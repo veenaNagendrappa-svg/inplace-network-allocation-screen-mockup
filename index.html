@@ -23,9 +23,9 @@
   --font: 'DM Sans', sans-serif; --mono: 'DM Mono', monospace;
 }
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
+html, body { margin: 0; padding: 0; overflow: hidden; }
 html { height: 100%; }
-body { font-family: var(--font); background: var(--bg); color: var(--fg); height: 100%; min-height: 100vh; display: flex; flex-direction: column; font-size: 13px; overflow: hidden; }
+body { font-family: var(--font); background: var(--bg); color: var(--fg); height: 100%; display: flex; flex-direction: column; font-size: 13px; }
 .sticky-header { position: sticky; top: 0; z-index: 50; flex-shrink: 0; background: var(--card); box-shadow: 0 2px 6px rgba(0,0,0,.07); }
 
 /* ── BARS ── */
@@ -120,10 +120,6 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); height
 .ctx-cell-bar.wknd { background:#f0f0f5; }
 
 /* EP identity chip on request hatch bars — now shows qty too */
-.ctx-cell-bar.has-ep { height:auto; min-height:32px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2px 2px; gap:1px; }
-.ep-chip { font-size:8px; font-weight:700; padding:1px 4px; border-radius:3px; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:calc(var(--col-w) - 6px); line-height:1.4; text-align:center; }
-.ep-chip.req-chip  { background:rgba(8,145,178,.8); border:1px solid rgba(8,145,178,.95); }
-.ep-qty-chip { font-size:8px; font-weight:700; color:rgba(8,145,178,1); background:white; border:1px solid rgba(8,145,178,.5); border-radius:3px; padding:0px 3px; line-height:1.5; white-space:nowrap; }
 
 /* hatched fill patterns */
 .ctx-cell-bar.hatch-placement {
@@ -274,8 +270,20 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .row-ward:nth-child(even) { background:#fafbfc; }
 .row-groupby:nth-child(even) { background:#fafbfc; }
 
+
+/* Rotation groups in side panel — Felix feedback: group placements by date range */
+.sp-rotation-group { margin-bottom:8px; border:1px solid var(--border); border-radius:7px; overflow:hidden; }
+.sp-rotation-header { display:flex; align-items:center; gap:8px; padding:6px 12px; background:#f8fafc; border-bottom:1px solid var(--border); }
+.sp-rotation-label { font-size:11px; font-weight:700; color:var(--fg); text-transform:uppercase; letter-spacing:.04em; }
+.sp-rotation-count { font-size:11px; color:var(--muted-fg); font-weight:500; }
+.sp-rotation-group .sp-pill { border-radius:0; border:none; border-bottom:1px solid #f0f2f5; }
+.sp-rotation-group .sp-pill:last-child { border-bottom:none; }
+/* Individual cards stack vertically — each card is absolutely positioned by date, stacked by top offset */
+.cards-row-inner.has-cards { height:36px; position:relative; }
+.cards-row-inner.stacked { height:auto; min-height:36px; }
+
 /* ── GRID ── */
-.grid-wrap { flex: 1; overflow: auto; }
+.grid-wrap { flex: 1; overflow: auto; padding-bottom: 60px; }
 .col-header { display:flex; align-items:center; border-bottom:1px solid var(--border); background:var(--muted); position:sticky; top:0; z-index:10; }
 .col-left-h { min-width:var(--left-w); max-width:var(--left-w); padding:6px 14px; font-size:9.5px; font-weight:700; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.06em; }
 .col-right-h { flex:1; display:flex; align-items:center; }
@@ -376,10 +384,10 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .btn-alloc { display:inline-flex; align-items:center; gap:3px; padding:0 8px; height:22px; border:none; background:var(--primary); border-radius:4px; cursor:pointer; font-family:var(--font); font-size:10.5px; font-weight:600; color:white; margin-left:auto; transition:background .15s, opacity .15s; white-space:nowrap; opacity:0; flex-shrink:0; }
 .btn-alloc svg { width:10px; height:10px; }
 .btn-alloc:hover { background:#1d4ed8; }
-/* Hover Allocate — reveal on row hover across all row types (Felix Feb 26 feedback) */
+/* Hover Allocate — reveal on row hover: parent agency and ward/shift rows only */
+/* Child agency rows (Greenfield, Lakeside etc) are expand/collapse only — no Allocate */
 .row-ward:hover .btn-alloc,
-.row-agency:hover .btn-alloc,
-.row-child-agency:hover .btn-alloc { opacity:1; }
+.row-agency:hover .btn-alloc { opacity:1; }
 /* Subtle row highlight on hover to signal interactivity */
 .row-ward { transition:background .1s; background:white; }
 .row-ward:hover { background:#f8faff; }
@@ -393,7 +401,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .toast-body { font-size:11px; color:var(--muted-fg); }
 
 /* ── BOTTOM BAR ── */
-.bottom-bar { position:sticky; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--border); box-shadow:0 -4px 20px rgba(0,0,0,.07); z-index:50; flex-shrink:0; }
+.bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--border); box-shadow:0 -4px 20px rgba(0,0,0,.07); z-index:50; }
 .bottom-inner { display:flex; align-items:center; justify-content:space-between; padding:10px 24px; max-width:1600px; margin:0 auto; }
 .bottom-left { display:flex; align-items:center; gap:14px; }
 .btn-clear { background:none; border:none; cursor:pointer; font-family:var(--font); font-size:13px; font-weight:600; color:var(--primary); text-decoration:underline; text-underline-offset:2px; }
@@ -532,7 +540,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .sp-agency-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; background:var(--primary-light); border-radius:999px; font-size:11px; font-weight:600; color:var(--primary); margin-bottom:6px; }
 .sp-title { font-size:15px; font-weight:700; color:var(--fg); }
 .sp-subtitle { font-size:11px; color:var(--muted-fg); margin-top:2px; }
-.sp-close { position:absolute; top:14px; right:14px; background:none; border:none; cursor:pointer; color:var(--muted-fg); padding:4px; border-radius:4px; transition:background .15s; }
+.sp-close { position:absolute; top:14px; right:14px; background:none; border:none; cursor:pointer; color:var(--muted-fg); padding:4px; border-radius:4px; transition:background .15s; z-index:10; }
 .sp-close:hover { background:var(--muted); }
 .sp-close svg { width:16px; height:16px; }
 
@@ -682,19 +690,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
 .scroll-hint svg { width:13px; height:13px; }
 
-/* fulfilled popup inside panel */
-.fulfilled-popup { display:none; position:absolute; bottom:0; left:0; right:0; background:white; border-top:2px solid #16a34a; padding:18px 20px; box-shadow:0 -8px 24px rgba(0,0,0,.1); z-index:10; flex-direction:column; gap:12px; }
-.fulfilled-popup.show { display:flex; }
-.fulfilled-popup-icon { width:32px; height:32px; border-radius:50%; background:#dcfce7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.fulfilled-popup-icon svg { width:17px; height:17px; color:#16a34a; }
-.fulfilled-popup-header { display:flex; align-items:center; gap:10px; }
-.fulfilled-popup-title { font-size:13.5px; font-weight:700; color:#15803d; }
-.fulfilled-popup-body { font-size:12px; color:var(--fg-light); line-height:1.5; }
-.fulfilled-popup-actions { display:flex; gap:8px; }
-.btn-fulfilled-more { flex:1; height:36px; border:1.5px solid var(--border); background:white; border-radius:7px; cursor:pointer; font-family:var(--font); font-size:12.5px; font-weight:600; color:var(--fg); transition:background .15s; }
-.btn-fulfilled-more:hover { background:var(--muted); }
-.btn-fulfilled-next { flex:1; height:36px; border:none; background:#16a34a; border-radius:7px; cursor:pointer; font-family:var(--font); font-size:12.5px; font-weight:600; color:white; transition:background .15s; }
-.btn-fulfilled-next:hover { background:#15803d; }
+
 .btn-gen-offer { flex:1; height:38px; border:none; background:var(--primary); border-radius:7px; cursor:pointer; font-family:var(--font); font-size:12px; font-weight:600; color:white; transition:background .15s; white-space:nowrap; }
 .btn-gen-offer:hover { background:#1d4ed8; }
 .btn-gen-publish { flex:1; height:38px; border:1.5px solid var(--primary); background:white; border-radius:7px; cursor:pointer; font-family:var(--font); font-size:12px; font-weight:600; color:var(--primary); transition:background .15s; white-space:nowrap; }
@@ -811,7 +807,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
       </button>
     </div>
-    <button class="btn-next-keep" onclick="switchRequest(1)">Next &amp; Keep open</button>
+    <button class="btn-next-keep" onclick="switchRequest(1)">Next</button>
   </div>
 </div>
 
@@ -1947,20 +1943,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
     Scroll to review all details
   </div>
 
-  <!-- fulfilled popup overlays footer when request is fully allocated -->
-  <div class="fulfilled-popup" id="fulfilled-popup">
-    <div class="fulfilled-popup-header">
-      <div class="fulfilled-popup-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <span class="fulfilled-popup-title">Request Fulfilled</span>
-    </div>
-    <p class="fulfilled-popup-body">All <strong id="fulfilled-count"></strong> placements have been allocated. Do you want to complete processing and review the next request?</p>
-    <div class="fulfilled-popup-actions">
-      <button class="btn-fulfilled-more" onclick="dismissFulfilled()">Add more placements</button>
-      <button class="btn-fulfilled-next" onclick="completeAndNext()">Complete &amp; Next</button>
-    </div>
-  </div>
+
 </div>
 
 <!-- TOAST -->
@@ -2540,27 +2523,9 @@ function renderAllCards() {
 }
 
 function repositionCard(p) {
-  const card = document.getElementById('card-' + p.id);
-  if (!card) return;
-  const fullStart = dateToColIdx(p.startDate);
-  const fullEnd   = dateToColIdx(p.endDate);
-  const visStart  = fullStart - viewOffset;
-  const visEnd    = fullEnd   - viewOffset;
-  // Clamp to visible window
-  const clampStart = Math.max(0, visStart);
-  const clampEnd   = Math.min(VISIBLE_COLS - 1, visEnd);
-  if (clampEnd < 0 || clampStart >= VISIBLE_COLS) {
-    // Fully outside window — hide
-    card.style.display = 'none';
-    return;
-  }
-  card.style.display = '';
-  card.style.left  = (clampStart * COL_W) + 'px';
-  card.style.width = ((clampEnd - clampStart + 1) * COL_W - 4) + 'px';
-  card.style.top   = '4px';
-  card.style.position = 'absolute';
-  // Indicate partial visibility
-  card.style.opacity = (visStart < 0 || visEnd >= VISIBLE_COLS) ? '0.6' : '1';
+  // Delegate to container-level stacking — repositions all cards together
+  const container = document.getElementById('cards-' + p.wardId)?.querySelector('.cards-row-inner');
+  repositionCardsInContainer(container);
 }
 
 function fmtDate(iso) {
@@ -2586,9 +2551,8 @@ function buildCardHTML(p) {
        </button>`
     : '';
   return `
-    <span class="pname">Plc ${p.id} · ${p.ward}</span>
+    <span class="pname">Plc ${p.id}</span>
     <span class="${dateCls}">${warnIcon}${dateLabel}</span>
-    <span class="qty">×${p.qty}</span>
     <span class="sbadge ${badgeCls}">${badgeLbl}</span>
     ${removeBtn}
     <div class="card-resize-handle" data-id="${p.id}" title="Drag to change end date"></div>`;
@@ -2711,28 +2675,12 @@ function confirmAlloc(wardId) {
   if (!input) return;
   const qty = Math.max(1, Math.min(parseInt(input.value)||1, state.total - state.allocated));
   const meta = wardMeta[wardId];
-
-  const p = {
-    id: state.nextId++,
-    wardId,
-    ward: meta.ward,
-    agency: meta.agency,
-    qty,
-    status: 'unsaved',
-    startDate: state.requestStartDate,
-    endDate:   state.requestEndDate,
-  };
-  state.placements.push(p);
-  state.allocated += qty;
-
-  // For parent agency rows, cards go in a dedicated cards-row after the agency row
-  // For shift rows, cards go in the existing cards-row
   const isParent = wardId.endsWith('-parent');
   const agencyKey = isParent ? wardId.replace('-parent','') : null;
 
+  // Get or create container
   let container;
   if (isParent) {
-    // Create or reuse a cards-row directly after the agency row
     let cardsRow = document.getElementById('cards-' + wardId);
     if (!cardsRow) {
       cardsRow = document.createElement('div');
@@ -2747,16 +2695,38 @@ function confirmAlloc(wardId) {
     container = document.getElementById('cards-' + wardId)?.querySelector('.cards-row-inner');
   }
 
-  if (container) {
-    const card = document.createElement('div');
-    card.className = 'placement-card';
-    card.id = 'card-' + p.id;
-    card.style.cssText = getCardStyle(p);
-    card.innerHTML = buildCardHTML(p);
-    container.appendChild(card);
-    container.classList.add('has-cards');
-    attachCardDrag(card, p);
+  // Create one card per placement (Felix feedback: each placement gets its own row
+  // so dates can be adjusted individually, enabling rotations in the side panel)
+  const newPlacements = [];
+  for (let i = 0; i < qty; i++) {
+    const p = {
+      id: state.nextId++,
+      wardId,
+      ward: meta.ward,
+      agency: meta.agency,
+      qty: 1,           // always 1 — individual placement
+      status: 'unsaved',
+      startDate: state.requestStartDate,
+      endDate:   state.requestEndDate,
+    };
+    state.placements.push(p);
+    state.allocated += 1;
+    newPlacements.push(p);
+
+    if (container) {
+      const card = document.createElement('div');
+      card.className = 'placement-card';
+      card.id = 'card-' + p.id;
+      card.style.cssText = getCardStyle(p);
+      card.innerHTML = buildCardHTML(p);
+      container.appendChild(card);
+      attachCardDrag(card, p);
+    }
   }
+  if (container) container.classList.add('has-cards');
+
+  // Stagger cards vertically so they don't overlap
+  repositionCardsInContainer(container);
 
   // Mark the row with unsaved dot
   const rowEl = isParent
@@ -2784,13 +2754,41 @@ function confirmAlloc(wardId) {
   // Update ward alloc badge
   const badge = document.getElementById('ward-count-' + wardId);
   if (badge) {
-    const total = state.placements.filter(x => x.wardId === wardId && x.status !== 'rejected').reduce((s,x) => s+x.qty, 0);
+    const total = state.placements.filter(x => x.wardId === wardId && x.status !== 'rejected').length;
     badge.textContent = `${total} allocated`;
     badge.style.display = total > 0 ? '' : 'none';
   }
 
   updateUI();
-  showToast('Placement added', `${qty} placement(s) queued for ${meta.agency} · ${meta.ward}.`);
+  showToast('Placements added', `${qty} individual placement${qty!==1?'s':''} added for ${meta.agency} · ${meta.ward}.`);
+}
+
+// Stack individual placement cards vertically — one row per card
+// Cards with matching dates are grouped visually but each still gets own row
+function repositionCardsInContainer(container) {
+  if (!container) return;
+  const cards = [...container.querySelectorAll('.placement-card')];
+  if (!cards.length) return;
+
+  const ROW_H = 36;
+
+  cards.forEach((card, idx) => {
+    const pid = parseInt(card.id.replace('card-',''));
+    const p = state.placements.find(x => x.id === pid);
+    if (!p) return;
+    const fullStart = dateToColIdx(p.startDate);
+    const fullEnd   = dateToColIdx(p.endDate);
+    const visStart  = Math.max(0, fullStart - viewOffset);
+    const visEnd    = Math.min(VISIBLE_COLS - 1, fullEnd - viewOffset);
+    card.style.position = 'absolute';
+    card.style.left     = (visStart * COL_W) + 'px';
+    card.style.width    = ((visEnd - visStart + 1) * COL_W - 4) + 'px';
+    card.style.top      = (4 + idx * ROW_H) + 'px';
+  });
+
+  // Expand container height to fit all cards
+  container.style.height = (cards.length * ROW_H + 8) + 'px';
+  if (cards.length > 1) container.classList.add('stacked');
 }
 
 // ── CONTEXT TOGGLES ──
@@ -2870,12 +2868,9 @@ function buildCtxRow(data, type) {
       return `<div class="ctx-cell-bar ${data.hatch}${dowHidden}"></div>`;
     }
 
-    // Request rows: hatch bar + EP chip + qty chip stacked
+    // Request rows: clean hatch bar only — detail on hover card (Felix: cells too busy)
     const tooltip = `${data.label} · ${data.ep} · ${data.discipline} ${data.year} · ${data.qty} placement${data.qty !== 1 ? 's' : ''} · ${data.status}${data.shift ? ' · ' + data.shift + 's only' : ''}`;
-    return `<div class="ctx-cell-bar has-ep ${data.hatch}${dowHidden}" title="${tooltip}">
-      <span class="ep-chip req-chip">${data.ep}</span>
-      <span class="ep-qty-chip">×${data.qty}</span>
-    </div>`;
+    return `<div class="ctx-cell-bar ${data.hatch}${dowHidden}" title="${tooltip}"></div>`;
   }).join('');
 
   const div = document.createElement('div');
@@ -3167,7 +3162,7 @@ function updateUI() {
   if (totalBadge) totalBadge.textContent = `Total: ${state.total}`;
 
   const count = state.placements.filter(p=>p.status==='unsaved').length;
-  const total = state.placements.reduce((s,p)=>s+p.qty,0);
+  const total = state.placements.filter(p => p.status !== 'rejected').length;
   document.getElementById('bottom-status').textContent =
     total > 0 ? `${total} placement${total!==1?'s':''} allocated · ${count} draft` : 'No placements allocated';
 
@@ -3215,7 +3210,7 @@ function removePlacement(id) {
     setTimeout(() => card.remove(), 200);
   }
 
-  state.allocated -= p.qty;
+  state.allocated -= 1; // each card is one placement
   state.placements = state.placements.filter(x => x.id !== id);
 
   // Restore availability in grid (undo the consumption that was previewed)
@@ -3247,31 +3242,21 @@ function updatePlacementDate(id, field, value) {
   const p = state.placements.find(x => x.id === id);
   if (!p) return;
   p[field] = value;
-  // Refresh card in grid
-  refreshCard(p);
-  // Refresh just this pill's warning inline
-  const pill = document.getElementById('sp-pill-' + id);
-  if (pill) {
-    const diff = !datesMatchRequest(p);
-    const warnEl = pill.querySelector('.sp-pill-diff-warn, .sp-pill-match');
-    if (warnEl) {
-      if (diff) {
-        warnEl.className = 'sp-pill-diff-warn';
-        warnEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Differs from request dates (${fmtDate(state.requestStartDate)} – ${fmtDate(state.requestEndDate)})`;
-      } else {
-        warnEl.className = 'sp-pill-match';
-        warnEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11"><polyline points="20 6 9 17 4 12"/></svg> Matches request dates`;
-      }
-    }
-  }
+  // Refresh card position in grid
+  const container = document.getElementById('cards-' + p.wardId)?.querySelector('.cards-row-inner');
+  repositionCardsInContainer(container);
+  // Rebuild groups — date change may split into a new group
+  state.agencyGroups = buildAgencyGroups();
+  // Stay on current group if still valid, otherwise go to first
+  if (state.currentAgencyIdx >= state.agencyGroups.length) state.currentAgencyIdx = 0;
+  renderPanelForCurrentAgency();
 }
 
 // ── CLEAR ──
 function clearAll() {
   if (state.placements.some(p=>p.status==='unsaved') && !confirm('Clear all unsaved placements?')) return;
   state.placements = state.placements.filter(p => p.status !== 'unsaved');
-  state.allocated = state.placements.reduce((s,p)=>s+p.qty,0);
+  state.allocated = state.placements.filter(p => p.status !== 'rejected').length;
   
   // Remove unsaved cards from DOM
   document.querySelectorAll('.placement-card').forEach(c => {
@@ -3573,13 +3558,23 @@ function initRosterFromRequest() {
 
 // ── PANEL ──
 function buildAgencyGroups() {
-  const unsaved = state.placements.filter(p=>p.status==='unsaved');
+  // Group placements by agency + date range
+  // Each unique combination becomes one group the coordinator works through sequentially.
+  // e.g. 3 placements at Agency A Jan-Feb = group 1
+  //      1 placement at Agency A Feb-Mar (date changed) = group 2
+  //      2 placements at Agency B = group 3
+  const unsaved = state.placements.filter(p => p.status === 'unsaved');
   const map = {};
+  const order = [];
   unsaved.forEach(p => {
-    if (!map[p.agency]) map[p.agency] = [];
-    map[p.agency].push(p);
+    const key = p.agency + '||' + p.wardId + '||' + p.startDate + '||' + p.endDate;
+    if (!map[key]) {
+      map[key] = { agency: p.agency, ward: p.ward, startDate: p.startDate, endDate: p.endDate, placements: [] };
+      order.push(key);
+    }
+    map[key].placements.push(p);
   });
-  return Object.entries(map).map(([agency, placements]) => ({agency, placements}));
+  return order.map(k => map[k]);
 }
 
 
@@ -3603,7 +3598,7 @@ function renderPlacementDetailFields() {
 
   const group = state.agencyGroups[state.currentAgencyIdx];
   spDetailState.agency = group ? group.agency : '';
-  spDetailState.numPlacements = group ? group.placements.reduce((s,p)=>s+p.qty,0) : state.total;
+  spDetailState.numPlacements = group ? group.placements.length : state.total;
 
   function isDiff(val, baseline) { return String(val) !== String(baseline); }
 
@@ -3654,11 +3649,11 @@ function openPanel() {
   document.getElementById('side-panel').classList.add('open');
 
   // Reset fulfilled popup
-  document.getElementById('fulfilled-popup').classList.remove('show');
+  
 
   // Scroll gate — disable footer, show hint, watch scroll
   const isFulfilled = state.allocated >= state.total;
-  initScrollGate(isFulfilled);
+  initScrollGate();
 }
 
 function renderPanelForCurrentAgency() {
@@ -3667,15 +3662,14 @@ function renderPanelForCurrentAgency() {
   const group = groups[idx];
   const isMulti = groups.length > 1;
 
-  // ── Reset detail fields to request defaults — no false diffs on open ──
   const req = getCurrentRequest();
   spDetailState.placementType = req.placementType;
   spDetailState.yearLevel     = req.yearLevel;
   spDetailState.discipline    = req.discipline;
   spDetailState.region        = state.requestRegion;
-  spDetailState.numPlacements = group ? group.placements.reduce((s,p) => s + p.qty, 0) : state.total;
+  spDetailState.numPlacements = group ? group.placements.length : state.total;
 
-  // Show/hide progress indicator
+  // Show/hide prev/next agency navigation
   const nav = document.getElementById('sp-nav');
   nav.style.display = isMulti ? 'flex' : 'none';
   if (isMulti) {
@@ -3686,51 +3680,82 @@ function renderPanelForCurrentAgency() {
   document.getElementById('sp-subtitle').textContent =
     `Review ${group.placements.length} placement${group.placements.length!==1?'s':''} for this agency before generating.`;
 
-  // Pills with per-placement date editing
+  // Group placements by date range — each unique date range = one date group in the panel
+  // Felix feedback: individual placements allow different dates, panel shows them grouped
+  const dateGroups = {};
+  const dateOrder = [];
+  group.placements.forEach(p => {
+    const key = p.startDate + '|' + p.endDate;
+    if (!dateGroups[key]) { dateGroups[key] = { startDate: p.startDate, endDate: p.endDate, placements: [] }; dateOrder.push(key); }
+    dateGroups[key].placements.push(p);
+  });
+  const hasMultipleDateGroups = dateOrder.length > 1;
+
   const reqStart = fmtDate(state.requestStartDate);
-  const reqEnd = fmtDate(state.requestEndDate);
-  const pillsEl = document.getElementById('sp-pills');
-  pillsEl.innerHTML = group.placements.map(p => {
-    const diff = !datesMatchRequest(p);
-    return `
-    <div class="sp-pill" id="sp-pill-${p.id}">
-      <span class="sp-pill-dot"></span>
-      <div class="sp-pill-body">
-        <div class="sp-pill-name">Placement ${p.id} — ${p.ward} <span class="sp-pill-qty">×${p.qty}</span></div>
-        <div class="sp-pill-dates">
-          <div class="sp-pill-date-field">
-            <label>Start</label>
-            <input type="date" value="${p.startDate}" onchange="updatePlacementDate(${p.id},'startDate',this.value)">
+  const reqEnd   = fmtDate(state.requestEndDate);
+  const pillsEl  = document.getElementById('sp-pills');
+
+  if (!hasMultipleDateGroups) {
+    // All placements share the same dates — show individual rows, each editable
+    pillsEl.innerHTML = group.placements.map((p, i) => {
+      const diff = !datesMatchRequest(p);
+      return `<div class="sp-pill" id="sp-pill-${p.id}">
+        <span class="sp-pill-dot"></span>
+        <div class="sp-pill-body">
+          <div class="sp-pill-name">Placement ${i + 1} — ${p.ward}</div>
+          <div class="sp-pill-dates">
+            <div class="sp-pill-date-field"><label>Start</label>
+              <input type="date" value="${p.startDate}" onchange="updatePlacementDate(${p.id},'startDate',this.value)">
+            </div>
+            <span class="sp-pill-dash">→</span>
+            <div class="sp-pill-date-field"><label>End</label>
+              <input type="date" value="${p.endDate}" onchange="updatePlacementDate(${p.id},'endDate',this.value)">
+            </div>
+            ${diff
+              ? `<span class="sp-pill-diff-warn">⚠ Differs from request (${reqStart} – ${reqEnd})</span>`
+              : `<span class="sp-pill-match">✓ Matches request</span>`
+            }
           </div>
-          <span class="sp-pill-dash">→</span>
-          <div class="sp-pill-date-field">
-            <label>End</label>
-            <input type="date" value="${p.endDate}" onchange="updatePlacementDate(${p.id},'endDate',this.value)">
-          </div>
-          ${diff
-            ? `<span class="sp-pill-diff-warn" title="Differs from request dates">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                Requested: ${reqStart} – ${reqEnd}
-              </span>`
-            : `<span class="sp-pill-match">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11"><polyline points="20 6 9 17 4 12"/></svg>
-                Matches request
-              </span>`
-          }
         </div>
-      </div>
-    </div>`;
-  }).join('');
+      </div>`;
+    }).join('');
+  } else {
+    // Multiple date groups — show grouped by date range
+    pillsEl.innerHTML = dateOrder.map(key => {
+      const dg = dateGroups[key];
+      const diff = dg.startDate !== state.requestStartDate || dg.endDate !== state.requestEndDate;
+      const count = dg.placements.length;
+      const inner = dg.placements.map((p, i) => `<div class="sp-pill" id="sp-pill-${p.id}">
+        <span class="sp-pill-dot"></span>
+        <div class="sp-pill-body">
+          <div class="sp-pill-name">Placement ${i + 1}</div>
+          <div class="sp-pill-dates">
+            <div class="sp-pill-date-field"><label>Start</label>
+              <input type="date" value="${p.startDate}" onchange="updatePlacementDate(${p.id},'startDate',this.value)">
+            </div>
+            <span class="sp-pill-dash">→</span>
+            <div class="sp-pill-date-field"><label>End</label>
+              <input type="date" value="${p.endDate}" onchange="updatePlacementDate(${p.id},'endDate',this.value)">
+            </div>
+          </div>
+        </div>
+      </div>`).join('');
+      return `<div class="sp-rotation-group">
+        <div class="sp-rotation-header">
+          <span class="sp-rotation-label">${fmtDate(dg.startDate)} – ${fmtDate(dg.endDate)}</span>
+          <span class="sp-rotation-count">${count} placement${count !== 1 ? 's' : ''}</span>
+          ${diff ? '<span class="sp-pill-diff-warn" style="margin-left:auto;">⚠ Custom dates</span>' : ''}
+        </div>
+        ${inner}
+      </div>`;
+    }).join('');
+  }
 
-  // Render placement detail fields
   renderPlacementDetailFields();
-
-  // Reset supervisor selection
   selectedSupervisor = null;
   allSettingsOpen = false;
   renderSupervisorList(group.agency);
 
-  // Update placement summary
   const ps_type = document.getElementById('ps-type');
   const ps_year = document.getElementById('ps-year');
   const ps_dates = document.getElementById('ps-dates');
@@ -3743,13 +3768,7 @@ function renderPanelForCurrentAgency() {
     ps_dur.textContent = `${days} Days`;
   }
 
-  // Roster: pre-populate from request if it carries a recurring pattern, otherwise reset to Off
   initRosterFromRequest();
-
-  // Footer
-  const footer = document.getElementById('sp-footer');
-  const isLast = idx === groups.length - 1;
-
   renderPanelFooter();
 }
 
@@ -3800,7 +3819,7 @@ function generateForCurrentAgency(type) {
         const endIdx   = dateToColIdx(p.endDate);
         for (let i = startIdx; i <= endIdx; i++) {
           if (i >= 0 && i < placementConsumption[wardId].length) {
-            placementConsumption[wardId][i] = (placementConsumption[wardId][i] || 0) + p.qty;
+            placementConsumption[wardId][i] = (placementConsumption[wardId][i] || 0) + 1;
           }
         }
       }
@@ -3808,8 +3827,14 @@ function generateForCurrentAgency(type) {
   });
 
   renderCapacityCells();
-  updateAgencyCountBadges(type);
   updateUI();
+
+  // Update agency badge in grid
+  const agencyKey = group.wardId ? group.wardId.replace(/-am$|-pm$|-full-day$/,'') : null;
+  if (agencyKey) {
+    const badge = document.getElementById('ward-count-' + group.placements[0]?.wardId);
+    if (badge) badge.className = 'ward-alloc-badge ' + type;
+  }
 
   const isLast = state.currentAgencyIdx >= groups.length - 1;
   if (!isLast) {
@@ -3823,25 +3848,15 @@ function generateForCurrentAgency(type) {
   }
 }
 
-// Called after all agencies processed
+// Called after all agencies processed — close panel, done
 function showFinalFooter() {
-  const footer = document.getElementById('sp-footer');
-  const isFulfilled = state.allocated >= state.total;
-  const remaining   = state.total - state.allocated;
-
-  const note = isFulfilled
-    ? `<div class="sp-footer-note" style="color:#15803d;background:#dcfce7;border-radius:5px;padding:5px 10px;text-align:center;">All ${state.total} placements allocated ✓</div>`
-    : `<div class="sp-footer-note" style="color:#92400e;background:#fef3c7;border-radius:5px;padding:5px 10px;text-align:center;">${remaining} of ${state.total} unallocated — request remains Pending</div>`;
-
-  // tertiary | secondary | primary
-  footer.innerHTML = `
-    ${note}
-    <div class="sp-footer-actions">
-      <button class="btn-gen-cancel"  onclick="closePanel()">Close</button>
-      <button class="btn-gen-publish" onclick="showStayOnRequestView()">Stay on Request</button>
-      <button class="btn-gen-offer"   onclick="completeAndNext()">Next Request &#8594;</button>
-    </div>
-  `;
+  closePanel();
+  const remaining = state.total - state.allocated;
+  if (remaining === 0) {
+    showToast('All placements generated', `Request #${getCurrentRequest().id} fully allocated.`);
+  } else {
+    showToast('Placements generated', `${remaining} unallocated — request remains Pending.`);
+  }
 }
 
 // Stay on request: shows a summary of all placements with option to cancel each
@@ -3932,7 +3947,7 @@ function generateAll(type) {
         const endIdx   = dateToColIdx(p.endDate);
         for (let i = startIdx; i <= endIdx; i++) {
           if (i >= 0 && i < placementConsumption[wardId].length) {
-            placementConsumption[wardId][i] = (placementConsumption[wardId][i] || 0) + p.qty;
+            placementConsumption[wardId][i] = (placementConsumption[wardId][i] || 0) + 1;
           }
         }
       }
@@ -3949,7 +3964,7 @@ function generateAll(type) {
   });
 
   updateUI();
-  const total = state.placements.reduce((s,p)=>s+p.qty,0);
+  const total = state.placements.filter(p => p.status !== 'rejected').length;
   showToast(`${label} generated`, `${total} placement${total!==1?'s':''} moved to ${label} status. Grid availability updated.`);
   // Advance to completion confirmation (stage 2)
   showCompletionFooter();
@@ -3987,49 +4002,27 @@ window.addEventListener('beforeunload', e => {
 updateUI();
 
 // ── SCROLL GATE ──
-function initScrollGate(isFulfilled) {
+function initScrollGate() {
   const spBody = document.getElementById('sp-body');
   const footer = document.getElementById('sp-footer');
   const hint = document.getElementById('scroll-hint');
-
-  // Always reset scroll to top when panel opens
   spBody.scrollTop = 0;
-
-  // Check if content is actually scrollable
   const needsScroll = spBody.scrollHeight > spBody.clientHeight + 10;
-
   if (!needsScroll) {
-    // Nothing to scroll — unlock immediately
     footer.classList.remove('sp-footer-locked');
     hint.classList.remove('show');
-    if (isFulfilled) showFulfilledPopup();
     return;
   }
-
-  // Lock footer and show hint
   footer.classList.add('sp-footer-locked');
   hint.classList.add('show');
-
   function onScroll() {
-    const atBottom = spBody.scrollTop + spBody.clientHeight >= spBody.scrollHeight - 10;
-    if (atBottom) {
+    if (spBody.scrollTop + spBody.clientHeight >= spBody.scrollHeight - 10) {
       footer.classList.remove('sp-footer-locked');
       hint.classList.remove('show');
       spBody.removeEventListener('scroll', onScroll);
-      if (isFulfilled) showFulfilledPopup();
     }
   }
   spBody.addEventListener('scroll', onScroll);
-}
-
-function showFulfilledPopup() {
-  document.getElementById('fulfilled-count').textContent =
-    `${state.allocated} placement${state.allocated!==1?'s':''}`;
-  document.getElementById('fulfilled-popup').classList.add('show');
-}
-
-function dismissFulfilled() {
-  document.getElementById('fulfilled-popup').classList.remove('show');
 }
 
 function completeAndNext() {
@@ -4538,16 +4531,39 @@ function hideReqHoverCard() {
 
 function switchRequest(dir) {
   currentRequestIdx = (currentRequestIdx + dir + REQUESTS.length) % REQUESTS.length;
-  // Reset allocation state for the new request
+
+  // Reset allocation state
   state.allocated = 0;
   state.placements = [];
   state.nextId = 1;
+  state.agencyGroups = [];
   selectedSupervisor = null;
   supSearchQuery = '';
-  // Clear all placement cards from DOM
-  document.querySelectorAll('.cards-row-inner').forEach(c => c.innerHTML = '');
+
+  // Clear placement cards from DOM — reset container height too
+  document.querySelectorAll('.cards-row-inner').forEach(c => {
+    c.innerHTML = '';
+    c.style.height = '';
+    c.classList.remove('has-cards', 'stacked');
+  });
+
+  // Remove unsaved state from all rows
   document.querySelectorAll('.ward-dot').forEach(d => d.remove());
-  document.querySelectorAll('.row-ward').forEach(r => r.classList.remove('unsaved-ward'));
+  document.querySelectorAll('.row-ward, .row-agency, .row-groupby').forEach(r => {
+    r.classList.remove('unsaved-ward');
+  });
+
+  // Remove all ward alloc badges
+  document.querySelectorAll('.ward-alloc-badge').forEach(b => {
+    b.textContent = '';
+    b.style.display = 'none';
+  });
+
+  // Reset placementConsumption to original values so capacity grid is clean
+  Object.keys(placementConsumption).forEach(k => {
+    placementConsumption[k] = placementConsumption[k].map(() => 0);
+  });
+
   updateReqBar();
   updatePendingLabel();
   resetFilters();
