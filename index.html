@@ -22,6 +22,8 @@
   --col-w: 46px; --left-w: 320px;
   --font: 'DM Sans', sans-serif; --mono: 'DM Mono', monospace;
 }
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
 html { height: 100%; }
 body { font-family: var(--font); background: var(--bg); color: var(--fg); height: 100%; min-height: 100vh; display: flex; flex-direction: column; font-size: 13px; overflow: hidden; }
 .sticky-header { position: sticky; top: 0; z-index: 50; flex-shrink: 0; background: var(--card); box-shadow: 0 2px 6px rgba(0,0,0,.07); }
@@ -273,7 +275,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .row-groupby:nth-child(even) { background:#fafbfc; }
 
 /* ── GRID ── */
-.grid-wrap { flex: 1; overflow: auto; padding-bottom: 80px; }
+.grid-wrap { flex: 1; overflow: auto; }
 .col-header { display:flex; align-items:center; border-bottom:1px solid var(--border); background:var(--muted); position:sticky; top:0; z-index:10; }
 .col-left-h { min-width:var(--left-w); max-width:var(--left-w); padding:6px 14px; font-size:9.5px; font-weight:700; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.06em; }
 .col-right-h { flex:1; display:flex; align-items:center; }
@@ -391,7 +393,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .toast-body { font-size:11px; color:var(--muted-fg); }
 
 /* ── BOTTOM BAR ── */
-.bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--border); box-shadow:0 -4px 20px rgba(0,0,0,.07); z-index:50; padding-bottom:env(safe-area-inset-bottom, 0px); }
+.bottom-bar { position:sticky; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--border); box-shadow:0 -4px 20px rgba(0,0,0,.07); z-index:50; flex-shrink:0; }
 .bottom-inner { display:flex; align-items:center; justify-content:space-between; padding:10px 24px; max-width:1600px; margin:0 auto; }
 .bottom-left { display:flex; align-items:center; gap:14px; }
 .btn-clear { background:none; border:none; cursor:pointer; font-family:var(--font); font-size:13px; font-weight:600; color:var(--primary); text-decoration:underline; text-underline-offset:2px; }
