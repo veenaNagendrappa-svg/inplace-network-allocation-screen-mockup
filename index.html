@@ -428,19 +428,14 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .modal-qty-row { display:flex; align-items:center; gap:10px; }
 .modal-input-sm { width:80px; height:34px; border:1px solid var(--border); border-radius:6px; padding:0 10px; font-family:var(--mono); font-size:13px; color:var(--fg); outline:none; transition:border-color .15s; }
 .modal-input-sm:focus { border-color:var(--primary); box-shadow:0 0 0 2px #dbeafe; }
+.modal-select { width:100%; padding:6px 10px; border:1px solid var(--border); border-radius:6px; font-family:var(--font); font-size:13px; color:var(--fg); background:white; cursor:pointer; height:34px; }
+.modal-select:disabled { background:#f5f6f8; color:var(--muted-fg); cursor:not-allowed; }
 .modal-qty-hint { font-size:12px; color:var(--muted-fg); }
 .modal-outcome { font-size:12px; color:var(--fg-light); background:var(--muted); border-radius:7px; padding:10px 14px; display:none; line-height:1.6; }
 .modal-outcome.show { display:block; }
-.reject-summary { display:none; border-radius:7px; overflow:hidden; border:1px solid var(--border); }
+.reject-summary { display:none; }
 .reject-summary.show { display:block; }
-.reject-summary-row { display:flex; justify-content:space-between; align-items:center; padding:8px 14px; font-size:12px; }
-.reject-summary-row:not(:last-child) { border-bottom:1px solid var(--border); }
-.reject-summary-row.kept { background:#f0fdf4; }
-.reject-summary-row.rejected { background:#fef2f2; }
-.reject-summary-label { color:var(--fg-light); font-weight:500; }
-.reject-summary-val { font-weight:700; }
-.reject-summary-row.kept .reject-summary-val { color:#15803d; }
-.reject-summary-row.rejected .reject-summary-val { color:#dc2626; }
+.reject-cannot-undo { font-size:12px; color:var(--fg); margin-top:10px; }
 .modal-footer { display:flex; justify-content:flex-end; gap:8px; padding:12px 20px 16px; border-top:1px solid var(--border); }
 .btn-modal-cancel { padding:0 18px; height:36px; border:1px solid var(--border); background:white; border-radius:7px; cursor:pointer; font-family:var(--font); font-size:13px; font-weight:600; color:var(--fg); }
 .btn-modal-cancel:hover { background:var(--muted); }
@@ -781,6 +776,22 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .rhc-shift-badge { display:inline-flex; padding:1px 6px; border-radius:4px; font-size:9.5px; font-weight:700; }
 .rhc-shift-badge.has-shift { background:#fef3c7; color:#92400e; }
 .rhc-shift-badge.all-shift { background:#f0f2f5; color:#6b7280; }
+
+/* ── Placements View in side panel ── */
+.plc-view-header { padding:0 0 14px; border-bottom:1px solid var(--border); margin-bottom:14px; }
+.plc-table { width:100%; border-collapse:collapse; font-size:12px; }
+.plc-table th { text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted-fg); padding:6px 8px; border-bottom:2px solid var(--border); white-space:nowrap; }
+.plc-table td { padding:9px 8px; border-bottom:1px solid var(--border); color:var(--fg); vertical-align:middle; }
+.plc-table tr:last-child td { border-bottom:none; }
+.plc-row:hover td { background:#f8faff; }
+.plc-id { font-family:var(--mono); font-size:11px; color:var(--muted-fg); }
+.plc-agency { font-weight:600; }
+.plc-ward { color:var(--muted-fg); }
+.plc-dates { font-family:var(--mono); font-size:11px; white-space:nowrap; }
+.plc-view-link { color:var(--primary); font-weight:600; font-size:12px; text-decoration:none; cursor:pointer; }
+.plc-view-link:hover { text-decoration:underline; }
+.plc-view-link.disabled { color:var(--muted-fg); cursor:default; font-weight:400; }
+
 </style>
 </head>
 <body>
@@ -1068,9 +1079,8 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   <div id="gb-rows-lhs" class="agency-child agency-une child-agency-lhs"></div>
 
   <!-- Springfield Community School — no shifts, direct capacity -->
-  <div class="row row-child-agency agency-child agency-une" id="child-agency-scs" onclick="toggleChildAgency('scs')">
+  <div class="row row-child-agency agency-child agency-une" id="child-agency-scs">
     <div class="row-left i3">
-      <svg class="child-agency-chevron" id="cchev-scs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(0deg);transition:transform .2s;flex-shrink:0;"><path d="m6 9 6 6 6-6"/></svg>
       <span class="lbl" style="font-weight:600;">Springfield Community School</span>
       <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
       <button class="btn-alloc btn-alloc-sm" onclick="event.stopPropagation();showInput('scs-direct','Any','Springfield Community School')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>Allocate</button>
@@ -1081,9 +1091,8 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   <div id="gb-rows-scs" class="agency-child agency-une child-agency-scs"></div>
 
   <!-- Riverside North Campus — no capacity configured -->
-  <div class="row row-child-agency agency-child agency-une" id="child-agency-rvn" onclick="toggleChildAgency('rvn')">
+  <div class="row row-child-agency agency-child agency-une" id="child-agency-rvn">
     <div class="row-left i3">
-      <svg class="child-agency-chevron" id="cchev-rvn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(0deg);transition:transform .2s;flex-shrink:0;"><path d="m6 9 6 6 6-6"/></svg>
       <span class="lbl" style="font-weight:600;">Riverside North Campus</span>
       <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
       <button class="btn-alloc btn-alloc-sm" onclick="event.stopPropagation();showInput('rvn-direct','Any','Riverside North Campus')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>Allocate</button>
@@ -1183,6 +1192,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
       <span class="bottom-status" id="bottom-status">No placements allocated</span>
     </div>
     <div class="bottom-right">
+      <button class="btn-sec" id="btn-view-placements" onclick="openPlacementsView()" style="display:none;">View Placements</button>
       <button class="btn-prim" id="btn-draft-placements" onclick="openPanel()" disabled>Review & Generate</button>
     </div>
   </div>
@@ -1575,7 +1585,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 <!-- RE-ALLOCATE MODAL -->
 <div class="modal" id="modal-reallocate">
   <div class="modal-header">
-    <span class="modal-title">Reassign Placements</span>
+    <span class="modal-title">Reassign Request</span>
     <button class="modal-close" onclick="closeModal('modal-reallocate')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
@@ -1583,9 +1593,29 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   <div class="modal-body">
     <p class="modal-desc">A new pending request will be created for the reassigned placements. The original request will be updated accordingly.</p>
     <div class="modal-field">
-      <label>Number to re-allocate</label>
+      <label>Region</label>
+      <select class="modal-select" id="reallocate-region" onchange="updateReallocateAgencies()">
+        <option value="">Select region…</option>
+        <option value="nsw">NSW – Central Coast</option>
+        <option value="vic">Victoria</option>
+        <option value="qld">Queensland</option>
+        <option value="wa">Western Australia</option>
+        <option value="sa">South Australia</option>
+        <option value="tas">Tasmania</option>
+        <option value="act">ACT</option>
+        <option value="nt">Northern Territory</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Agency</label>
+      <select class="modal-select" id="reallocate-agency" onchange="updateReallocateOutcome()" disabled>
+        <option value="">Select agency…</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Number to reassign</label>
       <div class="modal-qty-row">
-        <input type="number" id="reallocate-qty" min="1" value="1" class="modal-input-sm">
+        <input type="number" id="reallocate-qty" min="1" value="1" class="modal-input-sm" oninput="updateReallocateOutcome()">
         <span class="modal-qty-hint" id="reallocate-hint"></span>
       </div>
     </div>
@@ -1593,7 +1623,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   </div>
   <div class="modal-footer">
     <button class="btn-modal-cancel" onclick="closeModal('modal-reallocate')">Cancel</button>
-    <button class="btn-modal-confirm" onclick="confirmReallocate()">Reassign</button>
+    <button class="btn-modal-confirm" id="reallocate-confirm-btn" onclick="confirmReallocate()" disabled>Reassign</button>
   </div>
 </div>
 
@@ -3272,14 +3302,24 @@ function updateUI() {
 
   const count = state.placements.filter(p=>p.status==='unsaved').length;
   const total = state.placements.filter(p => p.status !== 'rejected').length;
+  const rej = state.rejectedCount || 0;
+  const rejStr = rej > 0 ? ` · ${rej} rejected` : '';
   document.getElementById('bottom-status').textContent =
-    total > 0 ? `${total} placement${total!==1?'s':''} allocated · ${count} draft` : 'No placements allocated';
+    total > 0 ? `${total} placement${total!==1?'s':''} allocated · ${count} draft${rejStr}` :
+    rej > 0 ? `No placements allocated · ${rej} rejected` : 'No placements allocated';
 
   const hasUnsaved = count > 0;
   document.getElementById('btn-draft-placements').disabled = !hasUnsaved;
   const hasRemaining = (state.total - state.allocated) > 0;
   document.getElementById('btn-reallocate').disabled = !hasRemaining;
-  document.getElementById('btn-reject-remaining').disabled = state.total === 0;
+  const rejectBtn = document.getElementById('btn-reject-remaining');
+  rejectBtn.disabled = remaining <= 0;
+  rejectBtn.textContent = state.allocated === 0 ? 'Reject' : 'Reject Remaining';
+
+  // Show View Placements button when there are generated (non-draft) placements
+  const hasGenerated = state.placements.some(p => p.status === 'offered' || p.status === 'published');
+  const btnView = document.getElementById('btn-view-placements');
+  if (btnView) btnView.style.display = hasGenerated ? '' : 'none';
 
   // Hide Allocate buttons when fully allocated
   document.querySelectorAll('.btn-alloc').forEach(btn => {
@@ -3777,6 +3817,66 @@ function updateDetailField(id, value) {
   renderPlacementDetailFields();
 }
 
+// Open side panel showing all placements for the current request
+// Mirrors the "Placement" tab on the existing request screen
+function openPlacementsView() {
+  const panel = document.getElementById('side-panel');
+  const overlay = document.getElementById('overlay');
+
+  // Build placements table
+  const generated = state.placements.filter(p => p.status === 'offered' || p.status === 'published');
+  const draft = state.placements.filter(p => p.status === 'unsaved');
+
+  const rows = [...generated, ...draft].map((p, i) => {
+    const statusCls = p.status === 'published' ? 'published' : p.status === 'offered' ? 'offered' : 'unsaved';
+    const statusLbl = p.status === 'published' ? 'Published' : p.status === 'offered' ? 'Offered' : 'Draft';
+    const viewLink = p.status !== 'unsaved'
+      ? `<a class="plc-view-link" href="#" onclick="event.preventDefault();showPlacementDetail(${p.id})">View</a>`
+      : `<span class="plc-view-link disabled">Draft</span>`;
+    return `<tr class="plc-row plc-row-${statusCls}">
+      <td class="plc-id">P${String(p.id).padStart(6,'0')}</td>
+      <td class="plc-agency">${p.agency}</td>
+      <td class="plc-ward">${p.ward}</td>
+      <td class="plc-dates">${fmtDate(p.startDate)} – ${fmtDate(p.endDate)}</td>
+      <td><span class="sbadge ${statusCls}">${statusLbl}</span></td>
+      <td>${viewLink}</td>
+    </tr>`;
+  }).join('');
+
+  const body = document.getElementById('sp-body');
+  body.innerHTML = `
+    <div class="plc-view-header">
+      <div class="section-label">Placements for this Request</div>
+      <div style="font-size:11.5px;color:var(--muted-fg);margin-top:2px;">${state.placements.length} placement${state.placements.length!==1?'s':''} · ${generated.length} generated</div>
+    </div>
+    <table class="plc-table">
+      <thead><tr>
+        <th>ID</th><th>Agency</th><th>Ward / Shift</th><th>Dates</th><th>Status</th><th>Action</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+
+  // Simple close footer
+  document.getElementById('sp-footer').innerHTML = `
+    <div class="sp-footer-actions">
+      <button class="btn-gen-cancel" onclick="closePanel()">Close</button>
+    </div>`;
+
+  document.getElementById('sp-agency-name').textContent = 'Placements';
+  document.getElementById('sp-subtitle').textContent = '';
+  document.getElementById('sp-nav').style.display = 'none';
+  overlay.classList.add('open');
+  panel.classList.add('open');
+}
+
+function showPlacementDetail(id) {
+  const p = state.placements.find(x => x.id === id);
+  if (!p) return;
+  // In the real system this would navigate to the placement detail page
+  // For the mockup we show a toast indicating where it would go
+  showToast('View Placement', `P${String(p.id).padStart(6,'0')} · ${p.agency} · ${p.ward} · ${p.status}`);
+}
+
 function openPanel() {
   state.agencyGroups = buildAgencyGroups();
   state.currentAgencyIdx = 0;
@@ -4118,31 +4218,76 @@ function openReallocateModal() {
   qtyInput.max = remaining;
   qtyInput.value = remaining;
   document.getElementById('reallocate-hint').textContent = `of ${remaining} remaining`;
-  updateReallocateOutcome();
-  qtyInput.oninput = updateReallocateOutcome;
+  // Reset region/agency selectors
+  document.getElementById('reallocate-region').value = '';
+  const agencyEl = document.getElementById('reallocate-agency');
+  agencyEl.innerHTML = '<option value="">Select agency…</option>';
+  agencyEl.disabled = true;
+  // Clear outcome
+  const outcomeEl = document.getElementById('reallocate-outcome');
+  outcomeEl.innerHTML = '';
+  outcomeEl.classList.remove('show');
   openModal('modal-reallocate');
+}
+
+// Mock agency data per region — in real app this comes from proc
+const REASSIGN_AGENCIES = {
+  'nsw': ['Northern Schools Network','Southern Schools Network','Western Sydney Network','Hunter Valley Network'],
+  'vic': ['Melbourne Metro Network','Geelong Network','Ballarat Network'],
+  'qld': ['Brisbane South Network','Sunshine Coast Network','Gold Coast Network'],
+  'wa':  ['Perth Metro Network','South West WA Network'],
+  'sa':  ['Adelaide Metro Network','Barossa Network'],
+  'tas': ['Hobart Network','Launceston Network'],
+  'act': ['ACT Education Network'],
+  'nt':  ['Darwin Network','Alice Springs Network'],
+};
+
+function updateReallocateAgencies() {
+  const region = document.getElementById('reallocate-region').value;
+  const agencyEl = document.getElementById('reallocate-agency');
+  agencyEl.innerHTML = '<option value="">Select agency…</option>';
+  if (region && REASSIGN_AGENCIES[region]) {
+    REASSIGN_AGENCIES[region].forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a;
+      opt.textContent = a;
+      agencyEl.appendChild(opt);
+    });
+    agencyEl.disabled = false;
+  } else {
+    agencyEl.disabled = true;
+  }
+  agencyEl.value = '';
+  updateReallocateOutcome();
 }
 
 function updateReallocateOutcome() {
   const remaining = state.total - state.allocated;
   const qty = Math.max(1, Math.min(parseInt(document.getElementById('reallocate-qty').value) || 1, remaining));
   const isFullReassign = qty === remaining;
+  const region = document.getElementById('reallocate-region');
+  const agency = document.getElementById('reallocate-agency');
   const outcomeEl = document.getElementById('reallocate-outcome');
-  const newReqId = 80000 + Math.floor(Math.random() * 999);
+
+  if (!agency.value) {
+    outcomeEl.innerHTML = '';
+    outcomeEl.classList.remove('show');
+    return;
+  }
+
+  const regionLabel = region.options[region.selectedIndex]?.text || '';
+  const agencyLabel = agency.value;
 
   if (isFullReassign) {
-    outcomeEl.innerHTML = `
-      <strong>Full re-allocate:</strong> A new pending request will be created for all ${qty} remaining placement${qty!==1?'s':''}.<br>
-      Request <strong>#${state.requestId || '80332'}</strong> will move to <strong>Allocated</strong> status.`;
+    outcomeEl.innerHTML = `<strong>Full reassign:</strong> A new pending request for all ${qty} remaining placement${qty!==1?'s':''} will be created and assigned to <strong>${agencyLabel}</strong> (${regionLabel}).<br>Request <strong>#${state.requestId || '80332'}</strong> will move to <strong>Allocated</strong> status.`;
   } else {
-    outcomeEl.innerHTML = `
-      <strong>Partial re-allocate:</strong> A new pending request will be created for ${qty} placement${qty!==1?'s':''}.<br>
-      Request <strong>#${state.requestId || '80332'}</strong> will remain in <strong>Pending</strong> with ${remaining - qty} remaining.`;
+    outcomeEl.innerHTML = `<strong>Partial reassign:</strong> A new pending request for ${qty} placement${qty!==1?'s':''} will be created and assigned to <strong>${agencyLabel}</strong> (${regionLabel}).<br>Request <strong>#${state.requestId || '80332'}</strong> will remain in <strong>Pending</strong> with ${remaining - qty} remaining.`;
   }
   outcomeEl.classList.add('show');
-  // Store for confirm step
   state._reallocateQty = qty;
   state._reallocateIsFull = isFullReassign;
+  state._reallocateAgency = agencyLabel;
+  document.getElementById('reallocate-confirm-btn').disabled = false;
 }
 
 let _newReqId = null;
@@ -4151,30 +4296,28 @@ function confirmReallocate() {
   const remaining = state.total - state.allocated;
   const qty = state._reallocateQty || remaining;
   const isFull = state._reallocateIsFull;
+  const agency = state._reallocateAgency || 'the selected agency';
   _newReqId = 80000 + Math.floor(Math.random() * 9999);
 
   closeModal('modal-reallocate');
 
-  // Update state
-  if (isFull) {
-    // All remaining reassigned — original request fully actioned
-    state.allocated = state.total;
-  } else {
-    // Partial — reduce total on this request
-    state.total = state.total - qty;
-  }
+  // Reassigned placements leave this request entirely — reduce total, not allocated
+  // Track reassigned count separately for the badge
+  state.reassignedCount = (state.reassignedCount || 0) + qty;
+  state.total = state.total - qty;
+
   updateUI();
 
-  // Show new-request confirmation (matching screenshot pattern)
-  document.getElementById('new-req-title').textContent = 'Re-assigned';
-  document.getElementById('new-req-desc').textContent =
-    `Re-assign created request id ${_newReqId}. Do you want to go to the created request?`;
-  openModal('modal-new-request');
+  const msg = isFull
+    ? `${qty} placement${qty!==1?'s':''} reassigned to ${agency}. New request #${_newReqId} created.`
+    : `${qty} placement${qty!==1?'s':''} reassigned to ${agency}. New request #${_newReqId} created. ${state.total - state.allocated} remaining on this request.`;
+  showToast('Reassigned', msg);
 }
 
 function goToNewRequest() {
+  // Kept as no-op — navigation to new request removed per Felix feedback (Mar 23):
+  // user may not have access to the reassigned agency's request.
   closeModal('modal-new-request');
-  showToast('Navigating to new request', `Request #${_newReqId} — opening in request list.`);
 }
 
 // ── REJECT REMAINING ──
@@ -4192,23 +4335,10 @@ function openRejectModal() {
     ? `Reject all ${remaining} placement${remaining!==1?'s':''} for Request #${state.requestId}? No placements have been allocated yet.`
     : `You have already allocated ${allocated} placement${allocated!==1?'s':''}. Reject the ${remaining} remaining unallocated placement${remaining!==1?'s':''} for Request #${state.requestId}?`;
 
-  // Summary rows (only shown when partial)
+  // Cannot undo note — always shown
   const summary = document.getElementById('reject-summary');
-  if (!isFullReject) {
-    summary.innerHTML = `
-      <div class="reject-summary-row kept">
-        <span class="reject-summary-label">Already allocated — will be kept</span>
-        <span class="reject-summary-val">${allocated} placement${allocated!==1?'s':''}</span>
-      </div>
-      <div class="reject-summary-row rejected">
-        <span class="reject-summary-label">Remaining — will be rejected</span>
-        <span class="reject-summary-val">${remaining} placement${remaining!==1?'s':''}</span>
-      </div>`;
-    summary.classList.add('show');
-  } else {
-    summary.innerHTML = '';
-    summary.classList.remove('show');
-  }
+  summary.innerHTML = '<p class="reject-cannot-undo">This action cannot be undone.</p>';
+  summary.classList.add('show');
 
   // Confirm button label
   document.getElementById('reject-confirm-btn').textContent =
@@ -4220,7 +4350,15 @@ function openRejectModal() {
 function confirmReject() {
   const remaining = state.total - state.allocated;
   const isFullReject = state.allocated === 0;
+  // Track rejected count and update totals
+  state.rejectedCount = (state.rejectedCount || 0) + remaining;
   state.total = state.allocated;
+  // Show rejected badge
+  const rejBadge = document.getElementById('badge-rejected');
+  if (rejBadge) {
+    rejBadge.textContent = `Rejected: ${state.rejectedCount}`;
+    rejBadge.style.display = '';
+  }
   closeModal('modal-reject');
   updateUI();
   showToast(
@@ -4606,6 +4744,8 @@ function switchRequest(dir) {
   state.placements = [];
   state.nextId = 1;
   state.agencyGroups = [];
+  state.rejectedCount = 0;
+  state.reassignedCount = 0;
   selectedSupervisor = null;
   supSearchQuery = '';
 
