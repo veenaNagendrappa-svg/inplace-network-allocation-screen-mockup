@@ -347,17 +347,19 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .placement-card { position:relative; display:flex; align-items:center; gap:6px; height:28px; padding:0 8px 0 10px; border-radius:5px; border:1px solid var(--unsaved-border); background:var(--unsaved-bg); border-left:3px solid var(--unsaved-color); cursor:grab; user-select:none; box-shadow:0 1px 4px rgba(0,0,0,.08); transition:box-shadow .15s; white-space:nowrap; overflow:hidden; }
 .placement-card:active { cursor:grabbing; box-shadow:0 4px 16px rgba(0,0,0,.18); }
 .placement-card.dragging { opacity:.85; box-shadow:0 6px 20px rgba(0,0,0,.2); z-index:100; }
-.placement-card.offered { border-left-color:var(--offered-color); background:var(--offered-bg); border-color:#fcd34d; }
-.placement-card.published { border-left-color:var(--published-color); background:var(--published-bg); border-color:#bfdbfe; }
+.placement-card.offered { border-left-color:var(--offered-color); background:var(--offered-bg); border-color:#fcd34d; cursor:pointer; }
+.placement-card.offered:hover { box-shadow:0 2px 8px rgba(37,99,235,.15); }
+.placement-card.published { border-left-color:var(--published-color); background:var(--published-bg); border-color:#bfdbfe; cursor:pointer; }
+.placement-card.published:hover { box-shadow:0 2px 8px rgba(37,99,235,.15); }
 @keyframes slideIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
 .placement-card .pname { font-size:10.5px; color:var(--fg); font-weight:600; flex-shrink:0; }
 .placement-card .card-dates { font-size:9.5px; font-family:var(--mono); color:var(--muted-fg); display:flex; align-items:center; gap:2px; white-space:nowrap; }
 .placement-card .card-dates.diff { color:#d97706; font-weight:600; }
 .placement-card .card-date-warn { display:inline-flex; align-items:center; color:#d97706; }
 .placement-card .qty { font-size:10px; font-family:var(--mono); color:var(--muted-fg); flex-shrink:0; }
-.placement-card .btn-remove-card { margin-left:auto; }
+.placement-card .btn-remove-card { margin-left:auto; position:relative; z-index:2; flex-shrink:0; }
 /* resize handle on right edge */
-.card-resize-handle { position:absolute; right:0; top:0; bottom:0; width:8px; cursor:ew-resize; display:flex; align-items:center; justify-content:center; }
+.card-resize-handle { position:absolute; right:0; top:0; bottom:0; width:8px; cursor:ew-resize; display:flex; align-items:center; justify-content:center; z-index:1; }
 .card-resize-handle::after { content:''; display:block; width:2px; height:12px; background:currentColor; opacity:.3; border-radius:2px; }
 
 /* cards container — positioned relative to grid row-right */
@@ -369,6 +371,9 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .btn-remove-card { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border:none; background:transparent; border-radius:4px; cursor:pointer; color:var(--muted-fg); padding:0; flex-shrink:0; transition:background .15s, color .15s; }
 .btn-remove-card:hover { background:#fee2e2; color:#dc2626; }
 .btn-remove-card svg { width:11px; height:11px; }
+.btn-card-open-full { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border:none; background:transparent; border-radius:4px; cursor:pointer; color:var(--muted-fg); padding:0; flex-shrink:0; transition:background .15s, color .15s; position:relative; z-index:2; opacity:0; }
+.placement-card:hover .btn-card-open-full { opacity:1; }
+.btn-card-open-full:hover { background:var(--primary-light); color:var(--primary); opacity:1; }
 .sbadge { display:inline-flex; align-items:center; padding:1px 7px; border-radius:999px; font-size:10px; font-weight:600; }
 .sbadge.unsaved { background:#ede9fe; color:#5b21b6; }
 .sbadge.offered { background:#fef3c7; color:#92400e; }
@@ -784,6 +789,8 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .plc-table td { padding:9px 8px; border-bottom:1px solid var(--border); color:var(--fg); vertical-align:middle; }
 .plc-table tr:last-child td { border-bottom:none; }
 .plc-row:hover td { background:#f8faff; }
+.plc-row-clickable:hover td { background:#eff6ff; }
+.plc-row-clickable:hover .plc-id-link { text-decoration:underline; color:var(--primary); }
 .plc-id { font-family:var(--mono); font-size:11px; color:var(--muted-fg); }
 .plc-agency { font-weight:600; }
 .plc-ward { color:var(--muted-fg); }
@@ -791,6 +798,11 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .plc-view-link { color:var(--primary); font-weight:600; font-size:12px; text-decoration:none; cursor:pointer; }
 .plc-view-link:hover { text-decoration:underline; }
 .plc-view-link.disabled { color:var(--muted-fg); cursor:default; font-weight:400; }
+.plc-open-btn { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border:1px solid var(--border); border-radius:5px; background:none; cursor:pointer; font-size:11px; font-weight:500; color:var(--fg-light); font-family:var(--font); transition:background .15s, color .15s, border-color .15s; }
+.plc-open-btn:hover { background:var(--primary-light); color:var(--primary); border-color:var(--primary); }
+.plc-id-link { color:var(--primary); font-weight:700; font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:3px; }
+.plc-id-link:hover { text-decoration:underline; }
+.placement-card.offered, .placement-card.published { cursor:pointer; }
 
 </style>
 </head>
@@ -2325,7 +2337,7 @@ function renderGroupByRows() {
       if (!rr) return;
       rr.innerHTML = visible.map((d, visIdx) => {
         const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}">–</div>`;
+        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
         const fullIdx = viewOffset + visIdx;
         let sum = 0;
         childAgencyShifts[key].forEach(sid => {
@@ -2334,7 +2346,7 @@ function renderGroupByRows() {
           if (cap) sum += (cap[fullIdx] ?? 0) - ((con||[])[fullIdx] ?? 0);
         });
         const cls = sum < 0 ? 'cell negative' : sum === 0 ? 'cell cell-p1-empty' : 'cell cell-p1';
-        return `<div class="${cls}${dowHidden}">${sum !== 0 ? sum : '–'}</div>`;
+        return `<div class="${cls}${dowHidden}">${sum !== 0 ? sum : ''}</div>`;
       }).join('');
     });
   });
@@ -2649,11 +2661,16 @@ function buildCardHTML(p) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
        </button>`
     : '';
+  const openFullBtn = (p.status === 'offered' || p.status === 'published')
+    ? `<button class="btn-card-open-full" title="Open in Action Request page" onclick="event.stopPropagation();showPlacementDetail(${p.id})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+       </button>`
+    : '';
   return `
     <span class="pname">Plc ${p.id}</span>
     <span class="${dateCls}">${warnIcon}${dateLabel}</span>
     <span class="sbadge ${badgeCls}">${badgeLbl}</span>
-    ${removeBtn}
+    ${removeBtn}${openFullBtn}
     <div class="card-resize-handle" data-id="${p.id}" title="Drag to change end date"></div>`;
 }
 
@@ -2674,6 +2691,7 @@ function refreshCard(p) {
     card.innerHTML = buildCardHTML(p);
     repositionCard(p);
     attachCardDrag(card, p);
+    attachCardClick(card, p);
   }
 }
 
@@ -2686,6 +2704,8 @@ function attachCardDrag(card, p) {
 
   function onMouseDown(e) {
     if (e.button !== 0) return;
+    // Never intercept clicks on the remove button or open-full button
+    if (e.target.closest('.btn-remove-card') || e.target.closest('.btn-card-open-full')) return;
     if (p.status !== 'unsaved') return; // only unsaved cards are draggable
     const handle = e.target.closest('.card-resize-handle');
     dragMode = handle ? 'resize' : 'move';
@@ -2749,6 +2769,17 @@ function attachCardDrag(card, p) {
 }
 
 // Sync pill dates in side panel when card is dragged
+// Click handler for offered/published cards — opens placement detail side panel
+function attachCardClick(card, p) {
+  card.addEventListener('click', function(e) {
+    // Don't open panel if clicking the X or open-full buttons
+    if (e.target.closest('.btn-remove-card') || e.target.closest('.btn-card-open-full')) return;
+    // Only open for generated placements
+    if (p.status !== 'offered' && p.status !== 'published') return;
+    openPlacementSidePanel(p.id);
+  });
+}
+
 function syncPillDates(p) {
   const pill = document.getElementById('sp-pill-' + p.id);
   if (!pill) return;
@@ -2836,6 +2867,7 @@ function confirmAlloc(wardId) {
       card.innerHTML = buildCardHTML(p);
       container.appendChild(card);
       attachCardDrag(card, p);
+      attachCardClick(card, p);
     }
   }
   if (container) container.classList.add('has-cards');
@@ -3119,7 +3151,7 @@ function renderCapacityCells() {
     if (!rr) return;
     rr.innerHTML = visible.map((d, visIdx) => {
       const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-      if (isWeekend(d)) return `<div class="cell wknd${dowHidden}">–</div>`;
+      if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
       const fullIdx = viewOffset + visIdx;
       if (!capArr || !capArr.length) return `<div class="cell cell-p1-empty${dowHidden}"></div>`;
       const rawCap = capArr[fullIdx];
@@ -3135,7 +3167,7 @@ function renderCapacityCells() {
     if (!rr) return;
     rr.innerHTML = visible.map((d, visIdx) => {
       const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-      if (isWeekend(d)) return `<div class="cell wknd${dowHidden}">–</div>`;
+      if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
       const fullIdx = viewOffset + visIdx;
       let sum = 0;
       childIds.forEach(wId => {
@@ -3212,7 +3244,7 @@ function renderCapacityCells() {
       if (!rr) return;
       rr.innerHTML = visible.map((d, visIdx) => {
         const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}">–</div>`;
+        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
         const fullIdx = viewOffset + visIdx;
         const inRange = d >= req.startDate && d <= req.endDate;
         const inReq   = inRange && (req.recurringDow === null || new Date(d).getDay() === req.recurringDow);
@@ -3232,7 +3264,7 @@ function renderCapacityCells() {
           else if (net > 0)  cls += ' avail';
           else               cls += ' zero';
         }
-        return `<div class="${cls}${dowHidden}">${net !== 0 ? net : '–'}</div>`;
+        return `<div class="${cls}${dowHidden}">${net !== 0 ? net : ''}</div>`;
       }).join('');
     });
 
@@ -3242,7 +3274,7 @@ function renderCapacityCells() {
       if (!rr) return;
       rr.innerHTML = visible.map((d, visIdx) => {
         const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}">–</div>`;
+        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
         const fullIdx = viewOffset + visIdx;
         const inRange = d >= req.startDate && d <= req.endDate;
         const inReq   = inRange && (req.recurringDow === null || new Date(d).getDay() === req.recurringDow);
@@ -3263,7 +3295,7 @@ function renderCapacityCells() {
           else if (sum > 0) cls += ' avail';
           else              cls += ' zero';
         }
-        return `<div class="${cls}${dowHidden}"${bstyle}>${sum !== 0 ? sum : '–'}</div>`;
+        return `<div class="${cls}${dowHidden}"${bstyle}>${sum !== 0 ? sum : ''}</div>`;
       }).join('');
     }
 
@@ -3343,31 +3375,36 @@ function removePlacement(id) {
   const p = state.placements.find(x => x.id === id);
   if (!p || p.status !== 'unsaved') return;
 
-  // Animate out
+  // Remove card from DOM immediately (works in both shift and groupby containers)
   const card = document.getElementById('card-' + id);
   if (card) {
-    card.style.transition = 'all .2s ease';
+    card.style.transition = 'opacity .15s ease, transform .15s ease';
     card.style.opacity = '0';
-    card.style.transform = 'translateX(12px)';
-    setTimeout(() => card.remove(), 200);
+    card.style.transform = 'translateX(10px)';
+    setTimeout(() => {
+      card.remove();
+      // After removal reposition siblings in whichever container held the card
+      if (currentGroupBy !== 'shift') {
+        renderGroupByCards();
+      } else {
+        const container = document.getElementById('cards-' + p.wardId)?.querySelector('.cards-row-inner');
+        repositionCardsInContainer(container);
+      }
+    }, 150);
   }
 
-  state.allocated -= 1; // each card is one placement
+  state.allocated -= 1;
   state.placements = state.placements.filter(x => x.id !== id);
-
-  // Restore availability in grid (undo the consumption that was previewed)
-  // Note: unsaved placements don't yet reduce placementConsumption — grid shows live capacity
-  // If a saved placement is restored, re-render capacity cells to reflect change
   renderCapacityCells();
 
-  // Restore Allocate button in row-left if spots are available
+  // Restore Allocate button
   const wardRow2 = document.getElementById('ward-' + p.wardId);
   if (wardRow2) {
     const btn = wardRow2.querySelector('.btn-alloc');
     if (btn) btn.style.display = '';
   }
 
-  // If no more unsaved cards for this ward, remove ward styling
+  // Clean up ward styling if no unsaved cards remain
   const remainingForWard = state.placements.filter(x => x.wardId === p.wardId && x.status === 'unsaved');
   if (!remainingForWard.length) {
     document.getElementById('ward-' + p.wardId)?.classList.remove('unsaved-ward');
@@ -3377,7 +3414,7 @@ function removePlacement(id) {
   }
 
   updateUI();
-  showToast('Placement removed', `${p.qty} placement(s) removed from ${p.ward}.`);
+  showToast('Placement removed', `Placement removed from ${p.ward}.`);
 }
 
 function updateAllPlacementDates(which, value) {
@@ -3820,19 +3857,27 @@ function openPlacementsView() {
   const generated = state.placements.filter(p => p.status === 'offered' || p.status === 'published');
   const draft = state.placements.filter(p => p.status === 'unsaved');
 
+  const openIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10" style="flex-shrink:0;vertical-align:middle;margin-left:3px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+
   const rows = [...generated, ...draft].map((p, i) => {
     const statusCls = p.status === 'published' ? 'published' : p.status === 'offered' ? 'offered' : 'unsaved';
     const statusLbl = p.status === 'published' ? 'Published' : p.status === 'offered' ? 'Offered' : 'Draft';
-    const viewLink = p.status !== 'unsaved'
-      ? `<a class="plc-view-link" href="#" onclick="event.preventDefault();showPlacementDetail(${p.id})">View</a>`
-      : `<span class="plc-view-link disabled">Draft</span>`;
-    return `<tr class="plc-row plc-row-${statusCls}">
-      <td class="plc-id">P${String(p.id).padStart(6,'0')}</td>
+    const plcId = `P${String(p.id).padStart(6,'0')}`;
+    const isGenerated = p.status !== 'unsaved';
+    // Click row → open full page directly for generated placements
+    const rowAttrs = isGenerated
+      ? `onclick="showPlacementDetail(${p.id})" title="Open in Action Request page" style="cursor:pointer;"`
+      : '';
+    // ID cell — link with ↗ icon for generated, plain text for draft
+    const idCell = isGenerated
+      ? `<span class="plc-id-link">${plcId}${openIcon}</span>`
+      : `<span style="color:var(--muted-fg);">${plcId}</span>`;
+    return `<tr class="plc-row plc-row-${statusCls} ${isGenerated ? 'plc-row-clickable' : ''}" ${rowAttrs}>
+      <td class="plc-id">${idCell}</td>
       <td class="plc-agency">${p.agency}</td>
       <td class="plc-ward">${p.ward}</td>
       <td class="plc-dates">${fmtDate(p.startDate)} – ${fmtDate(p.endDate)}</td>
       <td><span class="sbadge ${statusCls}">${statusLbl}</span></td>
-      <td>${viewLink}</td>
     </tr>`;
   }).join('');
 
@@ -3840,11 +3885,11 @@ function openPlacementsView() {
   body.innerHTML = `
     <div class="plc-view-header">
       <div class="section-label">Placements for this Request</div>
-      <div style="font-size:11.5px;color:var(--muted-fg);margin-top:2px;">${state.placements.length} placement${state.placements.length!==1?'s':''} · ${generated.length} generated</div>
+      <div style="font-size:11.5px;color:var(--muted-fg);margin-top:2px;">${state.placements.length} placement${state.placements.length!==1?'s':''} · ${generated.length} generated · click row to open placement page</div>
     </div>
     <table class="plc-table">
       <thead><tr>
-        <th>ID</th><th>Agency</th><th>Ward / Shift</th><th>Dates</th><th>Status</th><th>Action</th>
+        <th>ID</th><th>Agency</th><th>Ward / Shift</th><th>Dates</th><th>Status</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
@@ -3858,16 +3903,63 @@ function openPlacementsView() {
   document.getElementById('sp-agency-name').textContent = 'Placements';
   document.getElementById('sp-subtitle').textContent = '';
   document.getElementById('sp-nav').style.display = 'none';
+
+  // Hide open-full btn in list — shows per-placement when drilling in
+  const openFullBtn = document.getElementById('sp-open-full');
+  if (openFullBtn) openFullBtn.style.display = 'none';
+
   overlay.classList.add('open');
   panel.classList.add('open');
 }
 
 function showPlacementDetail(id) {
+  // Open full placement page — in real app navigates to Action Request page
+  showToast('Opening placement', `P${String(id).padStart(6,'0')} would open in the Action Request page.`);
+}
+
+function openPlacementSidePanel(id) {
   const p = state.placements.find(x => x.id === id);
   if (!p) return;
-  // In the real system this would navigate to the placement detail page
-  // For the mockup we show a toast indicating where it would go
-  showToast('View Placement', `P${String(p.id).padStart(6,'0')} · ${p.agency} · ${p.ward} · ${p.status}`);
+  const statusCls = p.status === 'published' ? 'published' : 'offered';
+  const statusLbl = p.status === 'published' ? 'Published' : 'Offered';
+  const plcId = `P${String(p.id).padStart(6,'0')}`;
+  const openIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+
+  const body = document.getElementById('sp-body');
+  body.innerHTML = `
+    <div style="padding:4px 0 16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <a href="#" class="plc-id-link" onclick="event.preventDefault();showPlacementDetail(${p.id})" title="Open full placement page">${plcId} ${openIcon}</a>
+        <span class="sbadge ${statusCls}">${statusLbl}</span>
+      </div>
+      <div class="sp-detail-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="sp-detail-field"><label>Agency</label><div class="sp-detail-val">${p.agency}</div></div>
+        <div class="sp-detail-field"><label>Ward / Shift</label><div class="sp-detail-val">${p.ward}</div></div>
+        <div class="sp-detail-field"><label>Start Date</label><div class="sp-detail-val">${fmtDate(p.startDate)}</div></div>
+        <div class="sp-detail-field"><label>End Date</label><div class="sp-detail-val">${fmtDate(p.endDate)}</div></div>
+        <div class="sp-detail-field"><label>Status</label><div class="sp-detail-val"><span class="sbadge ${statusCls}">${statusLbl}</span></div></div>
+        <div class="sp-detail-field"><label>Placement ID</label><div class="sp-detail-val"><a href="#" class="plc-id-link" onclick="event.preventDefault();showPlacementDetail(${p.id})">${plcId}</a></div></div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:var(--muted);border-radius:6px;font-size:11.5px;color:var(--muted-fg);">
+        To edit supervisor, roster or other details, open the full placement page.
+      </div>
+    </div>`;
+
+  document.getElementById('sp-footer').innerHTML = `
+    <div class="sp-footer-actions">
+      <button class="btn-gen-cancel" onclick="openPlacementsView()">← Back to list</button>
+    </div>`;
+  document.getElementById('sp-nav').style.display = 'none';
+
+  // Show open-full icon button in header
+  const openFullBtn = document.getElementById('sp-open-full');
+  if (openFullBtn) {
+    openFullBtn.style.display = 'flex';
+    openFullBtn.onclick = () => showPlacementDetail(p.id);
+  }
+
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('side-panel').classList.add('open');
 }
 
 function openPanel() {
@@ -3904,6 +3996,11 @@ function renderPanelForCurrentAgency() {
   if (isMulti) {
     document.getElementById('sp-nav-counter').textContent = `Agency ${idx+1} of ${groups.length}`;
   }
+
+  // Show open-in-full-page button when any placement is offered/published
+  const hasGenerated = group && group.placements.some(p => p.status === 'offered' || p.status === 'published');
+  const openFullBtn = document.getElementById('sp-open-full');
+  if (openFullBtn) openFullBtn.style.display = hasGenerated ? 'flex' : 'none';
 
   document.getElementById('sp-agency-name').textContent = group.agency;
   document.getElementById('sp-subtitle').textContent =
@@ -4026,33 +4123,34 @@ function showStayOnRequestView() {
   const body   = document.getElementById('sp-body');
   const footer = document.getElementById('sp-footer');
 
-  // Build placement summary cards
+  const openIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11" style="flex-shrink:0;opacity:.5;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+
   const cards = state.placements.map(p => {
     const statusLabel = p.status === 'published' ? 'Published' : p.status === 'offered' ? 'Offered' : 'Draft';
-    const cancelNote  = (p.status === 'offered' || p.status === 'published')
-      ? `<button class="ssc-cancel" onclick="cancelPlacementPrompt(${p.id})" title="Move to Cancelled — not yet supported in backend">Cancel ⚠</button>`
-      : '';
-    return `<div class="sp-stay-card ${p.status}" id="stay-card-${p.id}">
+    const isGenerated = p.status === 'offered' || p.status === 'published';
+    const clickAttr = isGenerated ? `onclick="showPlacementDetail(${p.id})" title="Click to open in Action Request page"` : '';
+    const icon = isGenerated ? openIcon : '';
+    return `<div class="sp-stay-card ${p.status}" id="stay-card-${p.id}" ${clickAttr}>
       <span class="ssc-dot"></span>
       <div class="ssc-info">
         <div class="ssc-ward">${p.ward}</div>
-        <div class="ssc-meta">${p.agency} · ×${p.qty} · ${fmtDate(p.startDate)} – ${fmtDate(p.endDate)}</div>
+        <div class="ssc-meta">${p.agency} · ${fmtDate(p.startDate)} – ${fmtDate(p.endDate)}</div>
       </div>
       <span class="ssc-badge">${statusLabel}</span>
-      ${cancelNote}
+      ${icon}
     </div>`;
   }).join('');
 
   body.innerHTML = `
     <div class="sp-stay-section-lbl">All placements for this request</div>
+    <div style="font-size:11px;color:var(--muted-fg);margin-bottom:8px;">Click an Offered or Published placement to open in the Action Request page.</div>
     <div class="sp-stay-grid">${cards}</div>
-    <div class="sp-stay-note">
-      ⚠ Cancelling a placement will move it to <strong>Cancelled</strong> status.
-      This is not yet supported in the backend — confirm with dev before use.
-    </div>
   `;
 
-  // Footer: tertiary | secondary (return to finalise) | primary (next request)
+  // Hide open-full header button — cards are the interaction here
+  const openFullBtn = document.getElementById('sp-open-full');
+  if (openFullBtn) openFullBtn.style.display = 'none';
+
   footer.innerHTML = `
     <div class="sp-footer-actions">
       <button class="btn-gen-cancel"  onclick="closePanel()">Close</button>
@@ -4132,6 +4230,14 @@ function generateAll(type) {
   showCompletionFooter();
 }
 
+
+function openPlacementFullPage() {
+  // In the real app this would navigate to the Action Request page for this placement.
+  // Mockup: show a toast indicating the intent.
+  const group = state.agencyGroups[state.currentAgencyIdx];
+  const agency = group ? group.agency : 'this agency';
+  showToast('Opening in full page', `Action Request page for ${agency} would open here.`);
+}
 
 function closePanel() {
   document.getElementById('overlay').classList.remove('open');
