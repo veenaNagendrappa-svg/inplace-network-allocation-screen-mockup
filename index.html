@@ -929,13 +929,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
     </div>
   </div>
 
-  <div class="f-field">
-    <label>Shift</label>
-    <div class="f-input" id="filter-shift" onclick="openFilterDropdown('filter-shift','filter-shift-val', SHIFTS_FILTER, 'shift')" style="cursor:pointer;">
-      <span class="f-val" id="filter-shift-val" style="color:#9ca3af">All</span>
-      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-    </div>
-  </div>
+  
 
   <!-- Requested days toggle switch — auto-shows when request has a day pattern -->
   <div class="req-days-switch-wrap" id="req-days-toggle" style="display:none;">
@@ -963,10 +957,9 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 <!-- LEGEND -->
 <div class="legend-bar">
   <!-- Capacity States section -->
-  <span class="legend-lbl">Capacity</span>
-  <div class="legend-item"><div class="l-swatch" style="background:#f0fdf4;border:1px solid #86efac"></div><span class="l-txt">Available</span></div>
-  <div class="legend-item"><div class="l-swatch" style="background:#fef2f2;border:1px solid #fca5a5"></div><span class="l-txt">Negative</span></div>
-  <div class="legend-item"><div class="l-swatch cap-zero-swatch" style="background:#f3f4f6;border:1px solid #e5e7eb"><span style="font-size:9px;color:#9ca3af;font-style:italic">–</span></div><span class="l-txt">Unconfigured</span></div>
+  <span class="legend-lbl">Availability</span>
+  <div class="legend-item"><div class="l-swatch" style="background:#E4F3E4;border:1px solid #245225"></div><span class="l-txt">Available</span></div>
+  <div class="legend-item"><div class="l-swatch" style="background:#FFEBEB;border:1px solid #8F0000"></div><span class="l-txt">Negative</span></div>
 
   <!-- Context items (shown when toggles on) -->
   <div class="legend-item" id="legend-placements" style="display:none">
@@ -982,7 +975,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
     <span style="font-size:9.5px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Group By</span>
     <button class="gb-pill active" id="gb-shift"         onclick="setGroupBy('shift')">Shift</button>
     <button class="gb-pill"        id="gb-placementType" onclick="setGroupBy('placementType')">Placement Type</button>
-    <button class="gb-pill"        id="gb-capacity"      onclick="setGroupBy('capacity')">Capacity</button>
+    <button class="gb-pill"        id="gb-capacity"      onclick="setGroupBy('capacity')">Availability</button>
     <button class="gb-pill"        id="gb-supervisor"    onclick="setGroupBy('supervisor')">Supervisor</button>
   </div>
 </div>
@@ -2012,10 +2005,12 @@ const REQUESTS = [
     total: 4,
     recurringDow: null,
     recurringShift: null,
-    // Student attached — shown in req bar
-    student:     'Jordan Smith',
-    studentCode: 'S00123456',
-    // Course and unit specified
+    students: [
+      { name: 'Jordan Smith',   code: 'S00123456' },
+      { name: 'Aisha Okonkwo', code: 'S00134821' },
+      { name: 'Liam Nguyen',   code: 'S00156033' },
+      { name: 'Ella Petrova',  code: 'S00167294' },
+    ],
     course: 'Bachelor of Education (Primary)',
     unit:   'EDUC3210 – Professional Experience 3',
   },
@@ -2032,10 +2027,8 @@ const REQUESTS = [
     total: 6,
     recurringDow: 1,
     recurringShift: 'AM',
-    // Student attached
     student:     'Priya Mehta',
     studentCode: 'S00198742',
-    // Course and unit
     course: 'Bachelor of Education (Secondary)',
     unit:   'EDUC2150 – Professional Experience 2',
   },
@@ -3132,7 +3125,7 @@ function renderCapacityCells() {
       const rawCap = capArr[fullIdx];
       if (rawCap === null || rawCap === undefined) return `<div class="cell cell-p1-empty${dowHidden}"></div>`;
       const net = rawCap - ((consumedArr||[])[fullIdx] ?? 0);
-      const cls = net < 0 ? 'cell negative' : net === 0 ? 'cell cell-p1-empty' : 'cell cell-p1';
+      const cls = net < 0 ? 'cell negative' : net === 0 ? 'cell zero' : 'cell cell-p1';
       return `<div class="${cls}${dowHidden}"${bold?' style="font-weight:700;"':''}>${net}</div>`;
     }).join('');
   }
@@ -4658,7 +4651,7 @@ function showCurrentReqHoverCard(e) {
     end:        GRID_DATES.indexOf(req.endDate),
     course:     req.course || null,
     unit:       req.unit   || null,
-    student:    req.student ? `${req.student} (${req.studentCode})` : null,
+    student:    req.students ? req.students.map(s => `${s.name} (${s.code})`).join(', ') : (req.student ? `${req.student} (${req.studentCode})` : null),
     dates:      req.dates,
     activeDates: req.activeDates || null,
     recurringDow: req.recurringDow,
@@ -4836,15 +4829,16 @@ function updateReqBar() {
   const unitEl = document.getElementById('req-unit');
   if (unitEl) unitEl.textContent = req.unit || '';
 
-  // Row 3 — student only, shown when a student is attached to the request
-  const hasStudent = !!(req.student && req.studentCode);
+  // Row 3 — students row, shown when students are attached to the request
+  const studentList = req.students || (req.student ? [{ name: req.student, code: req.studentCode }] : []);
+  const hasStudents = studentList.length > 0;
   const row3 = document.getElementById('req-row3');
-  if (row3) row3.style.display = hasStudent ? 'flex' : 'none';
+  if (row3) row3.style.display = hasStudents ? 'flex' : 'none';
 
   const nameEl = document.getElementById('req-student-name');
-  if (nameEl) nameEl.textContent = req.student || '';
+  if (nameEl) nameEl.textContent = studentList.map(s => `${s.name} (${s.code})`).join(', ');
   const codeEl = document.getElementById('req-student-code');
-  if (codeEl) codeEl.textContent = req.studentCode ? `(${req.studentCode})` : '';
+  if (codeEl) codeEl.textContent = '';
 
   // Sync filter bar defaults from request
   const fpt = document.getElementById('filter-placement-type-val');
