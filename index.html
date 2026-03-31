@@ -29,12 +29,12 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); height
 .sticky-header { position: sticky; top: 0; z-index: 50; flex-shrink: 0; background: var(--card); box-shadow: 0 2px 6px rgba(0,0,0,.07); }
 .top-nav-bar { display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:44px; background:var(--card); border-bottom:1px solid var(--border); gap:12px; }
 .top-nav-left { display:flex; align-items:center; min-width:0; flex:1; }
-.breadcrumb { display:flex; align-items:center; gap:6px; }
-.bc-seg { font-size:13px; }
-.bc-link { color:var(--primary); cursor:pointer; }
-.bc-link:hover { text-decoration:underline; }
-.bc-sep { color:var(--muted-fg); font-size:13px; }
-.bc-active { font-weight:700; color:var(--fg); }
+.breadcrumb { display:flex; align-items:center; gap:4px; font-size:12px; }
+.bc-seg { font-size:12px; color:#7D7D7D; white-space:nowrap; }
+.bc-link { color:#7D7D7D; cursor:pointer; text-decoration:none; }
+.bc-link:hover { color:#003179; text-decoration:underline; }
+.bc-sep { color:#DFDFDF; font-size:11px; margin:0 2px; }
+.bc-active { color:#00193E; font-weight:600; font-size:12px; }
 .top-nav-mid { display:none; }
 .sel-sm { display:inline-flex; align-items:center; gap:5px; padding:0 10px; height:28px; border:1px solid var(--border); border-radius:6px; background:var(--card); cursor:pointer; font-family:var(--font); font-size:11.5px; color:var(--fg); white-space:nowrap; }
 .sel-sm svg { width:11px; height:11px; color:var(--muted-fg); }
@@ -72,8 +72,21 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); height
 .req-days-switch-wrap.all-showing .req-days-switch { background:#94a3b8; }
 .req-days-switch-thumb { position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:white; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .2s; }
 .req-days-switch-wrap.all-showing .req-days-switch-thumb { transform:translateX(18px); }
-.f-reset-btn { display:flex; align-items:center; height:32px; padding:0 10px; border:none; background:none; font-size:12px; font-weight:500; color:var(--primary); cursor:pointer; white-space:nowrap; }
-.f-reset-btn:hover { text-decoration:underline; }
+/* Week / Day view toggle */
+.view-mode-group { display:inline-flex; align-items:center; flex-shrink:0; }
+.view-mode-btn { display:inline-flex; align-items:center; justify-content:center; height:32px; padding:0 13px; border:1px solid var(--border); background:var(--card); font-family:var(--font); font-size:12px; font-weight:500; color:var(--fg); cursor:pointer; white-space:nowrap; transition:background .15s, color .15s; }
+.view-mode-btn:first-child { border-radius:4px 0 0 4px; border-right:none; }
+.view-mode-btn:last-child  { border-radius:0 4px 4px 0; border-left:none; }
+.view-mode-btn.active { background:#0050C7; color:white; border-color:#0050C7; font-weight:600; }
+.view-mode-btn:not(.active):hover { background:var(--muted); }
+
+.f-filter-btn { display:inline-flex; align-items:center; height:32px; padding:0 14px; border:none; background:#0050C7; color:white; border-radius:5px; font-size:12px; font-weight:600; font-family:var(--font); cursor:pointer; white-space:nowrap; transition:background .15s; }
+.f-filter-btn:hover { background:#003179; }
+.f-filter-btn { display:inline-flex; align-items:center; height:32px; padding:0 14px; border:1.5px solid #0050C7; background:#0050C7; border-radius:5px; font-size:12px; font-weight:600; color:white; cursor:pointer; white-space:nowrap; font-family:var(--font); transition:background .15s, border-color .15s; }
+.f-filter-btn:hover { background:#003179; border-color:#003179; }
+.f-reset-btn { display:inline-flex; align-items:center; height:32px; padding:0 10px; border:1px solid #DFDFDF; background:white; border-radius:5px; font-size:12px; font-weight:500; color:#7D7D7D; font-family:var(--font); cursor:pointer; white-space:nowrap; transition:background .15s; }
+.f-reset-btn:hover:not(:disabled) { background:#F3F3F3; color:#003179; border-color:#A0C6FF; }
+.f-reset-btn:disabled { cursor:not-allowed; opacity:.4; }
 .f-bar-right { margin-left:auto; display:flex; align-items:flex-end; gap:6px; }
 .btn-nav { display:inline-flex; align-items:center; gap:4px; padding:0 12px; height:32px; border:1px solid var(--border); background:var(--card); border-radius:6px; cursor:pointer; font-family:var(--font); font-size:12px; font-weight:500; color:var(--fg); transition:background .15s; }
 .btn-nav:hover { background:var(--muted); }
@@ -105,29 +118,18 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); height
 .ctx-row .ctx-cells { flex:1; display:flex; }
 .ctx-row.ctx-request-row { align-items:stretch; }
 .ctx-row.ctx-request-row .ctx-label { align-items:flex-start; }
-.ctx-cell-bar { height:24px; flex-shrink:0; width:var(--col-w); position:relative; }
-.ctx-cell-bar.wknd { background:#f0f0f5; }
-.ctx-cell-bar.hatch-placement {
- background: repeating-linear-gradient(
- -45deg,
- var(--ctx-placement) 0px, var(--ctx-placement) 2px,
- var(--ctx-placement-bg) 2px, var(--ctx-placement-bg) 8px
- );
-}
-.ctx-cell-bar.hatch-placement-alt {
- background: repeating-linear-gradient(
- -45deg,
- #fbbf24 0px, #fbbf24 2px,
- #fffbeb 2px, #fffbeb 8px
- );
-}
-.ctx-cell-bar.hatch-request {
- background: repeating-linear-gradient(
- -45deg,
- #f87171 0px, #f87171 2px,
- #fef2f2 2px, #fef2f2 8px
- );
-}
+.ctx-cell-bar { height:32px; flex-shrink:0; width:var(--col-w); position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+.ctx-cell-bar.wknd { background:transparent; }
+/* Cell shift text */
+.ctx-cell-top { font-size:9px; font-weight:700; line-height:1; white-space:nowrap; text-align:center; letter-spacing:.01em; }
+.ctx-cell-bot { font-size:7.5px; font-weight:600; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:clip; max-width:100%; text-align:center; opacity:.85; }
+/* legacy hatch classes kept for backward compat but overridden by solid styles */
+.ctx-cell-bar.hatch-placement { background:#fff7ed; border-left:2px solid var(--ctx-placement); }
+.ctx-cell-bar.hatch-placement .ctx-cell-top { color:#c2410c; }
+.ctx-cell-bar.hatch-placement .ctx-cell-bot { color:#c2410c; }
+.ctx-cell-bar.hatch-placement-alt { background:#fffbeb; border-left:2px solid #fbbf24; }
+.ctx-cell-bar.hatch-placement-alt .ctx-cell-top { color:#92400e; }
+.ctx-cell-bar.hatch-placement-alt .ctx-cell-bot { color:#92400e; }
 .ctx-cell-bar.empty { background:transparent; }
 .cap-zero-row { background:#fafafa; }
 .cap-zero-row .row-left { opacity:.8; }
@@ -139,12 +141,17 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); height
 .cell.negative { background:#fef2f2; color:#dc2626; font-weight:700; }
 .cell.zero { background:white; color:#003179; }
 .cell.no-cap { background:#f3f4f6; color:#9ca3af; font-style:italic; }
-.day-col.in-request { background:#eff6ff; }
-.day-col.in-request .dd { color:var(--primary); font-weight:700; }
-.day-col.in-request .dow { color:var(--primary); }
-.row-agency.requested-agency { border-left:3px solid var(--primary); background:#eff6ff; }
-.requested-badge { display:inline-flex; align-items:center; gap:3px; padding:1px 7px; border-radius:999px; background:var(--primary); color:white; font-size:9.5px; font-weight:700; letter-spacing:.04em; margin-left:6px; flex-shrink:0; }
-.row-agency.requested-agency .lbl { color:var(--primary); }
+.day-col.in-request { background:#EFF5FF; }
+.day-col.in-request .dd { color:#003179; font-weight:700; }
+.day-col.in-request .dow { color:#003179; }
+.day-col.wknd.in-request { background:#EFF5FF; }
+.day-col.wknd.in-request .dd { color:#003179; font-weight:600; }
+.day-col.wknd.in-request .dow { color:#003179; }
+.row-agency.requested-agency,
+.row-child-agency.requested-agency { border-left:3px solid #003179; background:#EFF5FF; }
+.row-agency.requested-agency .lbl,
+.row-child-agency.requested-agency .lbl { color:#003179; }
+.requested-badge { display:inline-flex; align-items:center; gap:3px; padding:1px 7px; border-radius:999px; background:#003179; color:white; font-size:9.5px; font-weight:700; letter-spacing:.04em; margin-left:6px; flex-shrink:0; }
 .pinned-tag { display:none; }
 .collapsible-hdr { display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
 .collapsible-hdr .section-label { margin-bottom:0; }
@@ -153,8 +160,8 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); height
 .collapsible-body { overflow:hidden; transition:max-height .25s ease, opacity .2s ease; }
 .collapsible-body.closed { max-height:0 !important; opacity:0; pointer-events:none; }
 .req-bar { background:var(--card); border-bottom:2px solid var(--border); padding:0 16px; }
-.btn-edit-request { display:inline-flex; align-items:center; gap:5px; padding:0 11px; height:28px; border:1.5px solid var(--primary); background:var(--primary-light); border-radius:6px; cursor:pointer; font-family:var(--font); font-size:11.5px; font-weight:600; color:var(--primary); transition:background .15s; white-space:nowrap; }
-.btn-edit-request:hover { background:#dbeafe; }
+.btn-edit-request { display:inline-flex; align-items:center; gap:4px; padding:0 8px; height:28px; border:none; background:none; border-radius:6px; cursor:pointer; font-family:var(--font); font-size:11.5px; font-weight:500; color:var(--fg-light); transition:color .15s; white-space:nowrap; text-decoration:none; }
+.btn-edit-request:hover { color:var(--primary); text-decoration:underline; }
 .req-row1 { display:flex; align-items:center; justify-content:space-between; padding:7px 0 5px; gap:12px; }
 .req-row1-left { display:flex; align-items:center; gap:8px; flex-wrap:wrap; min-width:0; }
 .req-row1-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
@@ -177,8 +184,8 @@ body { font-family: var(--font); background: var(--bg); color: var(--fg); height
 .req-badges { margin-left:auto; display:flex; gap:5px; }
 .badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; }
 .badge-total { background:#e5e7eb; color:#374151; }
-.badge-rem { background:var(--cap); color:white; }
-.badge-alloc { background:var(--offered-color); color:white; }
+.badge-rem { background:#fef3c7; color:#92400e; border:1px solid #f59e0b; }
+.badge-alloc { background:#f3f4f6; color:#6b7280; border:1px solid #d1d5db; }
 .btn-req-action { padding:0 14px; height:30px; border-radius:6px; cursor:pointer; font-family:var(--font); font-size:12px; font-weight:600; transition:all .15s; white-space:nowrap; }
 .btn-req-action:disabled { opacity:.35; cursor:not-allowed; }
 .btn-reallocate-top { border:1.5px solid var(--primary); background:white; color:var(--primary); }
@@ -253,7 +260,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .col-left-h { min-width:var(--left-w); max-width:var(--left-w); padding:6px 14px; font-size:9.5px; font-weight:700; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.06em; }
 .col-right-h { flex:1; display:flex; align-items:center; }
 .day-col { width:var(--col-w); height:40px; flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right:1px solid #DFDFDF; color:#003179; background:white; }
-.day-col.wknd { background:#f8f8fb; }
+.day-col.wknd { background:white; }
 .day-col .dd { font-size:9.5px; font-weight:600; color:#003179; font-family:var(--mono); }
 .day-col .dow { font-size:8.5px; color:#003179; }
 .col-act-h { margin-left:auto; padding-right:12px; font-size:9.5px; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
@@ -264,7 +271,10 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .row-ep:hover { background:#e4ecff; }
 .row-ep .lbl { font-size:12px; font-weight:700; color:#1e40af; letter-spacing:.01em; }
 .row-ep svg { color:#3b82f6; }
-.row-child-agency { background:#f4f7fb; cursor:pointer; user-select:none; display:flex; align-items:center; border-left:2px solid #bfdbfe; }
+.row-child-agency { background:#f8fafc; cursor:pointer; user-select:none; display:flex; align-items:center; border-left:2px solid #C7DEFF; }
+/* Deeper levels get progressively more indented visual treatment */
+.row-child-agency .i4 { border-left:none; }
+.row-child-agency .i5 { border-left:none; }
 .row-child-agency:hover { background:#eff6ff; }
 .row-child-agency .row-left { min-width:var(--left-w); max-width:var(--left-w); flex-shrink:0; }
 .child-sum-row { flex:1; display:flex; align-items:center; }
@@ -284,14 +294,19 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .row-left .lbl.bold { font-weight:700; }
 .ward-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 .info-icon { width:11px; height:11px; color:var(--primary); flex-shrink:0; margin-left:2px; }
-.i0 { padding-left:8px; } .i1 { padding-left:8px; } .i2 { padding-left:24px; } .i3 { padding-left:44px; } .i4 { padding-left:64px; }
+.i0 { padding-left:8px; } .i1 { padding-left:8px; } .i2 { padding-left:24px; } .i3 { padding-left:44px; } .i4 { padding-left:64px; } .i5 { padding-left:84px; }
+/* Hierarchy connector lines — subtle left border tint for deep levels */
+.row.row-child-agency .i4::before,
+.row.row-child-agency .i5::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
 .row-right { flex:1; display:flex; align-items:center; padding-right:8px; border-left:1px solid #e8eaed; }
 .cell { width:var(--col-w); height:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:500; font-family:var(--mono); transition:background .1s; border-right:1px solid #DFDFDF; color:#003179; background:white; }
 .cell.avail { background:white; color:#003179; }
 .cell.avail:hover { background:#dcfce7; }
-.cell.wknd { background:white; color:#C2C2C2; }
+.cell.wknd { background:white; color:#003179; }
+.cell.wknd.in-req-col { background:#EFF5FF; }
 .cell.cell-p1 { background:white; color:#003179; }
 .cell.cell-p1-empty { background:white; color:#003179; }
+.cell.in-req-col { background:#EFF5FF; }
 .cell.in-req-sufficient { background:#E4F3E4; color:#245225; font-weight:700; animation: flashGreen .5s ease; }
 .cell.in-req-sufficient:hover { background:#86efac; }
 .cell.in-req-grey { background:white; color:#003179; }
@@ -338,11 +353,15 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .btn-sel:hover { background:#1d4ed8; }
 .btn-cancel-alloc { width:20px; height:20px; border:none; background:none; cursor:pointer; font-size:12px; color:var(--muted-fg); border-radius:3px; display:flex; align-items:center; justify-content:center; transition:background .15s, color .15s; }
 .btn-cancel-alloc:hover { background:#fee2e2; color:#dc2626; }
-.btn-alloc { display:inline-flex; align-items:center; gap:3px; padding:0 8px; height:22px; border:none; background:var(--primary); border-radius:4px; cursor:pointer; font-family:var(--font); font-size:10.5px; font-weight:600; color:white; margin-left:auto; transition:background .15s, opacity .15s; white-space:nowrap; opacity:0; flex-shrink:0; }
+.btn-alloc { display:inline-flex; align-items:center; gap:3px; padding:0 8px; height:22px; border:none; background:#0050C7; border-radius:4px; cursor:pointer; font-family:var(--font); font-size:10.5px; font-weight:600; color:white; margin-left:auto; transition:background .15s, opacity .15s; white-space:nowrap; opacity:0; flex-shrink:0; }
 .btn-alloc svg { width:10px; height:10px; }
-.btn-alloc:hover { background:#1d4ed8; }
-.row-ward:hover .btn-alloc,
+.btn-alloc:hover { background:#0369FF; }
+.row-child-agency:hover .btn-alloc { opacity:1; }
 .row-agency:hover .btn-alloc { opacity:1; }
+.row-ward:hover .btn-alloc,
+.row-agency:hover .btn-alloc,
+.row-child-agency:hover .btn-alloc,
+.row-ward:hover .btn-alloc { opacity:1; }
 .row-ward { transition:background .1s; background:white; }
 .row-ward:hover { background:#f8faff; }
 .toast { position:fixed; bottom:88px; right:20px; z-index:300; background:white; border:1px solid var(--border); border-radius:8px; padding:12px 16px; box-shadow:0 4px 20px rgba(0,0,0,.12); animation:toastIn .3s ease; min-width:240px; }
@@ -351,17 +370,24 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 @keyframes toastOut { to{opacity:0;transform:translateY(10px)} }
 .toast-title { font-size:12.5px; font-weight:700; color:var(--fg); margin-bottom:2px; }
 .toast-body { font-size:11px; color:var(--muted-fg); }
-.bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--border); box-shadow:0 -4px 20px rgba(0,0,0,.07); z-index:50; }
-.bottom-inner { display:flex; align-items:center; justify-content:space-between; padding:10px 24px; max-width:1600px; margin:0 auto; }
-.bottom-left { display:flex; align-items:center; gap:14px; }
-.btn-clear { background:none; border:none; cursor:pointer; font-family:var(--font); font-size:13px; font-weight:600; color:var(--primary); text-decoration:underline; text-underline-offset:2px; }
-.bottom-status { font-size:12.5px; color:var(--muted-fg); }
-.bottom-right { display:flex; align-items:center; gap:10px; }
-.btn-sec { padding:0 18px; height:38px; border:1px solid var(--border); background:var(--card); border-radius:7px; cursor:pointer; font-family:var(--font); font-size:13px; font-weight:600; color:var(--fg); transition:background .15s; }
-.btn-sec:hover { background:var(--muted); }
-.btn-prim { padding:0 18px; height:38px; border:none; background:var(--primary); border-radius:7px; cursor:pointer; font-family:var(--font); font-size:13px; font-weight:600; color:white; transition:background .15s; }
-.btn-prim:hover { background:#1d4ed8; }
-.btn-prim:disabled,.btn-sec:disabled { opacity:.4; cursor:not-allowed; }
+.bottom-bar { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#ffffff; border:1px solid #C7DEFF; border-radius:8px; box-shadow:0 4px 20px rgba(0,49,121,.18); z-index:200; width:auto; min-width:360px; }
+@keyframes barSlideUp { from{opacity:0;transform:translateX(-50%) translateY(10px);}to{opacity:1;transform:translateX(-50%) translateY(0);} }
+.bottom-bar { animation:barSlideUp .2s ease; }
+.bottom-inner { padding:8px 8px 8px 16px; display:flex; align-items:center; gap:10px; }
+.bottom-left { display:flex; align-items:center; gap:6px; margin-right:8px; }
+.btn-clear { display:inline-flex; align-items:center; gap:5px; padding:0 12px; height:34px; border:1px solid #DFDFDF; background:white; cursor:pointer; font-family:var(--font); font-size:12.5px; font-weight:500; color:#5F5F5F; border-radius:5px; flex-shrink:0; transition:border-color .15s, color .15s; white-space:nowrap; }
+.btn-clear:hover { border-color:#B60000; color:#B60000; }
+.btn-clear svg { width:13px; height:13px; flex-shrink:0; }
+.bottom-status { font-size:12.5px; font-weight:500; color:#003179; white-space:nowrap; }
+.bottom-right { display:flex; align-items:center; gap:6px; }
+.btn-sec { display:inline-flex; align-items:center; gap:5px; padding:0 14px; height:34px; border:1px solid #C7DEFF; background:#EFF5FF; cursor:pointer; font-family:var(--font); font-size:12.5px; font-weight:500; color:#003179; border-radius:5px; transition:background .15s, border-color .15s; white-space:nowrap; }
+.btn-sec:hover { background:rgba(255,255,255,.1); }
+.btn-prim { display:inline-flex; align-items:center; gap:5px; padding:0 16px; height:34px; border:none; background:#0050C7; cursor:pointer; font-family:var(--font); font-size:12.5px; font-weight:600; color:white; border-radius:5px; transition:background .15s; white-space:nowrap; }
+.btn-prim:hover { background:#0369FF; }
+.btn-sec:hover { background:#EFF5FF; border-color:#A0C6FF; }
+.btn-prim:disabled { opacity:.45; cursor:not-allowed; }
+.btn-prim:disabled { opacity:.4; cursor:not-allowed; }
+.btn-sec:disabled { opacity:.4; cursor:not-allowed; }
 .modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:200; }
 .modal-backdrop.open { display:block; }
 .modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-54%); width:420px; background:white; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.2); z-index:210; flex-direction:column; }
@@ -393,7 +419,46 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .btn-modal-danger:hover { background:#dc2626; }
 .overlay { position:fixed; inset:0; background:rgba(0,0,0,.25); z-index:200; opacity:0; pointer-events:none; transition:opacity .3s; }
 .overlay.open { opacity:1; pointer-events:all; }
-.side-panel { position:fixed; top:0; right:0; bottom:0; width:460px; background:var(--card); border-left:1px solid var(--border); box-shadow:-8px 0 30px rgba(0,0,0,.1); z-index:201; display:flex; flex-direction:column; transform:translateX(100%); transition:transform .35s cubic-bezier(.4,0,.2,1); }
+.side-panel { position:fixed; top:0; right:0; bottom:0; width:42%; min-width:460px; max-width:680px; background:var(--card); border-left:1px solid var(--border); box-shadow:-8px 0 30px rgba(0,0,0,.1); z-index:201; display:flex; flex-direction:column; transform:translateX(100%); transition:transform .35s cubic-bezier(.4,0,.2,1); }
+/* ── SP inline-edit rows ── */
+.sp-inline-row { display:grid; grid-template-columns:160px 1fr auto; align-items:center; gap:0 8px; padding:8px 12px; border-radius:6px; transition:background .1s; }
+.sp-inline-row:hover { background:#f8f9fb; }
+.sp-inline-row + .sp-inline-row { border-top:1px solid #f0f2f5; }
+.sp-inline-key { font-size:11px; font-weight:600; color:var(--muted-fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.4; }
+.sp-inline-val { font-size:12.5px; font-weight:500; color:var(--fg); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.4; }
+.sp-inline-val.diffed { color:#d97706; font-weight:600; }
+.sp-diff-badge { font-size:9.5px; color:#d97706; font-weight:600; background:#fffbeb; border:1px solid #fde68a; border-radius:3px; padding:1px 5px; margin-left:4px; white-space:nowrap; flex-shrink:0; }
+.sp-pencil-btn { opacity:0; background:none; border:none; cursor:pointer; color:var(--muted-fg); padding:4px; border-radius:4px; display:flex; align-items:center; flex-shrink:0; transition:opacity .15s, color .15s, background .15s; justify-self:end; }
+.sp-inline-row:hover .sp-pencil-btn { opacity:1; }
+.sp-pencil-btn:hover { color:var(--primary); background:var(--primary-light); }
+.sp-inline-row.editing { background:#f0f6ff; grid-template-columns:160px 1fr; }
+.sp-inline-row.editing .sp-inline-val,
+.sp-inline-row.editing .sp-diff-badge,
+.sp-inline-row.editing .sp-pencil-btn { display:none; }
+.sp-inline-edit-ctrl { display:none; flex:1; gap:5px; align-items:center; grid-column:2; }
+.sp-inline-row.editing .sp-inline-edit-ctrl { display:flex; }
+.sp-inline-input { height:28px; border:1.5px solid var(--primary); border-radius:5px; padding:0 8px; font-family:var(--font); font-size:12px; color:var(--fg); background:white; flex:1; min-width:0; outline:none; box-shadow:0 0 0 3px rgba(37,99,235,.1); }
+.sp-inline-select { height:28px; border:1.5px solid var(--primary); border-radius:5px; padding:0 6px; font-family:var(--font); font-size:12px; color:var(--fg); background:white; flex:1; min-width:0; outline:none; box-shadow:0 0 0 3px rgba(37,99,235,.1); cursor:pointer; }
+.sp-inline-confirm { height:26px; padding:0 10px; background:var(--primary); border:none; border-radius:5px; font-family:var(--font); font-size:11px; font-weight:600; color:white; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.sp-inline-confirm:hover { background:#1d4ed8; }
+.sp-inline-cancel { height:26px; padding:0 8px; background:none; border:1px solid var(--border); border-radius:5px; font-family:var(--font); font-size:11px; color:var(--fg-light); cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.sp-inline-cancel:hover { background:var(--muted); }
+.sp-inline-row.locked .sp-pencil-btn { display:none !important; }
+/* ── SP Section cards ── */
+.sp-section-card { border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:10px; }
+.sp-section-card-hdr { display:flex; align-items:center; gap:7px; padding:8px 12px; background:#f4f5f7; border-bottom:1px solid var(--border); }
+.sp-section-card-hdr svg { color:var(--muted-fg); flex-shrink:0; }
+.sp-section-card-title { font-size:10px; font-weight:700; color:var(--fg-light); text-transform:uppercase; letter-spacing:.08em; }
+.sp-section-card-body { background:white; }
+/* Sub-section divider inside a card */
+.sp-sub-heading { font-size:9.5px; font-weight:700; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.07em; padding:7px 12px 5px; background:#fafbfc; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-top:2px; }
+/* Row tweaks inside cards — remove outer radius since card handles it */
+.sp-section-card .sp-inline-row { border-radius:0; }
+.sp-section-card .sp-inline-row:hover { background:#f8f9fb; }
+.sp-section-card .sp-inline-row + .sp-inline-row { border-top:1px solid #f0f2f5; }
+/* Legacy heading (for Placement Details which uses section-heading) */
+.sp-section-heading { font-size:10px; font-weight:700; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.08em; padding:14px 12px 6px; display:flex; align-items:center; gap:6px; }
+.sp-section-heading.first { padding-top:4px; }
 .student-panel { position:fixed; top:0; right:0; bottom:0; width:400px; background:var(--card); border-left:1px solid var(--border); box-shadow:-8px 0 30px rgba(0,0,0,.12); z-index:203; display:flex; flex-direction:column; transform:translateX(100%); transition:transform .35s cubic-bezier(.4,0,.2,1); }
 .student-panel.open { transform:translateX(0); }
 .sp-student-header { padding:16px 20px 12px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
@@ -412,7 +477,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .sp-student-close:hover { background:var(--muted); }
 .sp-student-close svg { width:16px; height:16px; }
 .side-panel.open { transform:translateX(0); }
-.edit-req-panel { position:fixed; top:0; right:0; bottom:0; width:500px; background:var(--card); border-left:1px solid var(--border); box-shadow:-8px 0 30px rgba(0,0,0,.12); z-index:202; display:flex; flex-direction:column; overflow:hidden; transform:translateX(100%); transition:transform .35s cubic-bezier(.4,0,.2,1); }
+.edit-req-panel { position:fixed; top:0; right:0; bottom:0; width:42%; min-width:480px; max-width:700px; background:var(--card); border-left:1px solid var(--border); box-shadow:-8px 0 30px rgba(0,0,0,.12); z-index:202; display:flex; flex-direction:column; overflow:hidden; transform:translateX(100%); transition:transform .35s cubic-bezier(.4,0,.2,1); }
 .edit-req-panel.open { transform:translateX(0); }
 .erp-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); }
 .erp-title { font-size:15px; font-weight:700; color:var(--fg); }
@@ -455,6 +520,43 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .erp-collapsible-body.collapsed { max-height:0 !important; opacity:0; pointer-events:none; }
 .erp-req { color:#ef4444; margin-left:2px; }
 .erp-required-note { font-size:10.5px; color:var(--muted-fg); margin-bottom:4px; }
+/* ── Inline-edit row styles ── */
+.erp-section-block { display:flex; flex-direction:column; margin-bottom:0; }
+.erp-section-heading { font-size:10px; font-weight:700; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.08em; padding:14px 12px 6px; border-top:1px solid var(--border); margin-top:4px; display:flex; align-items:center; gap:6px; }
+.erp-section-heading:first-of-type { border-top:none; padding-top:4px; }
+.erp-inline-row { display:grid; grid-template-columns:148px 1fr auto; align-items:center; gap:0 8px; padding:8px 12px; border-radius:6px; transition:background .1s; }
+.erp-inline-row:hover { background:#f8f9fb; }
+.erp-inline-row + .erp-inline-row { border-top:1px solid #f0f2f5; }
+.erp-inline-key { font-size:11px; font-weight:600; color:var(--muted-fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.4; }
+.erp-inline-val { font-size:12.5px; font-weight:500; color:var(--fg); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.4; }
+.erp-inline-val.muted { color:var(--muted-fg); font-style:italic; font-weight:400; }
+.erp-inline-val.badge { display:inline-flex; }
+.erp-pencil-btn { opacity:0; background:none; border:none; cursor:pointer; color:var(--muted-fg); padding:4px; border-radius:4px; display:flex; align-items:center; flex-shrink:0; transition:opacity .15s, color .15s, background .15s; justify-self:end; }
+.erp-inline-row:hover .erp-pencil-btn { opacity:1; }
+.erp-pencil-btn:hover { color:var(--primary); background:var(--primary-light); }
+.erp-inline-row.editing { background:#f0f6ff; grid-template-columns:148px 1fr; }
+/* Edit state */
+.erp-inline-row.editing .erp-inline-val { display:none; }
+.erp-inline-row.editing .erp-pencil-btn { display:none; }
+.erp-inline-edit-ctrl { display:none; flex:1; gap:6px; align-items:center; grid-column:2; }
+.erp-inline-row.editing .erp-inline-edit-ctrl { display:flex; }
+.erp-inline-input { height:30px; border:1.5px solid var(--primary); border-radius:5px; padding:0 8px; font-family:var(--font); font-size:12px; color:var(--fg); background:white; flex:1; min-width:0; outline:none; box-shadow:0 0 0 3px rgba(37,99,235,.1); }
+.erp-inline-select { height:30px; border:1.5px solid var(--primary); border-radius:5px; padding:0 6px; font-family:var(--font); font-size:12px; color:var(--fg); background:white; flex:1; min-width:0; outline:none; box-shadow:0 0 0 3px rgba(37,99,235,.1); cursor:pointer; }
+.erp-inline-confirm { height:28px; padding:0 10px; background:var(--primary); border:none; border-radius:5px; font-family:var(--font); font-size:11.5px; font-weight:600; color:white; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.erp-inline-confirm:hover { background:#1d4ed8; }
+.erp-inline-cancel { height:28px; padding:0 8px; background:none; border:1px solid var(--border); border-radius:5px; font-family:var(--font); font-size:11.5px; color:var(--fg-light); cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.erp-inline-cancel:hover { background:var(--muted); }
+/* Comment section always-exposed */
+.erp-comment-box { display:flex; flex-direction:column; gap:8px; padding:12px 0 4px; }
+.erp-comment-list { display:flex; flex-direction:column; gap:8px; margin-bottom:6px; }
+.erp-comment-item { background:#fafbfc; border:1px solid var(--border); border-radius:6px; padding:10px 12px; font-size:12px; color:var(--fg); line-height:1.5; }
+.erp-comment-item-meta { font-size:10.5px; color:var(--muted-fg); margin-top:4px; }
+/* Schedule summary chip row */
+.erp-sched-summary { display:flex; flex-wrap:wrap; gap:5px; }
+.erp-sched-chip { display:inline-flex; align-items:center; gap:4px; background:var(--muted); border-radius:4px; padding:2px 8px; font-size:11px; font-weight:500; color:var(--fg-light); }
+.erp-sched-chip svg { width:11px; height:11px; color:var(--muted-fg); }
+/* Readonly disabled state */
+.erp-inline-row.locked .erp-pencil-btn { display:none !important; }
 .yn-group { display:flex; gap:0; }
 .yn-btn { height:30px; padding:0 14px; border:1px solid var(--border); background:white; cursor:pointer; font-family:var(--font); font-size:12px; font-weight:500; color:var(--fg-light); transition:all .15s; }
 .yn-btn:first-child { border-radius:6px 0 0 6px; }
@@ -662,17 +764,8 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 .day-col.dow-hidden { display:none; }
 .cell.dow-hidden { display:none; }
 .ctx-cell-bar.dow-hidden { display:none; }
-.day-col.dow-mon { border-top:2px solid #bae6fd; }
-.day-col.dow-mon .dd, .day-col.dow-mon .dow { color:#0369a1; }
-.day-col.dow-tue { border-top:2px solid #a7f3d0; }
-.day-col.dow-tue .dd, .day-col.dow-tue .dow { color:#065f46; }
-.day-col.dow-wed { border-top:2px solid #fde68a; }
-.day-col.dow-wed .dd, .day-col.dow-wed .dow { color:#92400e; }
-.day-col.dow-thu { border-top:2px solid #ddd6fe; }
-.day-col.dow-thu .dd, .day-col.dow-thu .dow { color:#5b21b6; }
-.day-col.dow-fri { border-top:2px solid #fbcfe8; }
-.day-col.dow-fri .dd, .day-col.dow-fri .dow { color:#9d174d; }
-.day-col.wknd .dd, .day-col.wknd .dow { color:#9ca3af; }
+
+
 .req-hover-card {
  position:fixed; z-index:1000; pointer-events:none;
  background:white; border:1px solid var(--border);
@@ -682,6 +775,45 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
  transition:opacity .12s ease, transform .12s ease;
 }
 .req-hover-card.visible { opacity:1; transform:translateY(0); }
+/* Placement hover card — blue accent variant */
+.plc-hover-card {
+ position:fixed; z-index:1000; pointer-events:none;
+ background:white; border:1px solid #bfdbfe;
+ border-top:3px solid var(--primary);
+ border-radius:10px; box-shadow:0 8px 24px rgba(37,99,235,.13);
+ padding:12px 14px; min-width:220px; max-width:280px;
+ opacity:0; transform:translateY(4px);
+ transition:opacity .12s ease, transform .12s ease;
+}
+.plc-hover-card.visible { opacity:1; transform:translateY(0); }
+.phc-id { font-size:10px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+.phc-label { font-size:12.5px; font-weight:700; color:var(--fg); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.phc-status-badge { font-size:9.5px; font-weight:700; padding:1px 7px; border-radius:4px; }
+.phc-status-badge.offered { background:var(--offered-bg); color:#92400e; }
+.phc-status-badge.published { background:#eff6ff; color:#1d4ed8; }
+.phc-status-badge.unsaved { background:#faf5ff; color:#7c3aed; }
+.phc-grid { display:grid; grid-template-columns:auto 1fr; gap:3px 10px; }
+.phc-lbl { font-size:10.5px; color:var(--muted-fg); font-weight:500; white-space:nowrap; }
+.phc-val { font-size:10.5px; color:var(--fg); font-weight:600; }
+.phc-divider { grid-column:1/-1; height:1px; background:#dbeafe; margin:5px 0; }
+.phc-shift-badge { display:inline-flex; padding:1px 6px; border-radius:4px; font-size:9.5px; font-weight:700; }
+.phc-shift-badge.has-shift { background:#eff6ff; color:#1d4ed8; }
+.phc-shift-badge.all-shift { background:#f0f2f5; color:#6b7280; }
+/* Placement ctx row — primary blue solid bar */
+.ctx-cell-bar.solid-placement { background:#dbeafe; border-left:2px solid var(--primary); }
+.ctx-cell-bar.solid-placement .ctx-cell-top { color:#1d4ed8; }
+.ctx-cell-bar.solid-placement .ctx-cell-bot { color:#1d4ed8; }
+.ctx-cell-bar.solid-placement-alt { background:#e0e7ff; border-left:2px solid #6366f1; }
+.ctx-cell-bar.solid-placement-alt .ctx-cell-top { color:#4338ca; }
+.ctx-cell-bar.solid-placement-alt .ctx-cell-bot { color:#4338ca; }
+.ctx-cell-bar.hatch-request { background:#fef2f2; border-left:2px solid #f87171; }
+.ctx-cell-bar.hatch-request .ctx-cell-top { color:#b91c1c; }
+.ctx-cell-bar.hatch-request .ctx-cell-bot { color:#b91c1c; }
+/* Ensure request and placement rows align the same height */
+.ctx-row.ctx-placement-row { align-items:stretch; border-left:3px solid var(--primary); }
+.ctx-row.ctx-request-row { align-items:stretch; border-left:3px solid var(--ctx-request); }
+.ctx-row.ctx-placement-row .ctx-label { align-items:flex-start; padding-left:61px; }
+.ctx-row.ctx-request-row .ctx-label { align-items:flex-start; padding-left:61px; }
 .rhc-id { font-size:10px; font-weight:700; color:var(--muted-fg); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
 .rhc-ep { font-size:13px; font-weight:700; color:var(--fg); margin-bottom:8px; }
 .rhc-grid { display:grid; grid-template-columns:auto 1fr; gap:3px 10px; }
@@ -739,11 +871,13 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 <!-- TOP NAV BAR -->
 <div class="top-nav-bar">
   <div class="top-nav-left">
-    <span class="breadcrumb">
-      <span class="bc-seg bc-link">Request</span>
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a class="bc-seg bc-link" href="#">Request</a>
       <span class="bc-sep">/</span>
-      <span class="bc-seg bc-active">Process Response</span>
-    </span>
+      <a class="bc-seg bc-link" href="#">Process Request</a>
+      <span class="bc-sep">/</span>
+      <span class="bc-seg bc-active" id="bc-active-seg">80332 – Charles Sturt University – Primary Education – Jan–Feb 26</span>
+    </nav>
   </div>
   <div class="top-nav-right">
     <button class="btn-previous" onclick="switchRequest(-1)">
@@ -833,6 +967,15 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
     </div>
   </div>
 
+  <!-- Week / Day view toggle -->
+  <div class="f-field">
+    <label>View By</label>
+    <div class="view-mode-group">
+      <button class="view-mode-btn" id="btn-view-week" onclick="setViewMode('week')">Week</button>
+      <button class="view-mode-btn active" id="btn-view-day" onclick="setViewMode('day')">Day</button>
+    </div>
+  </div>
+
   <div class="f-field">
     <label>Region</label>
     <div class="f-input" id="filter-region" onclick="initRegionFilter && initRegionFilter()" title="Defaults to request region" style="min-width:120px;cursor:pointer;">
@@ -866,6 +1009,15 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
     </div>
   </div>
 
+  <!-- Filter + Reset inline after Year Level -->
+  <div class="f-field">
+    <label style="color:transparent;user-select:none;">·</label>
+    <div style="display:flex;align-items:center;gap:4px;">
+      <button class="f-filter-btn" id="btn-apply-filters" onclick="applyFilters()">Filter</button>
+      <button class="f-reset-btn" id="btn-reset-filters" onclick="resetFilters()" disabled>Reset</button>
+    </div>
+  </div>
+
   <!-- Requested days toggle switch — auto-shows when request has a day pattern -->
   <div class="req-days-switch-wrap" id="req-days-toggle" style="display:none;">
     <span class="req-days-switch-lbl" id="req-days-lbl-all">All dates</span>
@@ -876,7 +1028,6 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   </div>
 
   <div class="f-bar-right">
-    <button class="f-reset-btn" onclick="resetFilters()">Reset</button>
     <div style="width:1px;height:24px;background:var(--border);margin:0 4px"></div>
     <button class="ctx-btn" id="ctx-btn-placements" onclick="toggleContext('placements')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
@@ -891,27 +1042,26 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 
 <!-- LEGEND -->
 <div class="legend-bar">
-  <!-- Capacity States section -->
-  <span class="legend-lbl">Availability</span>
-  <div class="legend-item"><div class="l-swatch" style="background:#E4F3E4;border:1px solid #245225"></div><span class="l-txt">Available</span></div>
-  <div class="legend-item"><div class="l-swatch" style="background:#FFEBEB;border:1px solid #8F0000"></div><span class="l-txt">Negative</span></div>
+  <!-- Group By LEFT -->
+  <span class="legend-lbl">Group By</span>
+  <button class="gb-pill active" id="gb-shift"         onclick="setGroupBy('shift')">Shift</button>
+  <button class="gb-pill"        id="gb-placementType" onclick="setGroupBy('placementType')">Placement Type</button>
+  <button class="gb-pill"        id="gb-capacity"      onclick="setGroupBy('capacity')">Availability</button>
+  <button class="gb-pill"        id="gb-supervisor"    onclick="setGroupBy('supervisor')">Supervisor</button>
 
-  <!-- Context items (shown when toggles on) -->
-  <div class="legend-item" id="legend-placements" style="display:none">
-    <div class="l-swatch" style="background:repeating-linear-gradient(-45deg,var(--ctx-placement) 0px,var(--ctx-placement) 2px,var(--ctx-placement-bg) 2px,var(--ctx-placement-bg) 8px)"></div>
-    <span class="l-txt">Other placements</span>
-  </div>
-  <div class="legend-item" id="legend-requests" style="display:none">
-    <div class="l-swatch" style="background:repeating-linear-gradient(-45deg,#f87171 0px,#f87171 2px,#fef2f2 2px,#fef2f2 8px)"></div>
-    <span class="l-txt">Other pending requests · EP, qty &amp; shift on bar</span>
-  </div>
-
-  <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
-    <span style="font-size:9.5px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Group By</span>
-    <button class="gb-pill active" id="gb-shift"         onclick="setGroupBy('shift')">Shift</button>
-    <button class="gb-pill"        id="gb-placementType" onclick="setGroupBy('placementType')">Placement Type</button>
-    <button class="gb-pill"        id="gb-capacity"      onclick="setGroupBy('capacity')">Availability</button>
-    <button class="gb-pill"        id="gb-supervisor"    onclick="setGroupBy('supervisor')">Supervisor</button>
+  <!-- Legend RIGHT -->
+  <div style="margin-left:auto;display:flex;align-items:center;gap:12px;">
+    <span class="legend-lbl">Availability</span>
+    <div class="legend-item"><div class="l-swatch" style="background:#E4F3E4;border:1px solid #245225"></div><span class="l-txt">Available</span></div>
+    <div class="legend-item"><div class="l-swatch" style="background:#FFEBEB;border:1px solid #8F0000"></div><span class="l-txt">Negative</span></div>
+    <div class="legend-item" id="legend-placements" style="display:none">
+      <div class="l-swatch" style="background:#dbeafe;border-left:2px solid var(--primary);border-radius:2px;"></div>
+      <span class="l-txt">Other placements</span>
+    </div>
+    <div class="legend-item" id="legend-requests" style="display:none">
+      <div class="l-swatch" style="background:#fef2f2;border-left:2px solid #f87171;border-radius:2px;"></div>
+      <span class="l-txt">Other pending requests</span>
+    </div>
   </div>
 </div>
 
@@ -927,12 +1077,12 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   </div>
 
   <!-- ══ Northern Schools Network ══ -->
-  <div class="row row-agency requested-agency" id="agency-une" onclick="toggleAgency('une')">
+  <div class="row row-agency" id="agency-une" onclick="toggleAgency('une')">
     <div class="row-left i2">
       <svg class="agency-chevron" id="chevron-une" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(0deg);transition:transform .2s;flex-shrink:0;"><path d="m6 9 6 6 6-6"/></svg>
       <span class="lbl bold">Northern Schools Network</span>
       <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <span class="requested-badge">★ Requested</span>
+      <span class="requested-badge" style="display:none;">★ Requested</span>
       <button class="btn-alloc btn-alloc-sm" onclick="event.stopPropagation();showInput('une-parent','Any Shift','Northern Schools Network')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>Allocate</button><span class="ward-alloc-badge" id="ward-count-une-parent" style="display:none"></span>
     </div>
     <div class="row-right" id="rr-une"></div>
@@ -958,6 +1108,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
       <svg class="child-agency-chevron" id="cchev-gps" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(0deg);transition:transform .2s;flex-shrink:0;"><path d="m6 9 6 6 6-6"/></svg>
       <span class="lbl" style="font-weight:600;">Greenfield Primary School</span>
       <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span class="requested-badge" style="display:none;">★ Requested</span>
       <button class="btn-alloc btn-alloc-sm" onclick="event.stopPropagation();showInput('gps-parent','Any Shift','Greenfield Primary School')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>Allocate</button><span class="ward-alloc-badge" id="ward-count-gps-parent" style="display:none"></span>
     </div>
     <div class="row-right child-sum-row" id="rr-child-gps"></div>
@@ -978,6 +1129,33 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   </div>
   <div class="cards-row agency-child agency-une child-agency-gps" id="cards-gps-full-day"><div class="cards-row-inner"></div></div>
   <div id="gb-rows-gps" class="agency-child agency-une child-agency-gps"></div>
+
+  <!-- Greenfield PS — Year 3 Block (deeper hierarchy example) -->
+  <div class="row row-child-agency agency-child agency-une child-agency-gps" id="child-agency-gps-y3" onclick="toggleChildAgency('gps-y3')">
+    <div class="row-left i4">
+      <svg class="child-agency-chevron" id="cchev-gps-y3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(0deg);transition:transform .2s;flex-shrink:0;"><path d="m6 9 6 6 6-6"/></svg>
+      <span class="lbl" style="font-weight:600;">Year 3 Block</span>
+      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span class="requested-badge" style="display:none;">★ Requested</span>
+      <button class="btn-alloc btn-alloc-sm" onclick="event.stopPropagation();showInput('gps-y3-am','AM','Year 3 Block')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>Allocate</button>
+      <span class="ward-alloc-badge" id="ward-count-gps-y3-am" style="display:none"></span>
+    </div>
+    <div class="row-right child-sum-row" id="rr-child-gps-y3"></div>
+  </div>
+
+  <!-- Greenfield PS — Year 3 Block — Room 3A (L5 — deepest level) -->
+  <div class="row row-child-agency agency-child agency-une child-agency-gps child-agency-gps-y3" id="child-agency-gps-room3a">
+    <div class="row-left i5">
+      <span class="lbl" style="font-weight:600;font-size:12px;">Room 3A</span>
+      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span class="requested-badge" style="display:none;">★ Requested</span>
+      <button class="btn-alloc btn-alloc-sm" onclick="event.stopPropagation();showInput('gps-room3a-am','AM','Room 3A — Greenfield Primary School')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>Allocate</button>
+      <span class="ward-alloc-badge" id="ward-count-gps-room3a-am" style="display:none"></span>
+    </div>
+    <div class="row-right col-right-cells" id="rr-child-gps-room3a"></div>
+  </div>
+
+  <div id="gb-rows-gps-y3" class="agency-child agency-une child-agency-gps-y3"></div>
 
   <!-- Lakeside High School -->
   <div class="row row-child-agency agency-child agency-une" id="child-agency-lhs" onclick="toggleChildAgency('lhs')">
@@ -1036,7 +1214,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
       <svg class="agency-chevron" id="chevron-acu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(0deg);transition:transform .2s;flex-shrink:0;"><path d="m6 9 6 6 6-6"/></svg>
       <span class="lbl bold">Southern Schools Network</span>
       <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      
+      <span class="requested-badge" style="display:none;">★ Requested</span>
       <button class="btn-alloc btn-alloc-sm" onclick="event.stopPropagation();showInput('acu-parent','Any Shift','Southern Schools Network')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>Allocate</button><span class="ward-alloc-badge" id="ward-count-acu-parent" style="display:none"></span>
     </div>
     <div class="row-right" id="rr-acu"></div>
@@ -1111,16 +1289,22 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   <div id="gb-rows-ha" class="agency-child agency-acu child-agency-ha"></div>
 </div>
 
-<!-- BOTTOM BAR -->
-<div class="bottom-bar">
+<!-- BOTTOM ACTION BAR — appears when draft placements exist -->
+<div class="bottom-bar" id="bottom-bar" style="display:none;">
   <div class="bottom-inner">
     <div class="bottom-left">
-      <button class="btn-clear" onclick="clearAll()">Clear</button>
-      <span class="bottom-status" id="bottom-status">No placements allocated</span>
+      <span class="bottom-status" id="bottom-status">0 placements drafted</span>
     </div>
     <div class="bottom-right">
       <button class="btn-sec" id="btn-view-placements" onclick="openPlacementsView()" style="display:none;">View Placements</button>
-      <button class="btn-prim" id="btn-draft-placements" onclick="openPanel()" disabled>Review & Generate</button>
+      <button class="btn-clear" onclick="clearAll()" title="Discard all draft placements">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Discard
+      </button>
+      <button class="btn-prim" id="btn-draft-placements" onclick="openPanel()" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Review & Generate
+      </button>
     </div>
   </div>
 </div>
@@ -1133,7 +1317,7 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
   <div class="erp-header">
     <div>
       <div class="erp-title" id="erp-panel-title">Edit Request</div>
-      <div class="erp-subtitle">Request #80332 · Charles Sturt University</div>
+      <div class="erp-subtitle" id="erp-panel-subtitle">Request #80332 · Charles Sturt University</div>
     </div>
     <button class="erp-close" onclick="closeEditRequest()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -1145,355 +1329,355 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
     <!-- Status banners -->
     <div class="erp-info-banner" id="erp-banner-editable">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-      This request is in <strong style="margin:0 3px">Pending</strong> status. You can edit placement requirements below.
+      This request is in <strong style="margin:0 3px">Pending</strong> status. Click the <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" style="vertical-align:middle;margin:0 2px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> pencil icon on any field to edit it.
     </div>
     <div class="erp-info-banner" id="erp-banner-readonly" style="display:none;background:#fefce8;border-color:#fde68a;color:#92400e;">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       This request is <strong style="margin:0 3px">Allocated</strong>. Fields are locked — editing is no longer permitted.
     </div>
 
-    <div class="erp-required-note">All fields marked with asterisk (*) are required</div>
+    <!-- ── GENERAL ── -->
+    <div class="erp-section-heading" style="border-top:none;padding-top:12px;">General</div>
+    <div class="erp-section-block">
 
-    <!-- ── GENERAL (collapsible, open by default) ── -->
-    <div class="erp-collapsible-hdr open" id="erp-sec-general-hdr" onclick="erpToggle('erp-sec-general-hdr','erp-sec-general-body')">
-      <span class="erp-collapsible-title">General</span>
-      <svg class="erp-collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="erp-collapsible-body" id="erp-sec-general-body" style="max-height:9999px;opacity:1">
-      <div style="padding-bottom:14px;display:flex;flex-direction:column;gap:10px;">
+      <!-- Status (locked) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Status</span>
+        <span class="erp-inline-val">
+          <span style="display:inline-flex;align-items:center;gap:5px;background:#FFF4E5;color:#B45309;border:1px solid #FCD34D;border-radius:12px;padding:2px 10px;font-size:11.5px;font-weight:600;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#F59E0B;display:inline-block;"></span>Pending
+          </span>
+        </span>
+      </div>
 
-        <!-- Status + Request ID -->
-        <div class="erp-field-row">
-          <div class="erp-field">
-            <label class="erp-label">Status</label>
-            <input class="erp-input" value="Pending" disabled>
-          </div>
-          <div class="erp-field">
-            <label class="erp-label">Request ID</label>
-            <input class="erp-input" value="80332" disabled>
-          </div>
-        </div>
+      <!-- Request ID (locked) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Request ID</span>
+        <span class="erp-inline-val" style="font-family:var(--mono);font-size:12px;">#80332</span>
+      </div>
 
-        <!-- EP + Campus -->
-        <div class="erp-field-row">
-          <div class="erp-field">
-            <label class="erp-label">Education Provider<span class="erp-req">*</span></label>
-            <input class="erp-input" id="erp-ep" value="Charles Sturt University" disabled>
-          </div>
-          <div class="erp-field">
-            <label class="erp-label">Campus<span class="erp-req">*</span></label>
-            <select class="erp-select" id="erp-campus">
-              <option selected>Callaghan</option>
-              <option>Central Coast</option>
-              <option>Newcastle City</option>
-              <option>Sydney</option>
-            </select>
-          </div>
-        </div>
+      <!-- Education Provider (locked) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Education Provider</span>
+        <span class="erp-inline-val">Charles Sturt University</span>
+      </div>
 
-        <!-- Course Type -->
-        <div class="erp-field">
-          <label class="erp-label">Course Type<span class="erp-req">*</span></label>
-          <select class="erp-select" id="erp-course-type">
-            <option selected>Bachelor Degree</option>
-            <option>Graduate Certificate</option>
-            <option>Masters</option>
-            <option>Diploma</option>
+      <!-- Campus (editable) -->
+      <div class="erp-inline-row" id="erp-row-campus">
+        <span class="erp-inline-key">Campus</span>
+        <span class="erp-inline-val" id="erp-val-campus">Callaghan</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-campus')" title="Edit Campus">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <select class="erp-inline-select" id="erp-input-campus">
+            <option selected>Callaghan</option><option>Central Coast</option><option>Newcastle City</option><option>Sydney</option>
           </select>
-        </div>
-
-        <!-- Region + Agency -->
-        <div class="erp-field-row">
-          <div class="erp-field">
-            <label class="erp-label">Region<span class="erp-req">*</span></label>
-            <select class="erp-select" id="erp-region">
-              <option selected>NSW - Central Coast</option>
-              <option>NSW - Sydney Metro</option>
-              <option>NSW - Hunter</option>
-              <option>NSW - New England</option>
-              <option>VIC - Metro</option>
-              <option>VIC - Regional</option>
-            </select>
-          </div>
-          <div class="erp-field">
-            <label class="erp-label">Agency</label>
-            <input class="erp-input" id="erp-agency" value="GFS-001" placeholder="Agency code">
-          </div>
-        </div>
-
-        <!-- Discipline + Placement Type -->
-        <div class="erp-field-row">
-          <div class="erp-field">
-            <label class="erp-label">Discipline<span class="erp-req">*</span></label>
-            <select class="erp-select" id="erp-discipline">
-              <option selected>Primary Education</option>
-              <option>Secondary Education</option>
-              <option>Early Childhood</option>
-            </select>
-          </div>
-          <div class="erp-field">
-            <label class="erp-label">Placement Type<span class="erp-req">*</span></label>
-            <select class="erp-select" id="erp-placement-type">
-              <option selected>Early/Stage 1</option>
-              <option>Stage 2/Stage 3</option>
-              <option>Any Stage</option>
-              <option>0-2 Years</option>
-              <option>2-5 Years</option>
-              <option>0-5 Years</option>
-              <option>Mathematics</option>
-              <option>English</option>
-              <option>Science - Biology</option>
-              <option>Science - Chemistry</option>
-              <option>Science - Physics</option>
-              <option>Sciences (Stage 4-5)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Year Level + Number of Placements -->
-        <div class="erp-field-row">
-          <div class="erp-field">
-            <label class="erp-label">Year Level<span class="erp-req">*</span></label>
-            <select class="erp-select" id="erp-year-level">
-              <option>Year 1</option>
-              <option>Year 2</option>
-              <option selected>Year 3</option>
-              <option>Year 4</option>
-            </select>
-          </div>
-          <div class="erp-field">
-            <label class="erp-label">Number of Placements<span class="erp-req">*</span></label>
-            <input class="erp-input" type="number" id="erp-total" value="4" min="1" max="99">
-          </div>
-        </div>
-
-        <!-- Course -->
-        <div class="erp-field">
-          <label class="erp-label">Course</label>
-          <input class="erp-input" id="erp-course" value="Bachelor of Education (Primary)" disabled>
-        </div>
-
-        <!-- Unit + Submitted Date -->
-        <div class="erp-field-row">
-          <div class="erp-field">
-            <label class="erp-label">Unit</label>
-            <input class="erp-input" id="erp-unit" value="" placeholder="Unit">
-          </div>
-          <div class="erp-field">
-            <label class="erp-label">Submitted Date</label>
-            <input class="erp-input" value="11/03/2026 (0 days ago)" disabled>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── EP CONTACT (collapsible, collapsed by default) ── -->
-    <div class="erp-collapsible-hdr" id="erp-sec-contact-hdr" onclick="erpToggle('erp-sec-contact-hdr','erp-sec-contact-body')">
-      <span class="erp-collapsible-title">Education Provider Contact</span>
-      <svg class="erp-collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="erp-collapsible-body collapsed" id="erp-sec-contact-body" style="max-height:0;opacity:0">
-      <div style="padding-bottom:14px;display:flex;flex-direction:column;gap:10px;">
-        <div class="erp-field">
-          <label class="erp-label">Name<span class="erp-req">*</span></label>
-          <input class="erp-input" value="Rachel Donovan">
-        </div>
-        <div class="erp-field">
-          <label class="erp-label" style="font-weight:400;color:var(--muted-fg)">Email</label>
-          <div style="font-size:12.5px;color:var(--fg);padding:4px 0"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="42306c262d2c2d34232c022c2735212331362e276c2726376c2337">[email&#160;protected]</a></div>
-        </div>
-        <div class="erp-field">
-          <label class="erp-label" style="font-weight:400;color:var(--muted-fg)">Phone</label>
-          <div style="font-size:12.5px;color:var(--fg);padding:4px 0">9999 99999</div>
+          <button class="erp-inline-confirm" onclick="erpConfirmEdit('erp-row-campus','erp-val-campus','erp-input-campus')">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-campus')">Cancel</button>
         </div>
       </div>
-    </div>
 
-    <!-- ── SCHEDULE (collapsible, collapsed by default) ── -->
-    <div class="erp-collapsible-hdr" id="erp-sec-schedule-hdr" onclick="erpToggle('erp-sec-schedule-hdr','erp-sec-schedule-body')">
-      <span class="erp-collapsible-title">Schedule</span>
-      <svg class="erp-collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="erp-collapsible-body collapsed" id="erp-sec-schedule-body" style="max-height:0;opacity:0">
-      <div style="padding-bottom:14px;display:flex;flex-direction:column;gap:12px;">
-
-        <!-- Discipline work days -->
-        <div style="background:var(--muted);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--fg);font-weight:500;">
-          Discipline work days per week: <strong>5</strong>
+      <!-- Course Type (editable) -->
+      <div class="erp-inline-row" id="erp-row-course-type">
+        <span class="erp-inline-key">Course Type</span>
+        <span class="erp-inline-val" id="erp-val-course-type">Bachelor Degree</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-course-type')" title="Edit Course Type">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <select class="erp-inline-select" id="erp-input-course-type">
+            <option selected>Bachelor Degree</option><option>Graduate Certificate</option><option>Masters</option><option>Diploma</option>
+          </select>
+          <button class="erp-inline-confirm" onclick="erpConfirmEdit('erp-row-course-type','erp-val-course-type','erp-input-course-type')">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-course-type')">Cancel</button>
         </div>
+      </div>
 
-        <!-- Placement Dates + Duration -->
-        <div class="erp-field-row">
-          <div class="erp-field">
-            <label class="erp-label">Placement Dates<span class="erp-req">*</span></label>
-            <div style="display:flex;align-items:center;gap:4px;">
-              <input class="erp-input" type="date" id="erp-start" value="2026-01-26" style="flex:1">
-              <span style="color:var(--muted-fg);font-size:12px">–</span>
-              <input class="erp-input" type="date" id="erp-end" value="2026-02-22" style="flex:1">
-            </div>
+      <!-- Region (editable) -->
+      <div class="erp-inline-row" id="erp-row-region">
+        <span class="erp-inline-key">Region</span>
+        <span class="erp-inline-val" id="erp-val-region">NSW - Central Coast</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-region')" title="Edit Region">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <select class="erp-inline-select" id="erp-input-region">
+            <option selected>NSW - Central Coast</option><option>NSW - Sydney Metro</option><option>NSW - Hunter</option><option>NSW - New England</option><option>VIC - Metro</option><option>VIC - Regional</option>
+          </select>
+          <button class="erp-inline-confirm" onclick="erpConfirmEdit('erp-row-region','erp-val-region','erp-input-region')">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-region')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Discipline (editable) -->
+      <div class="erp-inline-row" id="erp-row-discipline">
+        <span class="erp-inline-key">Discipline</span>
+        <span class="erp-inline-val" id="erp-val-discipline">Primary Education</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-discipline')" title="Edit Discipline">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <select class="erp-inline-select" id="erp-input-discipline">
+            <option selected>Primary Education</option><option>Secondary Education</option><option>Early Childhood</option>
+          </select>
+          <button class="erp-inline-confirm" onclick="erpConfirmEdit('erp-row-discipline','erp-val-discipline','erp-input-discipline')">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-discipline')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Placement Type (editable) -->
+      <div class="erp-inline-row" id="erp-row-placement-type">
+        <span class="erp-inline-key">Placement Type</span>
+        <span class="erp-inline-val" id="erp-val-placement-type">Early/Stage 1</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-placement-type')" title="Edit Placement Type">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <select class="erp-inline-select" id="erp-input-placement-type">
+            <option selected>Early/Stage 1</option><option>Stage 2/Stage 3</option><option>Any Stage</option><option>0-2 Years</option><option>2-5 Years</option><option>0-5 Years</option><option>Mathematics</option><option>English</option><option>Science - Biology</option><option>Science - Chemistry</option><option>Science - Physics</option>
+          </select>
+          <button class="erp-inline-confirm" onclick="erpConfirmEdit('erp-row-placement-type','erp-val-placement-type','erp-input-placement-type')">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-placement-type')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Year Level (editable) -->
+      <div class="erp-inline-row" id="erp-row-year-level">
+        <span class="erp-inline-key">Year Level</span>
+        <span class="erp-inline-val" id="erp-val-year-level">Year 3</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-year-level')" title="Edit Year Level">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <select class="erp-inline-select" id="erp-input-year-level" id="erp-year-level">
+            <option>Year 1</option><option>Year 2</option><option selected>Year 3</option><option>Year 4</option>
+          </select>
+          <button class="erp-inline-confirm" onclick="erpConfirmEdit('erp-row-year-level','erp-val-year-level','erp-input-year-level')">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-year-level')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Number of Placements (editable) -->
+      <div class="erp-inline-row" id="erp-row-total">
+        <span class="erp-inline-key">No. of Placements</span>
+        <span class="erp-inline-val" id="erp-val-total">4</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-total')" title="Edit Number of Placements">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <input class="erp-inline-input" type="number" id="erp-input-total" id="erp-total" value="4" min="1" max="99" style="max-width:80px;">
+          <button class="erp-inline-confirm" onclick="erpConfirmEditNumber('erp-row-total','erp-val-total','erp-input-total')">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-total')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Course (locked) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Course</span>
+        <span class="erp-inline-val">Bachelor of Education (Primary)</span>
+      </div>
+
+      <!-- Submitted Date (locked) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Submitted Date</span>
+        <span class="erp-inline-val">11/03/2026 <span style="color:var(--muted-fg);font-size:11px;">(0 days ago)</span></span>
+      </div>
+
+    </div><!-- end general section -->
+
+    <!-- ── EP CONTACT ── -->
+    <div class="erp-section-heading">Education Provider Contact</div>
+    <div class="erp-section-block">
+
+      <!-- Contact Name (editable) -->
+      <div class="erp-inline-row" id="erp-row-contact-name">
+        <span class="erp-inline-key">Name</span>
+        <span class="erp-inline-val" id="erp-val-contact-name">Rachel Donovan</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-contact-name')" title="Edit Contact Name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <input class="erp-inline-input" id="erp-input-contact-name" value="Rachel Donovan">
+          <button class="erp-inline-confirm" onclick="erpConfirmEdit('erp-row-contact-name','erp-val-contact-name','erp-input-contact-name')">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-contact-name')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Contact Email (locked) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Email</span>
+        <span class="erp-inline-val"><a href="mailto:rachel.donovan@csu.edu.au" style="color:var(--primary);">rachel.donovan@csu.edu.au</a></span>
+      </div>
+
+      <!-- Contact Phone (locked) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Phone</span>
+        <span class="erp-inline-val">9999 99999</span>
+      </div>
+
+    </div>
+
+    <!-- ── SCHEDULE ── -->
+    <div class="erp-section-heading">Schedule</div>
+    <div class="erp-section-block">
+
+      <!-- Placement Dates (editable – special dual-date) -->
+      <div class="erp-inline-row" id="erp-row-dates">
+        <span class="erp-inline-key">Placement Dates</span>
+        <span class="erp-inline-val" id="erp-val-dates">26/01/2026 – 22/02/2026</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-dates')" title="Edit Dates">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl" style="flex-wrap:wrap;gap:5px;">
+          <input class="erp-inline-input" type="date" id="erp-start" value="2026-01-26" style="min-width:130px;">
+          <span style="color:var(--muted-fg);align-self:center;flex-shrink:0;">–</span>
+          <input class="erp-inline-input" type="date" id="erp-end" value="2026-02-22" style="min-width:130px;">
+          <button class="erp-inline-confirm" onclick="erpConfirmDates()">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-dates')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Duration (editable) -->
+      <div class="erp-inline-row" id="erp-row-duration">
+        <span class="erp-inline-key">Duration</span>
+        <span class="erp-inline-val" id="erp-val-duration">10 Days</span>
+        <button class="erp-pencil-btn" onclick="erpStartEdit('erp-row-duration')" title="Edit Duration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div class="erp-inline-edit-ctrl">
+          <input class="erp-inline-input" type="number" id="erp-input-duration-num" value="10" style="max-width:70px;">
+          <select class="erp-inline-select" id="erp-input-duration-unit" style="max-width:90px;"><option selected>Days</option><option>Weeks</option></select>
+          <button class="erp-inline-confirm" onclick="erpConfirmDuration()">Save</button>
+          <button class="erp-inline-cancel" onclick="erpCancelEdit('erp-row-duration')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Fixed Dates (read-only summary) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Fixed Dates</span>
+        <span class="erp-inline-val">Yes</span>
+      </div>
+
+      <!-- Fixed Duration (read-only summary) -->
+      <div class="erp-inline-row locked">
+        <span class="erp-inline-key">Fixed Duration</span>
+        <span class="erp-inline-val">No</span>
+      </div>
+
+      <!-- Roster (summary chip row) -->
+      <div class="erp-inline-row" style="align-items:flex-start;padding-top:9px;">
+        <span class="erp-inline-key" style="padding-top:2px;">Roster</span>
+        <div style="flex:1;">
+          <div class="erp-sched-summary" id="erp-sched-summary">
+            <span class="erp-sched-chip" style="background:#eff6ff;color:#1d4ed8;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              Mon–Fri
+            </span>
+            <span class="erp-sched-chip">5 days/week</span>
+            <span class="erp-sched-chip">No holidays</span>
           </div>
-          <div class="erp-field">
-            <label class="erp-label">Duration<span class="erp-req">*</span></label>
-            <div style="display:flex;gap:6px;">
-              <input class="erp-input" type="number" value="10" style="width:60px;flex-shrink:0">
-              <select class="erp-select" style="flex:1">
-                <option selected>Days</option>
-                <option>Weeks</option>
+          <button onclick="erpToggleRosterBuilder()" style="margin-top:7px;background:none;border:none;font-family:var(--font);font-size:11.5px;font-weight:600;color:var(--primary);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px;" id="erp-roster-toggle-btn">Edit Roster</button>
+        </div>
+      </div>
+
+      <!-- Roster builder (hidden by default) -->
+      <div id="erp-roster-builder" style="display:none;padding:10px 0 4px;">
+        <div class="roster-tabs" style="margin-bottom:8px;">
+          <div class="roster-tab active" onclick="erpRosterTab(this,'erp-tab-pattern')">Pattern</div>
+          <div class="roster-tab" onclick="erpRosterTab(this,'erp-tab-calendar')">Calendar</div>
+        </div>
+        <div id="erp-tab-pattern">
+          <div id="erp-weeks-container"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+            <button class="add-week-btn" onclick="erpAddWeek()">+ Add Week</button>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <label style="font-size:11px;font-weight:600;color:var(--fg-light);">Exclude Holidays</label>
+              <select style="height:26px;border:1px solid var(--border);border-radius:5px;font-size:11px;padding:0 6px;font-family:var(--font);">
+                <option>None</option><option>Public Holidays</option><option>School Holidays</option>
               </select>
             </div>
           </div>
+          <button class="btn-schedule-preview">Generate Schedule Preview</button>
         </div>
-
-        <!-- Fixed Dates + Fixed Duration -->
-        <div class="erp-field-row">
-          <div class="erp-field">
-            <label class="erp-label">Fixed Dates</label>
-            <div class="yn-group">
-              <button class="yn-btn active" onclick="ynToggle(this)">Yes</button>
-              <button class="yn-btn" onclick="ynToggle(this)">No</button>
-            </div>
-          </div>
-          <div class="erp-field">
-            <label class="erp-label">Fixed Duration</label>
-            <div class="yn-group">
-              <button class="yn-btn" onclick="ynToggle(this)">Yes</button>
-              <button class="yn-btn active" onclick="ynToggle(this)">No</button>
-            </div>
-          </div>
+        <div id="erp-tab-calendar" style="display:none">
+          <div style="padding:18px 0;text-align:center;color:var(--muted-fg);font-size:12px;">Calendar view – individual day overrides</div>
         </div>
-
-        <!-- Specify Roster toggle -->
-        <div class="erp-field">
-          <label class="erp-label">Specify Roster</label>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-            <label class="toggle-wrap">
-              <input type="checkbox" id="erp-roster-toggle" onchange="erpRosterToggle(this)">
-              <div class="toggle-track"></div>
-            </label>
-            <span style="font-size:12px;color:var(--fg)" id="erp-roster-label">Off</span>
-          </div>
-        </div>
-
-        <!-- Roster builder (shown when Specify Roster is On) -->
-        <div id="erp-roster-builder" style="display:none">
-          <div class="roster-tabs" style="margin-bottom:8px;">
-            <div class="roster-tab active" onclick="erpRosterTab(this,'erp-tab-pattern')">Pattern</div>
-            <div class="roster-tab" onclick="erpRosterTab(this,'erp-tab-calendar')">Calendar</div>
-          </div>
-          <div id="erp-tab-pattern">
-            <div id="erp-weeks-container"></div>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-              <button class="add-week-btn" onclick="erpAddWeek()">Add Week</button>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <label style="font-size:11px;font-weight:600;color:var(--fg-light);">Exclude Holidays</label>
-                <select style="height:26px;border:1px solid var(--border);border-radius:5px;font-size:11px;padding:0 6px;font-family:var(--font);">
-                  <option>None</option><option>Public Holidays</option><option>School Holidays</option>
-                </select>
-              </div>
-            </div>
-            <button class="btn-schedule-preview">Generate Schedule Preview</button>
-          </div>
-          <div id="erp-tab-calendar" style="display:none">
-            <div style="padding:18px 0;text-align:center;color:var(--muted-fg);font-size:12px;">Calendar view – individual day overrides</div>
-          </div>
-        </div>
-
       </div>
-    </div>
 
-    <!-- ── ADDITIONAL INFORMATION (collapsible, collapsed) ── -->
-    <div class="erp-collapsible-hdr" id="erp-sec-addinfo-hdr" onclick="erpToggle('erp-sec-addinfo-hdr','erp-sec-addinfo-body')">
-      <span class="erp-collapsible-title">Additional Information</span>
-      <svg class="erp-collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="erp-collapsible-body collapsed" id="erp-sec-addinfo-body" style="max-height:0;opacity:0">
-      <div style="padding-bottom:14px;display:flex;flex-direction:column;gap:14px;">
+    </div><!-- end schedule -->
 
-        <!-- Student sub-section -->
-        <div style="font-size:11.5px;font-weight:600;color:var(--fg);margin-top:4px;">Student</div>
-        <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;">
-          <table style="width:100%;border-collapse:collapse;font-size:11.5px;">
-            <thead>
-              <tr style="background:#fafbfc;">
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Student Code</th>
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Student Name</th>
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Prerequisites</th>
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Example expandable student row -->
-              <tr style="cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none'">
-                <td style="padding:8px 10px;color:var(--primary);font-weight:600;">a38</td>
-                <td style="padding:8px 10px;">raquel a38</td>
-                <td style="padding:8px 10px;color:var(--primary);">0/6</td>
-                <td style="padding:8px 10px;color:var(--primary);font-weight:500;cursor:pointer;">View</td>
-              </tr>
-              <tr style="display:none;background:#fafbfc;">
-                <td colspan="4" style="padding:12px 14px;">
-                  <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:12px;align-items:start;">
-                    <div style="width:52px;height:52px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;">
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Email</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="204a0e534d4954486053545544454e540e4e4557434153544c450e4544550e4155">[email&#160;protected]</a></div>
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Education Provider</span>Charles Sturt University</div>
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Course Type</span>Bachelor Degree</div>
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Discipline</span>Primary Education</div>
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Date of Birth</span>—</div>
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:6px;font-size:11.5px;">
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Mobile Phone</span>—</div>
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Campus</span>Central Coast</div>
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Course</span>—</div>
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Year Level</span>Year 1</div>
-                      <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Gender</span>—</div>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <!-- ── ADDITIONAL INFORMATION ── -->
+    <div class="erp-section-heading">Additional Information</div>
+    <div class="erp-section-block">
 
-        <!-- Academic Supervisor sub-section -->
-        <div style="font-size:11.5px;font-weight:600;color:var(--fg);">Academic Supervisor</div>
-        <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;">
-          <table style="width:100%;border-collapse:collapse;font-size:11.5px;">
-            <thead>
-              <tr style="background:#fafbfc;">
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Name</th>
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Personnel Role</th>
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Prerequisites</th>
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Verified</th>
-                <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td colspan="5" style="padding:14px 10px;text-align:center;color:var(--muted-fg);font-size:12px;">No supervisor added</td></tr>
-            </tbody>
-          </table>
-        </div>
-
+      <!-- Student table -->
+      <div style="font-size:11px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Students</div>
+      <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:12px;">
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;">
+          <thead>
+            <tr style="background:#fafbfc;">
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Code</th>
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Name</th>
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Prerequisites</th>
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'table-row':'none'">
+              <td style="padding:8px 10px;color:var(--primary);font-weight:600;">a38</td>
+              <td style="padding:8px 10px;">Raquel A38</td>
+              <td style="padding:8px 10px;"><span style="background:#fef2f2;color:#dc2626;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600;">0/6</span></td>
+              <td style="padding:8px 10px;color:var(--primary);font-size:11.5px;font-weight:500;">View ▾</td>
+            </tr>
+            <tr style="display:none;background:#fafbfc;">
+              <td colspan="4" style="padding:12px 14px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11.5px;">
+                  <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Email</span>raquel.a38@csu.edu.au</div>
+                  <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Campus</span>Central Coast</div>
+                  <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Course Type</span>Bachelor Degree</div>
+                  <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Year Level</span>Year 3</div>
+                  <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Discipline</span>Primary Education</div>
+                  <div><span style="font-size:10px;color:var(--muted-fg);display:block;">Date of Birth</span>—</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
 
-    <!-- ── COMMENT (collapsible, collapsed) ── -->
-    <div class="erp-collapsible-hdr" id="erp-sec-comment-hdr" onclick="erpToggle('erp-sec-comment-hdr','erp-sec-comment-body')">
-      <span class="erp-collapsible-title">Comment <span style="font-size:11px;font-weight:400;color:var(--muted-fg);margin-left:2px;">(0)</span></span>
-      <svg class="erp-collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="erp-collapsible-body collapsed" id="erp-sec-comment-body" style="max-height:0;opacity:0">
-      <div style="padding-bottom:14px;display:flex;flex-direction:column;gap:8px;">
-        <textarea class="erp-textarea" placeholder="Add a comment…" style="width:100%;min-height:90px;box-sizing:border-box;"></textarea>
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;">
-            <input type="checkbox" style="width:14px;height:14px;accent-color:var(--primary);cursor:pointer;">
-            <span style="font-size:12px;color:var(--fg-light);">Private comment <span style="font-weight:400;color:var(--muted-fg)">(visible to my organisation only)</span></span>
-          </label>
-          <button style="height:30px;padding:0 14px;border:1px solid var(--primary);background:white;border-radius:5px;font-family:var(--font);font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;white-space:nowrap;">Save Comment</button>
-        </div>
+      <!-- Academic Supervisor table -->
+      <div style="font-size:11px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Academic Supervisor</div>
+      <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;">
+          <thead>
+            <tr style="background:#fafbfc;">
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Name</th>
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Role</th>
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-fg);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);">Verified</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="3" style="padding:14px 10px;text-align:center;color:var(--muted-fg);font-size:12px;">No supervisor added</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div><!-- end additional info -->
+
+    <!-- ── COMMENT (always exposed, not collapsible) ── -->
+    <div class="erp-section-heading">Comments</div>
+    <div class="erp-comment-box">
+      <div class="erp-comment-list" id="erp-comment-list">
+        <div style="color:var(--muted-fg);font-size:12px;font-style:italic;padding:4px 0;">No comments yet.</div>
+      </div>
+      <textarea class="erp-textarea" id="erp-new-comment" placeholder="Add a comment…" style="width:100%;min-height:80px;box-sizing:border-box;"></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;">
+          <input type="checkbox" id="erp-private-comment" style="width:14px;height:14px;accent-color:var(--primary);cursor:pointer;">
+          <span style="font-size:12px;color:var(--fg-light);">Private <span style="font-weight:400;color:var(--muted-fg)">(visible to my organisation only)</span></span>
+        </label>
+        <button onclick="erpSaveComment()" style="height:30px;padding:0 14px;border:1px solid var(--primary);background:white;border-radius:5px;font-family:var(--font);font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;white-space:nowrap;flex-shrink:0;">Save Comment</button>
       </div>
     </div>
 
@@ -1501,7 +1685,6 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 
   <div class="erp-footer" id="erp-footer">
     <button class="erp-btn-cancel" onclick="closeEditRequest()">Close</button>
-    <button class="erp-btn-save" id="erp-btn-save" onclick="saveEditRequest()">Save Changes</button>
   </div>
 </div>
 
@@ -1607,12 +1790,11 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
     <div class="sp-div"></div>
 
     <!-- ── PLACEMENT DETAIL FIELDS ── -->
-    <div class="section-label" style="margin-bottom:8px">
+    <div class="sp-section-heading first" style="border-top:none;padding-top:2px;">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6M3 15h6"/></svg>
       Placement Details
-      <span style="font-size:9.5px;color:var(--muted-fg);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">(editable — highlighted if differs from request)</span>
     </div>
-    <div class="sp-detail-grid" id="sp-detail-grid">
+    <div id="sp-detail-grid">
       <!-- Populated by renderPlacementDetailFields() -->
     </div>
     <div class="sp-div"></div>
@@ -1691,211 +1873,231 @@ body:not(.groupby-shift) [id="cards-ha-full-day"] { display:none !important; }
 
     <div class="sp-div"></div>
 
-    <!-- ── ADDITIONAL INFORMATION (collapsible, collapsed) ── -->
-    <div class="collapsible-hdr" id="addinfo-hdr" onclick="toggleCollapsible('addinfo-hdr','addinfo-body')">
-      <div class="section-label" style="margin-bottom:0">
+    <!-- ── ADDITIONAL INFORMATION card ── -->
+    <div class="sp-section-card">
+      <div class="sp-section-card-hdr">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        Additional Information
+        <span class="sp-section-card-title">Additional Information</span>
       </div>
-      <svg class="collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="collapsible-body closed" id="addinfo-body" style="max-height:0;opacity:0">
-      <div style="padding-top:8px;display:flex;flex-direction:column;gap:12px;padding-bottom:8px;">
+      <div class="sp-section-card-body">
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="field">
-            <label>Accommodation Provided</label>
-            <div class="yn-group">
-              <button class="yn-btn" onclick="ynToggle(this)">Yes</button>
-              <button class="yn-btn active" onclick="ynToggle(this)">No</button>
+        <div class="sp-inline-row" id="sp-row-accommodation">
+          <span class="sp-inline-key">Accommodation</span>
+          <span class="sp-inline-val" id="sp-val-accommodation">No</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-accommodation')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-accommodation"><option>No</option><option>Yes</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-accommodation','sp-val-accommodation','sp-input-accommodation')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-accommodation')">Cancel</button></div>
+        </div>
+
+        <div class="sp-inline-row" id="sp-row-allowance">
+          <span class="sp-inline-key">Allowance to Student</span>
+          <span class="sp-inline-val" id="sp-val-allowance">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-allowance')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-allowance"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-allowance','sp-val-allowance','sp-input-allowance')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-allowance')">Cancel</button></div>
+        </div>
+
+        <div class="sp-inline-row" id="sp-row-zone">
+          <span class="sp-inline-key">Zone</span>
+          <span class="sp-inline-val" id="sp-val-zone" style="color:var(--muted-fg);font-style:italic;">Not set</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-zone')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-zone"><option value="">Select…</option><option>Metro</option><option>Regional</option><option>Rural</option><option>Remote</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-zone','sp-val-zone','sp-input-zone')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-zone')">Cancel</button></div>
+        </div>
+
+        <div class="sp-inline-row" id="sp-row-po">
+          <span class="sp-inline-key">Purchase Order</span>
+          <span class="sp-inline-val" id="sp-val-po" style="color:var(--muted-fg);font-style:italic;">—</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-po')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><input class="sp-inline-input" id="sp-input-po" placeholder="PO number…"><button class="sp-inline-confirm" onclick="spConfirmEditInput('sp-row-po','sp-val-po','sp-input-po')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-po')">Cancel</button></div>
+        </div>
+
+        <!-- Student Commendation -->
+        <div class="sp-inline-row" style="grid-template-columns:1fr auto;gap:6px;align-items:start;padding:10px 12px;" id="sp-row-commendation">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted-fg);margin-bottom:4px;">Student Commendation</div>
+            <div id="sp-commendation-preview" style="font-size:12px;color:var(--muted-fg);font-style:italic;">—</div>
+            <div id="sp-commendation-edit" style="display:none;margin-top:4px;">
+              <textarea id="sp-input-commendation" maxlength="1000" style="width:100%;min-height:70px;border:1.5px solid var(--primary);border-radius:5px;padding:7px 9px;font-family:var(--font);font-size:12px;color:var(--fg);box-shadow:0 0 0 3px rgba(37,99,235,.1);outline:none;resize:vertical;box-sizing:border-box;"></textarea>
+              <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:5px;"><button class="sp-inline-cancel" onclick="spCancelTextarea('commendation')">Cancel</button><button class="sp-inline-confirm" onclick="spSaveTextarea('commendation')">Save</button></div>
             </div>
           </div>
-          <div class="field">
-            <label>Allowance Provided to Student</label>
-            <div class="yn-group">
-              <button class="yn-btn active" onclick="ynToggle(this)">Yes</button>
-              <button class="yn-btn" onclick="ynToggle(this)">No</button>
+          <button id="sp-commendation-pencil" onclick="spToggleTextarea('commendation')" style="opacity:.5;background:none;border:none;cursor:pointer;color:var(--muted-fg);padding:3px;border-radius:4px;display:flex;align-items:center;margin-top:2px;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        </div>
+
+        <!-- Student Complaint -->
+        <div class="sp-inline-row" style="grid-template-columns:1fr auto;gap:6px;align-items:start;padding:10px 12px;" id="sp-row-complaint">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted-fg);margin-bottom:4px;">Student Complaint</div>
+            <div id="sp-complaint-preview" style="font-size:12px;color:var(--muted-fg);font-style:italic;">—</div>
+            <div id="sp-complaint-edit" style="display:none;margin-top:4px;">
+              <textarea id="sp-input-complaint" maxlength="1000" style="width:100%;min-height:70px;border:1.5px solid var(--primary);border-radius:5px;padding:7px 9px;font-family:var(--font);font-size:12px;color:var(--fg);box-shadow:0 0 0 3px rgba(37,99,235,.1);outline:none;resize:vertical;box-sizing:border-box;"></textarea>
+              <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:5px;"><button class="sp-inline-cancel" onclick="spCancelTextarea('complaint')">Cancel</button><button class="sp-inline-confirm" onclick="spSaveTextarea('complaint')">Save</button></div>
             </div>
           </div>
+          <button id="sp-complaint-pencil" onclick="spToggleTextarea('complaint')" style="opacity:.5;background:none;border:none;cursor:pointer;color:var(--muted-fg);padding:3px;border-radius:4px;display:flex;align-items:center;margin-top:2px;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
         </div>
 
-        <div class="field">
-          <label>Zone</label>
-          <select class="erp-select">
-            <option value="">Select</option>
-            <option>Metro</option><option>Regional</option><option>Rural</option><option>Remote</option>
-          </select>
+        <!-- Support Package sub-section -->
+        <div class="sp-sub-heading">Support Package</div>
+
+        <div class="sp-inline-row" id="sp-row-travel">
+          <span class="sp-inline-key">Travel</span>
+          <span class="sp-inline-val" id="sp-val-travel" style="color:var(--muted-fg);font-style:italic;">Not set</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-travel')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-travel"><option value="">Select…</option><option>Own car</option><option>Public transport</option><option>Provided</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-travel','sp-val-travel','sp-input-travel')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-travel')">Cancel</button></div>
         </div>
 
-        <div class="field">
-          <label>Student Commendation</label>
-          <textarea placeholder="" maxlength="1000" oninput="this.nextElementSibling.textContent=this.value.length+'/1000'" style="min-height:80px;width:100%;"></textarea>
-          <div style="text-align:right;font-size:10px;color:var(--muted-fg);">0/1000</div>
+        <div class="sp-inline-row" id="sp-row-req-accommodation">
+          <span class="sp-inline-key">Require Accommodation</span>
+          <span class="sp-inline-val" id="sp-val-req-accommodation">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-req-accommodation')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-req-accommodation"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-req-accommodation','sp-val-req-accommodation','sp-input-req-accommodation')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-req-accommodation')">Cancel</button></div>
         </div>
 
-        <div class="field">
-          <label>Student Complaint</label>
-          <textarea placeholder="" maxlength="1000" oninput="this.nextElementSibling.textContent=this.value.length+'/1000'" style="min-height:80px;width:100%;"></textarea>
-          <div style="text-align:right;font-size:10px;color:var(--muted-fg);">0/1000</div>
+        <div class="sp-inline-row" id="sp-row-caw">
+          <span class="sp-inline-key">Cultural Awareness</span>
+          <span class="sp-inline-val" id="sp-val-caw" style="color:var(--muted-fg);font-style:italic;">—</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-caw')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><input class="sp-inline-input" type="date" id="sp-input-caw"><button class="sp-inline-confirm" onclick="spConfirmEditDate('sp-row-caw','sp-val-caw','sp-input-caw')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-caw')">Cancel</button></div>
         </div>
 
-        <div class="field">
-          <label>Purchase Order Number</label>
-          <input class="erp-input" placeholder="">
+        <div class="sp-inline-row" id="sp-row-orientation">
+          <span class="sp-inline-key">Orientation Date</span>
+          <span class="sp-inline-val" id="sp-val-orientation" style="color:var(--muted-fg);font-style:italic;">—</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-orientation')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><input class="sp-inline-input" type="date" id="sp-input-orientation"><button class="sp-inline-confirm" onclick="spConfirmEditDate('sp-row-orientation','sp-val-orientation','sp-input-orientation')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-orientation')">Cancel</button></div>
         </div>
 
-        <div style="font-size:12px;font-weight:700;color:var(--fg);padding-top:2px;">Support Package</div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="field">
-            <label>Travel to your placement</label>
-            <select class="erp-select">
-              <option value="">Select</option>
-              <option>Own car</option><option>Public transport</option><option>Provided</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Require Accommodation while on Placement</label>
-            <div class="yn-group">
-              <button class="yn-btn active" onclick="ynToggle(this)">Yes</button>
-              <button class="yn-btn" onclick="ynToggle(this)">No</button>
-            </div>
-          </div>
+        <div class="sp-inline-row" id="sp-row-vehicle">
+          <span class="sp-inline-key">Vehicle Hire Ref</span>
+          <span class="sp-inline-val" id="sp-val-vehicle" style="color:var(--muted-fg);font-style:italic;">—</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-vehicle')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><input class="sp-inline-input" id="sp-input-vehicle" placeholder="Reference number…"><button class="sp-inline-confirm" onclick="spConfirmEditInput('sp-row-vehicle','sp-val-vehicle','sp-input-vehicle')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-vehicle')">Cancel</button></div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="field">
-            <label>Cultural Awareness Workshop Date</label>
-            <input class="erp-input" type="date">
-          </div>
-          <div class="field">
-            <label>Orientation Date</label>
-            <input class="erp-input" type="date">
-          </div>
+        <div class="sp-inline-row" id="sp-row-driving">
+          <span class="sp-inline-key">Driving Test</span>
+          <span class="sp-inline-val" id="sp-val-driving">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-driving')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-driving"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-driving','sp-val-driving','sp-input-driving')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-driving')">Cancel</button></div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="field">
-            <label>Vehicle Hire Reference</label>
-            <input class="erp-input" placeholder="">
-          </div>
-          <div class="field">
-            <label>Driving Test Completed</label>
-            <div class="yn-group">
-              <button class="yn-btn active" onclick="ynToggle(this)">Yes</button>
-              <button class="yn-btn" onclick="ynToggle(this)">No</button>
-            </div>
-          </div>
+        <div class="sp-inline-row" id="sp-row-accom-ref">
+          <span class="sp-inline-key">Accommodation Ref</span>
+          <span class="sp-inline-val" id="sp-val-accom-ref" style="color:var(--muted-fg);font-style:italic;">—</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-accom-ref')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><input class="sp-inline-input" id="sp-input-accom-ref" placeholder="Reference number…"><button class="sp-inline-confirm" onclick="spConfirmEditInput('sp-row-accom-ref','sp-val-accom-ref','sp-input-accom-ref')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-accom-ref')">Cancel</button></div>
         </div>
 
-        <div class="field">
-          <label>Accommodation Reference Number</label>
-          <input class="erp-input" placeholder="">
-        </div>
+      </div><!-- /card-body -->
+    </div><!-- /additional info card -->
 
-      </div>
-    </div><!-- /addinfo-body -->
-
-    <div class="sp-div"></div>
-
-    <!-- ── PLACEMENT REQUIREMENT (collapsible, collapsed) ── -->
-    <div class="collapsible-hdr" id="placereq-hdr" onclick="toggleCollapsible('placereq-hdr','placereq-body')">
-      <div class="section-label" style="margin-bottom:0">
+    <!-- ── PLACEMENT REQUIREMENT card ── -->
+    <div class="sp-section-card">
+      <div class="sp-section-card-hdr">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Placement Requirement
+        <span class="sp-section-card-title">Placement Requirement</span>
       </div>
-      <svg class="collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="collapsible-body closed" id="placereq-body" style="max-height:0;opacity:0">
-      <div style="padding-top:8px;display:flex;flex-direction:column;gap:12px;padding-bottom:8px;">
+      <div class="sp-section-card-body">
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="field">
-            <label>Assessment Required</label>
-            <div class="yn-group"><button class="yn-btn active" onclick="ynToggle(this)">Yes</button><button class="yn-btn" onclick="ynToggle(this)">No</button></div>
-          </div>
-          <div class="field">
-            <label>Timesheet</label>
-            <div class="yn-group"><button class="yn-btn active" onclick="ynToggle(this)">Yes</button><button class="yn-btn" onclick="ynToggle(this)">No</button></div>
-          </div>
+        <div class="sp-inline-row" id="sp-row-assessment">
+          <span class="sp-inline-key">Assessment Required</span>
+          <span class="sp-inline-val" id="sp-val-assessment">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-assessment')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-assessment"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-assessment','sp-val-assessment','sp-input-assessment')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-assessment')">Cancel</button></div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="field">
-            <label>Student manages rosters</label>
-            <div class="yn-group"><button class="yn-btn active" onclick="ynToggle(this)">Yes</button><button class="yn-btn" onclick="ynToggle(this)">No</button></div>
-          </div>
-          <div class="field">
-            <label>Billable Placement</label>
-            <div class="yn-group"><button class="yn-btn active" onclick="ynToggle(this)">Yes</button><button class="yn-btn" onclick="ynToggle(this)">No</button></div>
-          </div>
+        <div class="sp-inline-row" id="sp-row-timesheet">
+          <span class="sp-inline-key">Timesheet</span>
+          <span class="sp-inline-val" id="sp-val-timesheet">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-timesheet')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-timesheet"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-timesheet','sp-val-timesheet','sp-input-timesheet')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-timesheet')">Cancel</button></div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="field">
-            <label>Student can raise incidents</label>
-            <div class="yn-group"><button class="yn-btn active" onclick="ynToggle(this)">Yes</button><button class="yn-btn" onclick="ynToggle(this)">No</button></div>
-          </div>
-          <div class="field">
-            <label>Roster Required</label>
-            <div class="yn-group"><button class="yn-btn active" onclick="ynToggle(this)">Yes</button><button class="yn-btn" onclick="ynToggle(this)">No</button></div>
-          </div>
+        <div class="sp-inline-row" id="sp-row-student-rosters">
+          <span class="sp-inline-key">Student Manages Rosters</span>
+          <span class="sp-inline-val" id="sp-val-student-rosters">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-student-rosters')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-student-rosters"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-student-rosters','sp-val-student-rosters','sp-input-student-rosters')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-student-rosters')">Cancel</button></div>
         </div>
 
-        <div class="field">
-          <label>Supervisor Allocation Required</label>
-          <div class="yn-group"><button class="yn-btn active" onclick="ynToggle(this)">Yes</button><button class="yn-btn" onclick="ynToggle(this)">No</button></div>
+        <div class="sp-inline-row" id="sp-row-billable">
+          <span class="sp-inline-key">Billable Placement</span>
+          <span class="sp-inline-val" id="sp-val-billable">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-billable')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-billable"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-billable','sp-val-billable','sp-input-billable')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-billable')">Cancel</button></div>
         </div>
 
-      </div>
-    </div><!-- /placereq-body -->
+        <div class="sp-inline-row" id="sp-row-incidents">
+          <span class="sp-inline-key">Student Can Raise Incidents</span>
+          <span class="sp-inline-val" id="sp-val-incidents">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-incidents')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-incidents"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-incidents','sp-val-incidents','sp-input-incidents')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-incidents')">Cancel</button></div>
+        </div>
 
-    <div class="sp-div"></div>
+        <div class="sp-inline-row" id="sp-row-roster-req">
+          <span class="sp-inline-key">Roster Required</span>
+          <span class="sp-inline-val" id="sp-val-roster-req">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-roster-req')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-roster-req"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-roster-req','sp-val-roster-req','sp-input-roster-req')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-roster-req')">Cancel</button></div>
+        </div>
 
-    <!-- ── PLACEMENT CONTACT (collapsible, collapsed) ── -->
-    <div class="collapsible-hdr" id="placecontact-hdr" onclick="toggleCollapsible('placecontact-hdr','placecontact-body')">
-      <div class="section-label" style="margin-bottom:0">
+        <div class="sp-inline-row" id="sp-row-sup-alloc">
+          <span class="sp-inline-key">Supervisor Allocation</span>
+          <span class="sp-inline-val" id="sp-val-sup-alloc">Yes</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-sup-alloc')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><select class="sp-inline-select" id="sp-input-sup-alloc"><option>Yes</option><option>No</option></select><button class="sp-inline-confirm" onclick="spConfirmEdit('sp-row-sup-alloc','sp-val-sup-alloc','sp-input-sup-alloc')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-sup-alloc')">Cancel</button></div>
+        </div>
+
+      </div><!-- /card-body -->
+    </div><!-- /placement requirement card -->
+
+    <!-- ── PLACEMENT CONTACT card ── -->
+    <div class="sp-section-card">
+      <div class="sp-section-card-hdr">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Placement Contact
+        <span class="sp-section-card-title">Placement Contact</span>
       </div>
-      <svg class="collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="collapsible-body closed" id="placecontact-body" style="max-height:0;opacity:0">
-      <div style="padding-top:8px;display:flex;flex-direction:column;gap:10px;padding-bottom:8px;">
-        <div class="field">
-          <label>Name <span class="erp-req">*</span></label>
-          <input class="erp-input" value="Rachel Donovan">
-        </div>
-        <div class="field">
-          <label style="font-weight:400;color:var(--muted-fg)">Email</label>
-          <div style="font-size:12.5px;color:var(--fg);padding:3px 0"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b8ca96dcd7d6d7ced9d6f8d6ddcfdbd9cbccd4dd96dddccd96d9cd">[email&#160;protected]</a></div>
-        </div>
-        <div class="field">
-          <label style="font-weight:400;color:var(--muted-fg)">Phone</label>
-          <div style="font-size:12.5px;color:var(--fg);padding:3px 0">+61249215000</div>
-        </div>
-      </div>
-    </div><!-- /placecontact-body -->
+      <div class="sp-section-card-body">
 
-    <div class="sp-div"></div>
+        <div class="sp-inline-row" id="sp-row-contact-name2">
+          <span class="sp-inline-key">Name</span>
+          <span class="sp-inline-val" id="sp-val-contact-name2">Rachel Donovan</span>
+          <button class="sp-pencil-btn" onclick="spStartEdit('sp-row-contact-name2')" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <div class="sp-inline-edit-ctrl"><input class="sp-inline-input" id="sp-input-contact-name2" value="Rachel Donovan"><button class="sp-inline-confirm" onclick="spConfirmEditInput('sp-row-contact-name2','sp-val-contact-name2','sp-input-contact-name2')">Save</button><button class="sp-inline-cancel" onclick="spCancelEdit('sp-row-contact-name2')">Cancel</button></div>
+        </div>
 
-    <!-- ── PLACEMENT COMMENT (collapsible, collapsed) ── -->
-    <div class="collapsible-hdr" id="placecomment-hdr" onclick="toggleCollapsible('placecomment-hdr','placecomment-body')">
-      <div class="section-label" style="margin-bottom:0">
+        <div class="sp-inline-row locked">
+          <span class="sp-inline-key">Email</span>
+          <span class="sp-inline-val"><a href="mailto:rachel.donovan@greenfield.edu.au" style="color:var(--primary);">rachel.donovan@greenfield.edu.au</a></span>
+        </div>
+
+        <div class="sp-inline-row locked">
+          <span class="sp-inline-key">Phone</span>
+          <span class="sp-inline-val">+61249215000</span>
+        </div>
+
+      </div><!-- /card-body -->
+    </div><!-- /placement contact card -->
+
+    <!-- ── PLACEMENT COMMENTS card ── -->
+    <div class="sp-section-card">
+      <div class="sp-section-card-hdr">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Placement Comment <span style="font-weight:400;font-size:10px;color:var(--muted-fg);margin-left:3px;">(0)</span>
+        <span class="sp-section-card-title">Placement Comments</span>
       </div>
-      <svg class="collapsible-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-    </div>
-    <div class="collapsible-body closed" id="placecomment-body" style="max-height:0;opacity:0">
-      <div style="padding-top:8px;display:flex;flex-direction:column;gap:8px;padding-bottom:8px;">
-        <textarea class="erp-textarea" placeholder="Add a comment…" style="width:100%;min-height:80px;box-sizing:border-box;"></textarea>
-        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;">
-          <input type="checkbox" style="width:14px;height:14px;accent-color:var(--primary);cursor:pointer;">
-          <span style="font-size:12px;color:var(--fg-light);">Private comment <span style="font-weight:400;color:var(--muted-fg)">(visible to my organisation only)</span></span>
-        </label>
-      </div>
-    </div><!-- /placecomment-body -->
+      <div class="sp-section-card-body" style="padding:12px;">
+        <div class="erp-comment-list" id="sp-comment-list" style="margin-bottom:10px;">
+          <div style="color:var(--muted-fg);font-size:12px;font-style:italic;padding:4px 0;">No comments yet.</div>
+        </div>
+        <textarea class="erp-textarea" id="sp-new-comment" placeholder="Add a comment…" style="width:100%;min-height:80px;box-sizing:border-box;"></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;">
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;">
+            <input type="checkbox" id="sp-private-comment" style="width:14px;height:14px;accent-color:var(--primary);cursor:pointer;">
+            <span style="font-size:12px;color:var(--fg-light);">Private <span style="font-weight:400;color:var(--muted-fg)">(visible to my organisation only)</span></span>
+          </label>
+          <button onclick="spSaveComment()" style="height:30px;padding:0 14px;border:1px solid var(--primary);background:white;border-radius:5px;font-family:var(--font);font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;white-space:nowrap;flex-shrink:0;">Save Comment</button>
+        </div>
+      </div><!-- /card-body -->
+    </div><!-- /comments card -->
 
   </div>
 
@@ -1959,6 +2161,26 @@ const REQUESTS = [
     studentCode: 'S00198742',
     course: 'Bachelor of Education (Secondary)',
     unit:   'EDUC2150 – Professional Experience 2',
+  },
+  {
+    id: '80509',
+    ep: 'University of Sydney',
+    dates: '26/01/2026 – 22/02/2026',
+    startDate: '2026-01-26',
+    endDate:   '2026-02-22',
+    placementType: 'Early/Stage 1',
+    discipline: 'Primary Education',
+    specialisation: 'General',
+    yearLevel: 'Year 3',
+    total: 1,
+    recurringDow: null,
+    recurringShift: null,
+    student:     'Ella Petrova',
+    studentCode: 'S00167294',
+    course: 'Bachelor of Education (Primary)',
+    unit:   'EDUC3210 – Professional Experience 3',
+    // This request specifically targets Room 3A (L4) under Greenfield PS
+    requestedAgency: 'gps-room3a',
   },
   {
     id: '80508',
@@ -2068,7 +2290,7 @@ function toggleDept(key) {
 }
 
 const agencyChildWards = {
-  'une': ['gps-am','gps-pm','gps-full-day','lhs-am','lhs-pm','lhs-full-day','scs-direct','rvn-direct'],
+  'une': ['gps-am','gps-pm','gps-full-day','lhs-am','lhs-pm','lhs-full-day','scs-direct','rvn-direct','gps-y3-am','gps-room3a-am'],
   'acu': ['rc-am','rc-pm','rc-full-day','ha-am','ha-pm','ha-full-day','scs-direct','rvn-direct'],
 };
 const agencyOwnShifts = {
@@ -2077,7 +2299,9 @@ const agencyOwnShifts = {
 };
 
 const childAgencyShifts = {
-  'gps': ['gps-am','gps-pm','gps-full-day'],
+  'gps':      ['gps-am','gps-pm','gps-full-day'],
+  'gps-y3':   ['gps-y3-am'],
+  'gps-room3a': ['gps-room3a-am'],
   'lhs': ['lhs-am','lhs-pm','lhs-full-day'],
   'scs': [],
   'rvn': [],
@@ -2185,6 +2409,7 @@ function renderGroupByCards() {
 }
 
 function renderGroupByRows() {
+  const req = getCurrentRequest();
   if (currentGroupBy === 'shift') {
     
     CHILD_AGENCIES.forEach(({ key }) => {
@@ -2242,7 +2467,8 @@ function renderGroupByRows() {
       if (!rr) return;
       rr.innerHTML = visible.map((d, visIdx) => {
         const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
+        const inReqStripe = (d >= req.startDate && d <= req.endDate) ? ' in-req-col' : '';
+        if (isWeekend(d)) return `<div class="cell wknd${inReqStripe}${dowHidden}"></div>`;
         const fullIdx = viewOffset + visIdx;
         let sum = 0;
         childAgencyShifts[key].forEach(sid => {
@@ -2261,9 +2487,13 @@ function showInput(wardId, ward, agency) {
   
   const isParent = wardId.endsWith('-parent');
   const agencyKey = isParent ? wardId.replace('-parent','') : null;
+  // Look for ward row, child-agency row, or direct agency row
   const wardRow = isParent
     ? document.getElementById('agency-' + agencyKey)
-    : document.getElementById('ward-' + wardId);
+    : (document.getElementById('ward-' + wardId)
+       || document.getElementById('child-agency-' + wardId)
+       || document.getElementById('child-agency-' + wardId.replace(/-am$|-pm$|-full-day$/,''))
+      );
   if (!wardRow) return;
 
   
@@ -2302,14 +2532,42 @@ const GRID_DATES = (function() {
   return dates;
 })();
 
-const VISIBLE_COLS = 14;  
+const DAY_VISIBLE_COLS  = 14;
+const WEEK_VISIBLE_COLS = 8;  // show 8 weeks
 const COL_W = 46;
-const TOTAL_COLS = GRID_DATES.length;  
+const TOTAL_COLS = GRID_DATES.length;
+// Keep VISIBLE_COLS alias for legacy references
+const VISIBLE_COLS = DAY_VISIBLE_COLS;
 
-let viewOffset = 0;  
+let currentViewMode = 'day'; // 'day' | 'week'
+let viewOffset = 0;
+
+function getVisibleColCount() {
+  return currentViewMode === 'week' ? WEEK_VISIBLE_COLS : DAY_VISIBLE_COLS;
+}
+
+function setViewMode(mode) {
+  if (mode === currentViewMode) return;
+  currentViewMode = mode;
+  document.getElementById('btn-view-week').classList.toggle('active', mode === 'week');
+  document.getElementById('btn-view-day').classList.toggle('active', mode === 'day');
+  if (mode === 'week') {
+    viewOffset = Math.floor(viewOffset / 7) * 7;
+  }
+  viewOffset = Math.max(0, Math.min(viewOffset, TOTAL_COLS - getVisibleColCount() * (mode === 'week' ? 7 : 1)));
+  renderGrid();
+}
 
 function getVisibleDates() {
-  return GRID_DATES.slice(viewOffset, viewOffset + VISIBLE_COLS);
+  if (currentViewMode === 'week') {
+    const dates = [];
+    for (let w = 0; w < WEEK_VISIBLE_COLS; w++) {
+      const idx = viewOffset + w * 7;
+      if (idx < GRID_DATES.length) dates.push(GRID_DATES[idx]);
+    }
+    return dates;
+  }
+  return GRID_DATES.slice(viewOffset, viewOffset + DAY_VISIBLE_COLS);
 }
 
 function isWeekend(iso) {
@@ -2426,6 +2684,8 @@ function openFilterDropdown(triggerId, labelId, options, filterKey) {
         el.style.color       = isDefault ? '' : 'var(--primary)';
       }
 
+      renderCapacityCells();
+      setResetButtonState();
       drop.remove(); openFilterDrop = null;
     };
     drop.appendChild(item);
@@ -2440,6 +2700,35 @@ function openFilterDropdown(triggerId, labelId, options, filterKey) {
     }
   };
   setTimeout(() => document.addEventListener('click', close), 0);
+}
+
+function applyFilters() {
+  // Filters are already applied live as the user changes them via openFilterDropdown.
+  // This button provides explicit confirmation — re-renders the grid and shows a brief flash.
+  renderCapacityCells();
+  renderGrid();
+  const btn = document.getElementById('btn-apply-filters');
+  if (btn) {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Applied';
+    btn.style.background = '#245225';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1200);
+  }
+}
+
+function setResetButtonState() {
+  const btn = document.getElementById('btn-reset-filters');
+  if (!btn) return;
+  const req = getCurrentRequest();
+  const ptVal = document.getElementById('filter-placement-type-val')?.textContent;
+  const ylVal = document.getElementById('filter-year-level-val')?.textContent;
+  const diVal = document.getElementById('filter-discipline-val')?.textContent;
+  const isDirty = (ptVal && ptVal !== req.placementType) ||
+                  (ylVal && ylVal !== req.yearLevel) ||
+                  (diVal && diVal !== req.discipline);
+  btn.disabled = !isDirty;
+  btn.style.opacity = isDirty ? '1' : '0.4';
+  btn.style.cursor  = isDirty ? 'pointer' : 'not-allowed';
 }
 
 function resetFilters() {
@@ -2465,6 +2754,7 @@ function resetFilters() {
     const el = document.getElementById(id);
     if (el) { el.style.borderColor = ''; el.style.color = ''; }
   });
+  setResetButtonState();
 }
 
 function initRegionFilter(e) {
@@ -2506,19 +2796,33 @@ function initRegionFilter(e) {
 }
 
 function navigateWindow(dir) {
-  const newOffset = viewOffset + dir * VISIBLE_COLS;
+  const step = currentViewMode === 'week' ? WEEK_VISIBLE_COLS * 7 : DAY_VISIBLE_COLS;
+  const newOffset = viewOffset + dir * step;
   if (newOffset < 0 || newOffset >= TOTAL_COLS) return;
-  viewOffset = Math.min(newOffset, TOTAL_COLS - VISIBLE_COLS);
+  const maxOffset = currentViewMode === 'week'
+    ? TOTAL_COLS - WEEK_VISIBLE_COLS * 7
+    : TOTAL_COLS - DAY_VISIBLE_COLS;
+  viewOffset = Math.min(newOffset, Math.max(0, maxOffset));
   renderGrid();
 }
 
 function updateDateWindowLabel() {
   const visible = getVisibleDates();
-  const first = visible[0], last = visible[visible.length - 1];
-  document.getElementById('date-window-label').textContent =
-    `${fmtDate(first)} – ${fmtDate(last)}`;
+  const first = visible[0];
+  let labelText;
+  if (currentViewMode === 'week') {
+    const lastWeekStartIdx = GRID_DATES.indexOf(visible[visible.length - 1]);
+    const lastWeekEndIdx = Math.min(lastWeekStartIdx + 6, TOTAL_COLS - 1);
+    labelText = fmtDate(first) + ' – ' + fmtDate(GRID_DATES[lastWeekEndIdx]);
+  } else {
+    labelText = fmtDate(first) + ' – ' + fmtDate(visible[visible.length - 1]);
+  }
+  document.getElementById('date-window-label').textContent = labelText;
+  const maxOffset = currentViewMode === 'week'
+    ? TOTAL_COLS - WEEK_VISIBLE_COLS * 7
+    : TOTAL_COLS - DAY_VISIBLE_COLS;
   document.getElementById('btn-prev-window').disabled = viewOffset === 0;
-  document.getElementById('btn-next-window').disabled = viewOffset + VISIBLE_COLS >= TOTAL_COLS;
+  document.getElementById('btn-next-window').disabled = viewOffset >= Math.max(0, maxOffset);
 }
 
 function renderAllCards() {
@@ -2825,7 +3129,7 @@ function repositionCardsInContainer(container) {
   if (cards.length > 1) container.classList.add('stacked');
 }
 
-const contextState = { placements: false, requests: false };
+const contextState = { placements: true, requests: true };
 
 function toggleContext(type) {
   contextState[type] = !contextState[type];
@@ -2839,35 +3143,44 @@ function toggleContext(type) {
 
 const mockPlacements = {
   'gps-am': [
-    { label:'Plc: 77210 · Offered', start:0,  end:4,  hatch:'hatch-placement' },
-    { label:'Plc: 77185 · Planned', start:7,  end:13, hatch:'hatch-placement-alt' },
+    { label:'P077210', ep:'Charles Sturt University', discipline:'Primary Education', year:'Yr 3', placementType:'Early/Stage 1', shift:'AM',  status:'Offered',  dates:'26/01 – 06/02', start:0,  end:11, hatch:'solid-placement' },
+    { label:'P077185', ep:'Western Sydney University', discipline:'Primary Education', year:'Yr 2', placementType:'Stage 2/3', shift:null, status:'Published', dates:'10/02 – 22/02', start:9,  end:20, hatch:'solid-placement-alt' },
   ],
   'lhs-am': [
-    { label:'Plc: 77891 · Offered', start:3,  end:8,  hatch:'hatch-placement' },
+    { label:'P077891', ep:'University of Sydney', discipline:'Secondary Education', year:'Yr 2', placementType:'Mathematics', shift:'AM', status:'Offered', dates:'03/02 – 14/02', start:5, end:15, hatch:'solid-placement' },
   ],
   'rc-am': [
-    { label:'Plc: 78200 · Offered', start:0,  end:9,  hatch:'hatch-placement' },
+    { label:'P078200', ep:'Charles Sturt University', discipline:'Primary Education', year:'Yr 3', placementType:'Early/Stage 1', shift:null, status:'Offered', dates:'26/01 – 14/02', start:0, end:14, hatch:'solid-placement' },
   ],
 };
 const mockRequests = {
   'gps-am': [
-    { label:'Req: 80100', ep:'GPS',  discipline:'Primary Education', year:'Yr 3', qty:3, shift:null,  status:'Pending', start:0,  end:27, hatch:'hatch-request' },
-    { label:'Req: 80144', ep:'GPS',  discipline:'Primary Education', year:'Yr 2', qty:2, shift:'Mon', status:'Pending', start:3,  end:27, hatch:'hatch-request' },
+    { label:'Req: 80100', ep:'Charles Sturt University', discipline:'Primary Education', year:'Yr 3', qty:3, shift:null,  status:'Pending', placementType:'Early/Stage 1', start:0,  end:27, hatch:'hatch-request' },
+    { label:'Req: 80144', ep:'Western Sydney University', discipline:'Primary Education', year:'Yr 2', qty:2, shift:'Mon', status:'Pending', placementType:'Stage 2/3',   start:3,  end:27, hatch:'hatch-request' },
   ],
   'lhs-am': [
-    { label:'Req: 79988', ep:'LHS',  discipline:'Secondary Education', year:'Yr 2', qty:3, shift:null, status:'Pending', start:0, end:27, hatch:'hatch-request' },
+    { label:'Req: 79988', ep:'University of Sydney',     discipline:'Secondary Education', year:'Yr 2', qty:3, shift:null, status:'Pending', placementType:'Mathematics', start:0, end:27, hatch:'hatch-request' },
   ],
   'ha-am': [
-    { label:'Req: 80130', ep:'HA',   discipline:'Primary Education', year:'Yr 3', qty:2, shift:null,  status:'Pending', start:0, end:27, hatch:'hatch-request' },
+    { label:'Req: 80130', ep:'Australian Catholic University', discipline:'Primary Education', year:'Yr 3', qty:2, shift:null, status:'Pending', placementType:'Early/Stage 1', start:0, end:27, hatch:'hatch-request' },
   ],
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.body.classList.add('groupby-shift'); 
+  document.body.classList.add('groupby-shift');
   syncDowToRequest();
   updateReqBar();
   updatePendingLabel();
   renderGrid();
+  // Initialise context button states to match default ON
+  const btnP = document.getElementById('ctx-btn-placements');
+  const btnR = document.getElementById('ctx-btn-requests');
+  if (btnP) { btnP.classList.add('active-placements'); }
+  if (btnR) { btnR.classList.add('active-requests'); }
+  const lgP = document.getElementById('legend-placements');
+  const lgR = document.getElementById('legend-requests');
+  if (lgP) lgP.style.display = 'flex';
+  if (lgR) lgR.style.display = 'flex';
 });
 
 function getWeekendSet() {
@@ -2876,51 +3189,71 @@ function getWeekendSet() {
 
 function buildCtxRow(data, type) {
   const isPlacement = type === 'placement';
-  const labelColor  = isPlacement ? 'var(--ctx-placement)' : 'var(--ctx-request)';
+  const labelColor  = isPlacement ? 'var(--primary)' : 'var(--ctx-request)';
   const visibleDates = getVisibleDates();
   const weekends     = getWeekendSet();
 
   const cellsHtml = visibleDates.map((d, visIdx) => {
+    // In week mode each visIdx represents a week; use Monday as representative day
+    const fullIdx = currentViewMode === 'week' ? viewOffset + visIdx * 7 : viewOffset + visIdx;
     const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
 
-    if (weekends.has(visIdx)) {
+    if (currentViewMode !== 'week' && weekends.has(visIdx)) {
       return `<div class="ctx-cell-bar wknd${dowHidden}"></div>`;
     }
 
-    const fullIdx = viewOffset + visIdx;
-    const inRange = fullIdx >= data.start && fullIdx <= data.end;
+    const weekEnd = currentViewMode === 'week' ? fullIdx + 6 : fullIdx;
+    const inRange = fullIdx <= data.end && weekEnd >= data.start;
 
     if (!inRange) {
       return `<div class="ctx-cell-bar empty${dowHidden}"></div>`;
     }
 
     if (isPlacement) {
-      return `<div class="ctx-cell-bar ${data.hatch}${dowHidden}"></div>`;
+      const shiftTop = data.shift ? data.shift : 'Full Day';
+      const tooltip = `${data.label} · ${data.ep} · ${data.discipline} · ${data.year}${data.shift ? ' · ' + data.shift : ''} · ${data.status}`;
+      return `<div class="ctx-cell-bar ${data.hatch}${dowHidden}" title="${tooltip}">
+        <span class="ctx-cell-top">${shiftTop}</span>
+      </div>`;
     }
 
-    
-    const tooltip = `${data.label} · ${data.ep} · ${data.discipline} ${data.year} · ${data.qty} placement${data.qty !== 1 ? 's' : ''} · ${data.status}${data.shift ? ' · ' + data.shift + 's only' : ''}`;
-    return `<div class="ctx-cell-bar ${data.hatch}${dowHidden}" title="${tooltip}"></div>`;
+    // Request
+    const shiftTop = data.shift ? data.shift : 'Full Day';
+    const tooltip = `${data.label} · ${data.ep} · ${data.discipline} · ${data.year} · ×${data.qty} · ${data.status}${data.shift ? ' · ' + data.shift + 's only' : ''}`;
+    return `<div class="ctx-cell-bar hatch-request${dowHidden}" title="${tooltip}">
+      <span class="ctx-cell-top">${shiftTop}</span>
+    </div>`;
   }).join('');
 
   const div = document.createElement('div');
   div.className = 'ctx-row ' + (isPlacement ? 'ctx-placement-row' : 'ctx-request-row');
 
   if (isPlacement) {
-    
+    const shiftLabel = data.shift ? data.shift + ' only' : 'All shifts';
+    const shiftCls   = data.shift ? 'has-shift' : 'no-shift';
+    const stCls = data.status === 'Published' ? 'published' : data.status === 'Offered' ? 'offered' : 'unsaved';
+
     div.innerHTML = `
-      <div class="ctx-label" style="color:${labelColor};flex-direction:row;align-items:center;">
-        <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${data.label}</span>
+      <div class="ctx-label">
+        <div class="ctx-label-line1" style="color:${labelColor}">
+          <span style="width:6px;height:6px;border-radius:50%;background:${labelColor};flex-shrink:0;display:inline-block;"></span>
+          <span class="ctx-label-id">${data.label}</span>
+          <span class="ctx-label-ep">${data.ep}</span>
+        </div>
+        <div class="ctx-label-line2">
+          <span class="ctx-label-meta">${data.discipline} · ${data.year} · ${data.placementType}</span>
+          <span class="ctx-label-shift ${shiftCls}">${shiftLabel}</span>
+        </div>
       </div>
       <div class="ctx-cells">${cellsHtml}</div>
     `;
+    div.addEventListener('mouseenter', e => showPlcHoverCard(e, data));
+    div.addEventListener('mousemove',  e => movePlcHoverCard(e));
+    div.addEventListener('mouseleave', hidePlcHoverCard);
   } else {
-    
     const shiftLabel  = data.shift ? data.shift + 's only' : 'All shifts';
     const shiftCls    = data.shift ? 'has-shift' : 'no-shift';
     const statusCls   = data.status === 'Offered' ? 'offered' : 'pending';
-    const safeData    = JSON.stringify(data).replace(/'/g, '&#39;');
-    div.setAttribute('data-req', safeData);
     div.addEventListener('mouseenter', e => showReqHoverCard(e, data));
     div.addEventListener('mousemove',  e => moveReqHoverCard(e));
     div.addEventListener('mouseleave', hideReqHoverCard);
@@ -2953,9 +3286,11 @@ function renderContextRows() {
     if (!wardRow) return;
     const anchor = cardsContainer || wardRow;
 
+    // Insert requests first (they appear lower/further in DOM = visually below)
     if (contextState.requests && mockRequests[wardId]) {
       [...mockRequests[wardId]].reverse().forEach(r => anchor.after(buildCtxRow(r, 'request')));
     }
+    // Insert placements after (they appear immediately below the ward row, above requests)
     if (contextState.placements && mockPlacements[wardId]) {
       [...mockPlacements[wardId]].reverse().forEach(p => anchor.after(buildCtxRow(p, 'placement')));
     }
@@ -2965,6 +3300,8 @@ function renderContextRows() {
 }
 
 const originalCapacity = {
+  'gps-y3-am':       [null,null,null,null,null,null,null, 2,2,2,2,2, null,null, 2,2,2,2,2, null,null, 2,2,2,2,2, null,null, 2,2,2,2,2, null,null, 2,2,2,2,2, null,null, 2,2,2,2,2, null,null, 2,2,2,2,2, null,null],
+  'gps-room3a-am':   [null,null,null,null,null,null,null, 1,1,1,1,1, null,null, 1,1,1,1,1, null,null, 1,1,1,1,1, null,null, 1,1,1,1,1, null,null, 1,1,1,1,1, null,null, 1,1,1,1,1, null,null, 1,1,1,1,1, null,null],
   
   'une-am':       Array.from({length:56},(_,i)=>[5,5,5,5,5,0,0][i%7]??0),
   'une-pm':       Array.from({length:56},(_,i)=>[3,3,3,3,3,0,0][i%7]??0),
@@ -3016,29 +3353,89 @@ const placementConsumption = {
 function renderCapacityCells() {
   const visible   = getVisibleDates();
   const req       = getCurrentRequest();
-  const allShifts  = ['une-am','une-pm','une-full-day','acu-am','acu-pm','acu-full-day','gps-am','gps-pm','gps-full-day','lhs-am','lhs-pm','lhs-full-day','rc-am','rc-pm','rc-full-day','ha-am','ha-pm','ha-full-day','scs-direct','rvn-direct'];
-  const allAgencies = Object.keys(agencyChildWards); 
+  const allShifts  = ['une-am','une-pm','une-full-day','acu-am','acu-pm','acu-full-day','gps-am','gps-pm','gps-full-day','lhs-am','lhs-pm','lhs-full-day','rc-am','rc-pm','rc-full-day','ha-am','ha-pm','ha-full-day','scs-direct','rvn-direct','gps-y3-am','gps-room3a-am'];
+  const allAgencies = Object.keys(agencyChildWards);
 
-  
+  // Week mode: get the 7 day indices for a week starting at weekMonIdx
+  function weekDayIndices(weekMonIdx) {
+    const idxs = [];
+    for (let d = 0; d < 7; d++) {
+      const i = weekMonIdx + d;
+      if (i < TOTAL_COLS && !isWeekend(GRID_DATES[i])) idxs.push(i);
+    }
+    return idxs;
+  }
+
   function renderRaw(rrId, capArr, consumedArr, bold) {
     const rr = document.getElementById(rrId);
     if (!rr) return;
+
+    if (currentViewMode === 'week') {
+      rr.innerHTML = visible.map((d, visIdx) => {
+        const weekMonFullIdx = viewOffset + visIdx * 7;
+        const weekEnd = GRID_DATES[Math.min(weekMonFullIdx + 6, TOTAL_COLS - 1)];
+        const inReqStripe = (d <= req.endDate && weekEnd >= req.startDate) ? ' in-req-col' : '';
+        const dayIdxs = weekDayIndices(weekMonFullIdx);
+        if (!capArr || !capArr.length || !dayIdxs.length) {
+          return `<div class="cell cell-p1-empty${inReqStripe}" style="font-size:11px;"></div>`;
+        }
+        // Show the minimum available capacity across the week (most conservative)
+        let minNet = Infinity;
+        dayIdxs.forEach(i => {
+          const raw = capArr[i];
+          if (raw !== null && raw !== undefined) {
+            const net = raw - ((consumedArr||[])[i] ?? 0);
+            if (net < minNet) minNet = net;
+          }
+        });
+        if (minNet === Infinity) return `<div class="cell cell-p1-empty${inReqStripe}" style="font-size:11px;"></div>`;
+        const cls = minNet < 0 ? 'cell negative' : minNet === 0 ? 'cell zero' : 'cell cell-p1';
+        return `<div class="${cls}${inReqStripe}" style="font-size:11px;"${bold?' font-weight:700;':''}>${minNet}</div>`;
+      }).join('');
+      return;
+    }
+
     rr.innerHTML = visible.map((d, visIdx) => {
       const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-      if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
+      const inReqStripe = (d >= req.startDate && d <= req.endDate) ? ' in-req-col' : '';
+      if (isWeekend(d)) return `<div class="cell wknd${inReqStripe}${dowHidden}"></div>`;
       const fullIdx = viewOffset + visIdx;
-      if (!capArr || !capArr.length) return `<div class="cell cell-p1-empty${dowHidden}"></div>`;
+      if (!capArr || !capArr.length) return `<div class="cell cell-p1-empty${inReqStripe}${dowHidden}"></div>`;
       const rawCap = capArr[fullIdx];
-      if (rawCap === null || rawCap === undefined) return `<div class="cell cell-p1-empty${dowHidden}"></div>`;
+      if (rawCap === null || rawCap === undefined) return `<div class="cell cell-p1-empty${inReqStripe}${dowHidden}"></div>`;
       const net = rawCap - ((consumedArr||[])[fullIdx] ?? 0);
       const cls = net < 0 ? 'cell negative' : net === 0 ? 'cell zero' : 'cell cell-p1';
-      return `<div class="${cls}${dowHidden}"${bold?' style="font-weight:700;"':''}>${net}</div>`;
+      return `<div class="${cls}${inReqStripe}${dowHidden}"${bold?' style="font-weight:700;"':''}>${net}</div>`;
     }).join('');
   }
 
   function renderRawSum(rrId, childIds, bold) {
     const rr = document.getElementById(rrId);
     if (!rr) return;
+
+    if (currentViewMode === 'week') {
+      rr.innerHTML = visible.map((d, visIdx) => {
+        const weekMonFullIdx = viewOffset + visIdx * 7;
+        const weekEnd = GRID_DATES[Math.min(weekMonFullIdx + 6, TOTAL_COLS - 1)];
+        const inReqStripe = (d <= req.endDate && weekEnd >= req.startDate) ? ' in-req-col' : '';
+        const dayIdxs = weekDayIndices(weekMonFullIdx);
+        let minSum = Infinity;
+        dayIdxs.forEach(i => {
+          let daySum = 0;
+          childIds.forEach(wId => {
+            const cap = originalCapacity[wId];
+            const con = placementConsumption[wId];
+            if (cap) daySum += (cap[i] ?? 0) - ((con||[])[i] ?? 0);
+          });
+          if (daySum < minSum) minSum = daySum;
+        });
+        if (minSum === Infinity) minSum = 0;
+        const cls = minSum < 0 ? 'cell negative' : 'cell cell-p1';
+        return `<div class="${cls}${inReqStripe}" style="font-size:11px;"${bold?' font-weight:700;':''}>${minSum}</div>`;
+      }).join('');
+      return;
+    }
+
     rr.innerHTML = visible.map((d, visIdx) => {
       const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
       if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
@@ -3118,7 +3515,8 @@ function renderCapacityCells() {
       if (!rr) return;
       rr.innerHTML = visible.map((d, visIdx) => {
         const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
+        const inReqStripe = (d >= req.startDate && d <= req.endDate) ? ' in-req-col' : '';
+        if (isWeekend(d)) return `<div class="cell wknd${inReqStripe}${dowHidden}"></div>`;
         const fullIdx = viewOffset + visIdx;
         const inRange = d >= req.startDate && d <= req.endDate;
         const inReq   = inRange && (req.recurringDow === null || new Date(d).getDay() === req.recurringDow);
@@ -3148,7 +3546,8 @@ function renderCapacityCells() {
       if (!rr) return;
       rr.innerHTML = visible.map((d, visIdx) => {
         const dowHidden = !isDowActive(d) ? ' dow-hidden' : '';
-        if (isWeekend(d)) return `<div class="cell wknd${dowHidden}"></div>`;
+        const inReqStripe = (d >= req.startDate && d <= req.endDate) ? ' in-req-col' : '';
+        if (isWeekend(d)) return `<div class="cell wknd${inReqStripe}${dowHidden}"></div>`;
         const fullIdx = viewOffset + visIdx;
         const inRange = d >= req.startDate && d <= req.endDate;
         const inReq   = inRange && (req.recurringDow === null || new Date(d).getDay() === req.recurringDow);
@@ -3169,7 +3568,8 @@ function renderCapacityCells() {
           else if (sum > 0) cls += ' avail';
           else              cls += ' zero';
         }
-        return `<div class="${cls}${dowHidden}"${bstyle}>${sum !== 0 ? sum : ''}</div>`;
+        const inReqStripe2 = (d >= req.startDate && d <= req.endDate) ? ' in-req-col' : '';
+        return `<div class="${cls}${inReqStripe2}${dowHidden}"${bstyle}>${sum !== 0 ? sum : ''}</div>`;
       }).join('');
     }
 
@@ -3202,11 +3602,14 @@ function updateUI() {
   const rej = state.rejectedCount || 0;
   const rejStr = rej > 0 ? ` · ${rej} rejected` : '';
   document.getElementById('bottom-status').textContent =
-    total > 0 ? `${total} placement${total!==1?'s':''} allocated · ${count} draft${rejStr}` :
-    rej > 0 ? `No placements allocated · ${rej} rejected` : 'No placements allocated';
+    count > 0 ? `${count} placement${count!==1?'s':''} drafted` :
+    total > 0 ? `${total} placement${total!==1?'s':''} generated` :
+    rej > 0 ? `${rej} rejected` : '';
 
   const hasUnsaved = count > 0;
   document.getElementById('btn-draft-placements').disabled = !hasUnsaved;
+  const bottomBar = document.getElementById('bottom-bar');
+  if (bottomBar) bottomBar.style.display = (hasUnsaved || hasGenerated) ? 'block' : 'none';
   const hasRemaining = (state.total - state.allocated) > 0;
   document.getElementById('btn-reallocate').disabled = !hasRemaining;
   const rejectBtn = document.getElementById('btn-reject-remaining');
@@ -3236,7 +3639,10 @@ function cancelInput(wardId) {
   const agencyKey = isParent ? wardId.replace('-parent','') : null;
   const wardRow = isParent
     ? document.getElementById('agency-' + agencyKey)
-    : document.getElementById('ward-' + wardId);
+    : (document.getElementById('ward-' + wardId)
+       || document.getElementById('child-agency-' + wardId)
+       || document.getElementById('child-agency-' + wardId.replace(/-am$|-pm$|-full-day$/,''))
+      );
   if (!wardRow) return;
   wardRow.querySelector('.alloc-inline')?.remove();
   wardRow.querySelectorAll('.btn-alloc').forEach(b => b.style.display = '');
@@ -3651,51 +4057,72 @@ function renderPlacementDetailFields() {
 
   function isDiff(val, baseline) { return String(val) !== String(baseline); }
 
-  function makeSelect(id, label, opts, value, baseline) {
-    const d = isDiff(value, baseline);
-    return '<div class="sp-detail-field' + (d?' diffed':'') + '" id="sdf-wrap-' + id + '">'
-      + '<label>' + label + '</label>'
-      + '<select id="sdf-' + id + '" onchange="updateDetailField(\'' + id + '\',this.value)">'
-      + opts.map(o => '<option value="' + o + '"' + (o===value?' selected':'') + '>' + o + '</option>').join('')
-      + '</select>'
-      + '<span class="diff-note">' + (d ? 'Request: ' + baseline : '') + '</span>'
-      + '</div>';
-  }
-
-  function makeInput(id, label, value, baseline, type, ro) {
-    const d = !ro && isDiff(value, baseline);
-    return '<div class="sp-detail-field' + (d?' diffed':'') + '" id="sdf-wrap-' + id + '">'
-      + '<label>' + label + '</label>'
-      + '<input id="sdf-' + id + '" type="' + (type||'text') + '" value="' + value + '"'
-      + (ro ? ' readonly' : ' oninput="updateDetailField(\'' + id + '\',this.value)"')
-      + '>'
-      + '<span class="diff-note">' + (d ? 'Request: ' + baseline : '') + '</span>'
-      + '</div>';
-  }
-
   const placements = group ? group.placements : [];
   const sharedStart = placements.length ? placements[0].startDate : state.requestStartDate;
   const sharedEnd   = placements.length ? placements[0].endDate   : state.requestEndDate;
-  const startDiff = isDiff(sharedStart, state.requestStartDate);
-  const endDiff   = isDiff(sharedEnd,   state.requestEndDate);
-  const startField = '<div class="sp-detail-field' + (startDiff?' diffed':'') + '">'
-    + '<label>Start Date</label>'
-    + '<input type="date" value="' + sharedStart + '" onchange="updateAllPlacementDates(\'start\',this.value)">'
-    + '<span class="diff-note">' + (startDiff ? 'Request: ' + state.requestStartDate : '') + '</span>'
-    + '</div>';
-  const endField = '<div class="sp-detail-field' + (endDiff?' diffed':'') + '">'
-    + '<label>End Date</label>'
-    + '<input type="date" value="' + sharedEnd + '" onchange="updateAllPlacementDates(\'end\',this.value)">'
-    + '<span class="diff-note">' + (endDiff ? 'Request: ' + state.requestEndDate : '') + '</span>'
-    + '</div>';
+
+  const pencilSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+
+  function makeSelectRow(rowId, label, opts, value, baseline) {
+    const diff = isDiff(value, baseline);
+    const diffBadge = diff ? `<span class="sp-diff-badge">Request: ${baseline}</span>` : '';
+    const options = opts.map(o => `<option${o===value?' selected':''}>${o}</option>`).join('');
+    return `<div class="sp-inline-row" id="${rowId}">
+      <span class="sp-inline-key">${label}</span>
+      <span class="sp-inline-val${diff?' diffed':''}" id="${rowId}-val">${value}</span>
+      ${diffBadge}
+      <button class="sp-pencil-btn" onclick="spStartEdit('${rowId}')" title="Edit">${pencilSVG}</button>
+      <div class="sp-inline-edit-ctrl">
+        <select class="sp-inline-select" id="${rowId}-input">${options}</select>
+        <button class="sp-inline-confirm" onclick="spConfirmSdfSelect('${rowId}')">Save</button>
+        <button class="sp-inline-cancel" onclick="spCancelEdit('${rowId}')">Cancel</button>
+      </div>
+    </div>`;
+  }
+
+  function makeInputRow(rowId, label, value, baseline, type, readOnly) {
+    const diff = !readOnly && isDiff(value, baseline);
+    const diffBadge = diff ? `<span class="sp-diff-badge">Request: ${baseline}</span>` : '';
+    const lockClass = readOnly ? ' locked' : '';
+    const pencilBtn = readOnly ? '' : `<button class="sp-pencil-btn" onclick="spStartEdit('${rowId}')" title="Edit">${pencilSVG}</button>`;
+    const editCtrl = readOnly ? '' : `<div class="sp-inline-edit-ctrl">
+        <input class="sp-inline-input" id="${rowId}-input" type="${type||'text'}" value="${value}">
+        <button class="sp-inline-confirm" onclick="spConfirmSdfInput('${rowId}')">Save</button>
+        <button class="sp-inline-cancel" onclick="spCancelEdit('${rowId}')">Cancel</button>
+      </div>`;
+    return `<div class="sp-inline-row${lockClass}" id="${rowId}">
+      <span class="sp-inline-key">${label}</span>
+      <span class="sp-inline-val${diff?' diffed':''}" id="${rowId}-val">${value}</span>
+      ${diffBadge}${pencilBtn}${editCtrl}
+    </div>`;
+  }
+
+  function makeDateRow(rowId, label, value, baseline, onchange) {
+    const diff = isDiff(value, baseline);
+    const diffBadge = diff ? `<span class="sp-diff-badge">Request: ${baseline}</span>` : '';
+    const fmtD = v => { if (!v) return '—'; const [y,m,d] = v.split('-'); return `${d}/${m}/${y}`; };
+    return `<div class="sp-inline-row" id="${rowId}">
+      <span class="sp-inline-key">${label}</span>
+      <span class="sp-inline-val${diff?' diffed':''}" id="${rowId}-val">${fmtD(value)}</span>
+      ${diffBadge}
+      <button class="sp-pencil-btn" onclick="spStartEdit('${rowId}')" title="Edit">${pencilSVG}</button>
+      <div class="sp-inline-edit-ctrl">
+        <input class="sp-inline-input" id="${rowId}-input" type="date" value="${value}">
+        <button class="sp-inline-confirm" onclick="spConfirmSdfDate('${rowId}','${onchange}')">Save</button>
+        <button class="sp-inline-cancel" onclick="spCancelEdit('${rowId}')">Cancel</button>
+      </div>
+    </div>`;
+  }
+
   grid.innerHTML =
-    makeSelect('region', 'Region', SP_REGIONS, spDetailState.region, state.requestRegion) +
-    makeInput('discipline', 'Discipline', spDetailState.discipline, state.requestDiscipline, 'text', true) +
-    makeSelect('type', 'Placement Type', SP_PLACEMENT_TYPES, spDetailState.placementType, state.requestPlacementType) +
-    makeSelect('year', 'Year Level', SP_YEAR_LEVELS, spDetailState.yearLevel, state.requestYearLevel) +
-    makeInput('num', 'No. of Placements', spDetailState.numPlacements, state.requestNumPlacements, 'number', false) +
-    startField + endField +
-    makeInput('agency', 'Agency', spDetailState.agency, '', 'text', true);
+    makeSelectRow('sdf-region',     'Region',          SP_REGIONS,          spDetailState.region,         state.requestRegion) +
+    makeInputRow ('sdf-discipline', 'Discipline',      spDetailState.discipline, state.requestDiscipline, 'text', true) +
+    makeSelectRow('sdf-type',       'Placement Type',  SP_PLACEMENT_TYPES,  spDetailState.placementType,  state.requestPlacementType) +
+    makeSelectRow('sdf-year',       'Year Level',      SP_YEAR_LEVELS,      spDetailState.yearLevel,      state.requestYearLevel) +
+    makeInputRow ('sdf-num',        'No. of Placements', spDetailState.numPlacements, state.requestNumPlacements, 'number', false) +
+    makeDateRow  ('sdf-start',      'Start Date',      sharedStart, state.requestStartDate, 'start') +
+    makeDateRow  ('sdf-end',        'End Date',        sharedEnd,   state.requestEndDate,   'end') +
+    makeInputRow ('sdf-agency',     'Agency',          spDetailState.agency, '', 'text', true);
 }
 
 function updateDetailField(id, value) {
@@ -3704,6 +4131,140 @@ function updateDetailField(id, value) {
   if (!key) return;
   spDetailState[key] = id === 'num' ? (parseInt(value)||1) : value;
   renderPlacementDetailFields();
+}
+
+// ── SP Inline-edit helpers ──
+function spStartEdit(rowId) {
+  document.querySelectorAll('.sp-inline-row.editing').forEach(r => {
+    if (r.id !== rowId) spCancelEdit(r.id);
+  });
+  const row = document.getElementById(rowId);
+  if (row) row.classList.add('editing');
+}
+
+function spCancelEdit(rowId) {
+  const row = document.getElementById(rowId);
+  if (row) row.classList.remove('editing');
+}
+
+function spConfirmEdit(rowId, valId, inputId) {
+  const row = document.getElementById(rowId);
+  const valEl = document.getElementById(valId);
+  const inputEl = document.getElementById(inputId);
+  if (!row || !valEl || !inputEl) return;
+  const newVal = inputEl.tagName === 'SELECT'
+    ? inputEl.options[inputEl.selectedIndex].text
+    : inputEl.value;
+  valEl.textContent = newVal || '—';
+  valEl.style.cssText = newVal ? '' : 'color:var(--muted-fg);font-style:italic;';
+  row.classList.remove('editing');
+  showToast('Placement updated', 'Field saved successfully.');
+}
+
+function spConfirmEditInput(rowId, valId, inputId) {
+  spConfirmEdit(rowId, valId, inputId);
+}
+
+function spConfirmEditDate(rowId, valId, inputId) {
+  const row = document.getElementById(rowId);
+  const valEl = document.getElementById(valId);
+  const inputEl = document.getElementById(inputId);
+  if (!row || !valEl || !inputEl) return;
+  const v = inputEl.value;
+  if (v) { const [y,m,d] = v.split('-'); valEl.textContent = `${d}/${m}/${y}`; valEl.style.cssText = ''; }
+  row.classList.remove('editing');
+  showToast('Placement updated', 'Date saved.');
+}
+
+// Handlers for sdf (placement detail) inline rows
+function spConfirmSdfSelect(rowId) {
+  const row = document.getElementById(rowId);
+  const valEl = document.getElementById(rowId + '-val');
+  const inputEl = document.getElementById(rowId + '-input');
+  if (!row || !valEl || !inputEl) return;
+  const newVal = inputEl.options[inputEl.selectedIndex].text;
+  valEl.textContent = newVal;
+  // sync to spDetailState
+  const sdfMap = { 'sdf-region':'region', 'sdf-type':'placementType', 'sdf-year':'yearLevel' };
+  const key = sdfMap[rowId];
+  if (key) { spDetailState[key] = newVal; }
+  row.classList.remove('editing');
+  showToast('Placement updated', 'Field saved.');
+}
+
+function spConfirmSdfInput(rowId) {
+  const row = document.getElementById(rowId);
+  const valEl = document.getElementById(rowId + '-val');
+  const inputEl = document.getElementById(rowId + '-input');
+  if (!row || !valEl || !inputEl) return;
+  const newVal = inputEl.value;
+  valEl.textContent = newVal || '—';
+  if (rowId === 'sdf-num') {
+    spDetailState.numPlacements = parseInt(newVal) || 1;
+  }
+  row.classList.remove('editing');
+  showToast('Placement updated', 'Field saved.');
+}
+
+function spConfirmSdfDate(rowId, which) {
+  const row = document.getElementById(rowId);
+  const valEl = document.getElementById(rowId + '-val');
+  const inputEl = document.getElementById(rowId + '-input');
+  if (!row || !valEl || !inputEl || !inputEl.value) return;
+  const [y,m,d] = inputEl.value.split('-');
+  valEl.textContent = `${d}/${m}/${y}`;
+  // sync to placements
+  updateAllPlacementDates(which, inputEl.value);
+  row.classList.remove('editing');
+  showToast('Placement updated', 'Date saved.');
+}
+
+function spToggleTextarea(field) {
+  const preview = document.getElementById(`sp-${field}-preview`);
+  const editArea = document.getElementById(`sp-${field}-edit`);
+  const pencil = document.getElementById(`sp-${field}-pencil`);
+  if (!editArea) return;
+  const isHidden = editArea.style.display === 'none';
+  editArea.style.display = isHidden ? 'block' : 'none';
+  if (preview) preview.style.display = isHidden ? 'none' : 'block';
+  if (pencil) pencil.style.opacity = isHidden ? '1' : '.5';
+}
+
+function spCancelTextarea(field) {
+  const editArea = document.getElementById(`sp-${field}-edit`);
+  const preview = document.getElementById(`sp-${field}-preview`);
+  const pencil = document.getElementById(`sp-${field}-pencil`);
+  if (editArea) editArea.style.display = 'none';
+  if (preview) preview.style.display = 'block';
+  if (pencil) pencil.style.opacity = '.5';
+}
+
+function spSaveTextarea(field) {
+  const textarea = document.getElementById(`sp-input-${field}`);
+  const preview = document.getElementById(`sp-${field}-preview`);
+  if (!textarea || !preview) return;
+  const val = textarea.value.trim();
+  preview.textContent = val || '—';
+  preview.style.cssText = val ? 'font-size:12px;color:var(--fg);' : 'font-size:12px;color:var(--muted-fg);font-style:italic;';
+  spCancelTextarea(field);
+  showToast('Placement updated', 'Comment saved.');
+}
+
+function spSaveComment() {
+  const textarea = document.getElementById('sp-new-comment');
+  const isPrivate = document.getElementById('sp-private-comment')?.checked;
+  const list = document.getElementById('sp-comment-list');
+  if (!textarea || !textarea.value.trim() || !list) return;
+  const placeholder = list.querySelector('div[style*="italic"]');
+  if (placeholder) placeholder.remove();
+  const item = document.createElement('div');
+  item.className = 'erp-comment-item';
+  const badge = isPrivate ? '<span style="font-size:10px;background:#fffbeb;color:#92400e;border:1px solid #fcd34d;border-radius:3px;padding:1px 5px;margin-left:6px;">Private</span>' : '';
+  item.innerHTML = `${textarea.value.trim()}<div class="erp-comment-item-meta">You · just now${badge}</div>`;
+  list.appendChild(item);
+  textarea.value = '';
+  if (document.getElementById('sp-private-comment')) document.getElementById('sp-private-comment').checked = false;
+  showToast('Comment saved', 'Your comment has been added.');
 }
 
 function openPlacementsView() {
@@ -4192,8 +4753,6 @@ window.addEventListener('beforeunload', e => {
   }
 });
 
-updateUI();
-
 function initScrollGate() {
   const spBody = document.getElementById('sp-body');
   const footer = document.getElementById('sp-footer');
@@ -4389,7 +4948,107 @@ function confirmReject() {
   );
 }
 
+// ── Inline-edit helpers ──
+function erpStartEdit(rowId) {
+  // Cancel any other open rows first
+  document.querySelectorAll('.erp-inline-row.editing').forEach(r => {
+    if (r.id !== rowId) erpCancelEdit(r.id);
+  });
+  const row = document.getElementById(rowId);
+  if (!row) return;
+  row.classList.add('editing');
+}
+
+function erpCancelEdit(rowId) {
+  const row = document.getElementById(rowId);
+  if (!row) return;
+  row.classList.remove('editing');
+}
+
+function erpConfirmEdit(rowId, valId, inputId) {
+  const row = document.getElementById(rowId);
+  const valEl = document.getElementById(valId);
+  const inputEl = document.getElementById(inputId);
+  if (!row || !valEl || !inputEl) return;
+  valEl.textContent = inputEl.tagName === 'SELECT'
+    ? inputEl.options[inputEl.selectedIndex].text
+    : inputEl.value;
+  row.classList.remove('editing');
+  showToast('Request updated', 'Field saved successfully.');
+}
+
+function erpConfirmEditNumber(rowId, valId, inputId) {
+  const row = document.getElementById(rowId);
+  const valEl = document.getElementById(valId);
+  const inputEl = document.getElementById(inputId);
+  if (!row || !valEl || !inputEl) return;
+  const num = parseInt(inputEl.value) || 1;
+  valEl.textContent = num;
+  // Keep legacy state in sync
+  if (inputId === 'erp-input-total') {
+    state.total = num;
+    updateUI();
+  }
+  row.classList.remove('editing');
+  showToast('Request updated', 'Changes saved to Request #80332.');
+}
+
+function erpConfirmDates() {
+  const startEl = document.getElementById('erp-start');
+  const endEl = document.getElementById('erp-end');
+  const valEl = document.getElementById('erp-val-dates');
+  const row = document.getElementById('erp-row-dates');
+  if (!startEl || !endEl || !valEl) return;
+  const fmtD = v => { if (!v) return ''; const [y,m,d] = v.split('-'); return `${d}/${m}/${y}`; };
+  valEl.textContent = `${fmtD(startEl.value)} – ${fmtD(endEl.value)}`;
+  // Sync to grid date display
+  const datesEl = document.querySelector('.req-dates');
+  if (datesEl) datesEl.textContent = valEl.textContent;
+  row.classList.remove('editing');
+  showToast('Request updated', 'Placement dates saved.');
+}
+
+function erpConfirmDuration() {
+  const numEl = document.getElementById('erp-input-duration-num');
+  const unitEl = document.getElementById('erp-input-duration-unit');
+  const valEl = document.getElementById('erp-val-duration');
+  const row = document.getElementById('erp-row-duration');
+  if (!numEl || !unitEl || !valEl) return;
+  valEl.textContent = `${numEl.value} ${unitEl.options[unitEl.selectedIndex].text}`;
+  row.classList.remove('editing');
+  showToast('Request updated', 'Duration saved.');
+}
+
+function erpToggleRosterBuilder() {
+  const builder = document.getElementById('erp-roster-builder');
+  const btn = document.getElementById('erp-roster-toggle-btn');
+  if (!builder) return;
+  const isHidden = builder.style.display === 'none';
+  builder.style.display = isHidden ? '' : 'none';
+  if (btn) btn.textContent = isHidden ? 'Collapse Roster' : 'Edit Roster';
+  if (isHidden && erpWeekCount === 0) erpAddWeek();
+}
+
+function erpSaveComment() {
+  const textarea = document.getElementById('erp-new-comment');
+  const isPrivate = document.getElementById('erp-private-comment')?.checked;
+  const list = document.getElementById('erp-comment-list');
+  if (!textarea || !textarea.value.trim() || !list) return;
+  // Remove placeholder if present
+  const placeholder = list.querySelector('div[style*="italic"]');
+  if (placeholder) placeholder.remove();
+  const item = document.createElement('div');
+  item.className = 'erp-comment-item';
+  const badge = isPrivate ? '<span style="font-size:10px;background:#fffbeb;color:#92400e;border:1px solid #fcd34d;border-radius:3px;padding:1px 5px;margin-left:6px;">Private</span>' : '';
+  item.innerHTML = `${textarea.value.trim()}<div class="erp-comment-item-meta">You · just now${badge}</div>`;
+  list.appendChild(item);
+  textarea.value = '';
+  if (document.getElementById('erp-private-comment')) document.getElementById('erp-private-comment').checked = false;
+  showToast('Comment saved', 'Your comment has been added.');
+}
+
 function erpToggle(headerId, bodyId) {
+  // legacy stub — kept for any residual calls
   const hdr = document.getElementById(headerId);
   const body = document.getElementById(bodyId);
   if (!hdr || !body) return;
@@ -4500,18 +5159,20 @@ function openEditRequest() {
   document.getElementById('erp-panel-title').textContent = isAllocated ? 'View Request' : 'Edit Request';
   document.getElementById('erp-banner-editable').style.display = isAllocated ? 'none' : 'flex';
   document.getElementById('erp-banner-readonly').style.display = isAllocated ? 'flex' : 'none';
-  document.getElementById('erp-btn-save').style.display = isAllocated ? 'none' : '';
-  
-  const editableIds = ['erp-year-level','erp-placement-type','erp-discipline','erp-start','erp-end','erp-total','erp-notes'];
-  editableIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.disabled = isAllocated;
+
+  // Lock all pencil buttons when allocated/readonly
+  document.querySelectorAll('.erp-inline-row:not(.locked)').forEach(row => {
+    if (isAllocated) row.classList.add('locked');
+    else row.classList.remove('locked');
   });
+
   document.getElementById('edit-req-panel').classList.add('open');
   document.getElementById('overlay').classList.add('open');
 }
 
 function closeEditRequest() {
+  // Cancel any open inline edits before closing
+  document.querySelectorAll('.erp-inline-row.editing').forEach(r => r.classList.remove('editing'));
   document.getElementById('edit-req-panel').classList.remove('open');
   if (!document.getElementById('side-panel').classList.contains('open')) {
     document.getElementById('overlay').classList.remove('open');
@@ -4519,20 +5180,7 @@ function closeEditRequest() {
 }
 
 function saveEditRequest() {
-  const yearLevel = document.getElementById('erp-year-level')?.value;
-  const placType  = document.getElementById('erp-placement-type')?.value;
-  const startDate = document.getElementById('erp-start')?.value;
-  const endDate   = document.getElementById('erp-end')?.value;
-  const total     = parseInt(document.getElementById('erp-total')?.value) || state.total;
-
-  const fmtD = v => { if (!v) return ''; const [y,m,d] = v.split('-'); return `${d}/${m}/${y}`; };
-
-  const datesEl = document.querySelector('.req-dates');
-  if (datesEl && startDate && endDate) datesEl.textContent = `${fmtD(startDate)} – ${fmtD(endDate)}`;
-
-  state.total = total;
-  updateUI();
-  showToast('Request updated', 'Changes saved to Request #80332.');
+  // Legacy save — inline-edit now saves field by field
   closeEditRequest();
 }
 
@@ -4583,6 +5231,11 @@ function isDowActive(iso) {
 }
 
 function applyDowFilter() {
+  // In week mode, no dow-hiding — every column represents a full week
+  if (currentViewMode === 'week') {
+    document.querySelectorAll('.dow-hidden').forEach(el => el.classList.remove('dow-hidden'));
+    return;
+  }
   const visible = getVisibleDates();
   document.querySelectorAll('.col-right-h .day-col').forEach((col, i) => {
     const d = visible[i];
@@ -4607,21 +5260,28 @@ function renderGridHeader() {
   const colRight = document.querySelector('.col-right-h');
   if (!colRight) return;
   const req = getCurrentRequest();
+
+  if (currentViewMode === 'week') {
+    colRight.innerHTML = visible.map(d => {
+      const weekEndIdx = Math.min(GRID_DATES.indexOf(d) + 6, TOTAL_COLS - 1);
+      const weekEnd = GRID_DATES[weekEndIdx];
+      const inReq = (d <= req.endDate && weekEnd >= req.startDate) ? ' in-request' : '';
+      return `<div class="day-col${inReq}" style="font-size:10px;line-height:1.2;">
+        <span class="dd" style="font-size:10px;">${fmtDate(d).slice(0,5)}</span>
+        <span class="dow" style="font-size:9px;color:var(--muted-fg);">Mon</span>
+      </div>`;
+    }).join('') + `<span class="col-act-h" style="display:none"></span>`;
+    return;
+  }
+
   colRight.innerHTML = visible.map(d => {
     const wknd    = isWeekend(d) ? ' wknd' : '';
-    const dowCls  = ' ' + getDowClass(d);
     const hidden  = !isDowActive(d) ? ' dow-hidden' : '';
-    
-    
     let inReq = '';
     if (d >= req.startDate && d <= req.endDate) {
-      if (req.recurringDow === null) {
-        inReq = ' in-request';
-      } else if (new Date(d).getDay() === req.recurringDow) {
-        inReq = ' in-request';
-      }
+      inReq = ' in-request';
     }
-    return `<div class="day-col${wknd}${inReq}${dowCls}${hidden}">
+    return `<div class="day-col${wknd}${inReq}${hidden}">
       <span class="dd">${fmtDate(d).slice(0,5)}</span>
       <span class="dow">${getDowLabel(d)}</span>
     </div>`;
@@ -4731,6 +5391,55 @@ function hideReqHoverCard() {
   }, 80);
 }
 
+let plcHoverTimer = null;
+
+function showPlcHoverCard(e, data) {
+  clearTimeout(plcHoverTimer);
+  const card = document.getElementById('plc-hover-card');
+  if (!card) return;
+
+  const stCls = data.status === 'Published' ? 'published' : data.status === 'Offered' ? 'offered' : 'unsaved';
+  const shiftLabel = data.shift ? data.shift + ' only' : 'All shifts';
+  const shiftCls   = data.shift ? 'has-shift' : 'all-shift';
+
+  card.innerHTML = `
+    <div class="phc-id">Placement</div>
+    <div class="phc-label">
+      ${data.label}
+      <span class="phc-status-badge ${stCls}">${data.status}</span>
+    </div>
+    <div class="phc-grid">
+      <span class="phc-lbl">Education Provider</span>
+      <span class="phc-val">${data.ep}</span>
+      <span class="phc-lbl">Discipline</span>
+      <span class="phc-val">${data.discipline}</span>
+      <span class="phc-lbl">Placement Type</span>
+      <span class="phc-val">${data.placementType}</span>
+      <span class="phc-lbl">Year Level</span>
+      <span class="phc-val">${data.year}</span>
+      <div class="phc-divider"></div>
+      <span class="phc-lbl">Dates</span>
+      <span class="phc-val">${data.dates || '—'}</span>
+      <span class="phc-lbl">Shift</span>
+      <span class="phc-val"><span class="phc-shift-badge ${shiftCls}">${shiftLabel}</span></span>
+    </div>`;
+
+  positionHoverCard(card, e);
+  card.classList.add('visible');
+}
+
+function movePlcHoverCard(e) {
+  const card = document.getElementById('plc-hover-card');
+  if (card && card.classList.contains('visible')) positionHoverCard(card, e);
+}
+
+function hidePlcHoverCard() {
+  plcHoverTimer = setTimeout(() => {
+    const card = document.getElementById('plc-hover-card');
+    if (card) card.classList.remove('visible');
+  }, 80);
+}
+
 function switchRequest(dir) {
   currentRequestIdx = (currentRequestIdx + dir + REQUESTS.length) % REQUESTS.length;
 
@@ -4773,6 +5482,11 @@ function switchRequest(dir) {
   resetFilters();
   syncDowToRequest();
   viewOffset = 0;
+  // Sync view-mode buttons to current mode (preserved across requests)
+  const btnW = document.getElementById('btn-view-week');
+  const btnD = document.getElementById('btn-view-day');
+  if (btnW) btnW.classList.toggle('active', currentViewMode === 'week');
+  if (btnD) btnD.classList.toggle('active', currentViewMode === 'day');
   renderGrid();
   updateUI();
 }
@@ -4781,7 +5495,6 @@ function updateReqBar() {
   const req = getCurrentRequest();
   const DOW_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-  
   const epEl = document.getElementById('req-ep-name');
   if (epEl) epEl.textContent = req.ep;
   const idEl = document.getElementById('req-id-label');
@@ -4789,7 +5502,67 @@ function updateReqBar() {
   const datesEl = document.getElementById('req-dates-label');
   if (datesEl) datesEl.textContent = req.dates;
 
-  
+  // Update breadcrumb active segment: ID – EP – Discipline – short dates
+  const bcSeg = document.getElementById('bc-active-seg');
+  if (bcSeg) {
+    const d = req.dates;
+    const parts = d.split(' – ');
+    function shortDate(s) {
+      const [dd, mm, yyyy] = s.split('/');
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return months[parseInt(mm)-1] + ' ' + yyyy.slice(2);
+    }
+    const shortDates = parts.length === 2 ? shortDate(parts[0]) + '–' + shortDate(parts[1]) : d;
+    bcSeg.textContent = req.id + ' – ' + req.ep + ' – ' + req.discipline + ' – ' + shortDates;
+  }
+
+  // ── Dynamic requested-agency highlighting ──
+  // Clear all existing requested highlights
+  document.querySelectorAll('.requested-agency').forEach(el => {
+    el.classList.remove('requested-agency');
+  });
+  document.querySelectorAll('.requested-badge').forEach(el => {
+    el.style.display = 'none';
+  });
+
+  if (req.requestedAgency === 'gps-room3a') {
+    // Request #80509: Room 3A (L4) — highlight the full hierarchy path
+    // L1: Northern Schools Network
+    document.getElementById('agency-une')?.classList.add('requested-agency');
+    // L2: Greenfield Primary School — highlight as ancestor
+    document.getElementById('child-agency-gps')?.classList.add('requested-agency');
+    // L3: Year 3 Block — highlight as ancestor
+    document.getElementById('child-agency-gps-y3')?.classList.add('requested-agency');
+    // L4: Room 3A — show ★ Requested badge HERE only
+    const room3aRow = document.getElementById('child-agency-gps-room3a');
+    if (room3aRow) {
+      room3aRow.classList.add('requested-agency');
+      const badge = room3aRow.querySelector('.requested-badge');
+      if (badge) badge.style.display = '';
+    }
+    // Ensure deep hierarchy rows are visible
+    document.getElementById('child-agency-gps-y3')?.style && (document.getElementById('child-agency-gps-y3').style.display = '');
+    document.getElementById('child-agency-gps-room3a')?.style && (document.getElementById('child-agency-gps-room3a').style.display = '');
+    // Auto-expand the hierarchy
+    setTimeout(() => {
+      if (typeof toggleAgency === 'function') {
+        const agState = window.agencyState || {};
+        if (!agState['une']) { /* already collapsed */ } else { }
+        // Expand une if collapsed
+        document.querySelectorAll('.agency-une').forEach(el => el.style.display = '');
+        document.querySelectorAll('.child-agency-gps').forEach(el => el.style.display = '');
+        document.querySelectorAll('.child-agency-gps-y3').forEach(el => el.style.display = '');
+      }
+    }, 50);
+  } else {
+    // Default: highlight the top-level network based on request
+    // For req 80332 and 80401 → une (Northern Schools), 80508 → une
+    const defaultAgency = (req.id === '80401') ? 'acu' : 'une';
+    document.getElementById('agency-' + defaultAgency)?.classList.add('requested-agency');
+    const badge = document.querySelector('#agency-' + defaultAgency + ' .requested-badge');
+    if (badge) badge.style.display = '';
+  }
+
   const badge = document.getElementById('req-recurring-badge');
   if (badge) {
     if (req.recurringDow !== null) {
@@ -4841,7 +5614,7 @@ function updateReqBar() {
   if (chipsEl) {
     chipsEl.innerHTML = studentList.map((s, i) => {
       const sep = i < studentList.length - 1 ? '<span style="color:var(--muted-fg);">,</span> ' : '';
-      return `<button class="student-link" onclick="event.stopPropagation();openStudentPanel(${i})" title="View student details">${s.name} <span class="student-link-code">${s.code}</span></button>${sep}`;
+      return `<button class="student-link" onclick="event.stopPropagation();showStudentInPanel(${i})" title="View student details">${s.name} <span class="student-link-code">${s.code}</span></button>${sep}`;
     }).join('');
   }
   
@@ -4863,9 +5636,80 @@ function updatePendingLabel() {
   const label = document.getElementById('pending-label');
   if (label) label.textContent = `${currentRequestIdx + 1} of ${REQUESTS.length} Pending`;
 }
+
+// Ultra-simple student panel opener — no dependencies on other panel state
+function showStudentInPanel(idx) {
+  const req = getCurrentRequest();
+  const studentList = req.students || (req.student ? [{name:req.student, code:req.studentCode}] : []);
+  const s = studentList[idx];
+  if (!s) { console.error('No student at index', idx); return; }
+
+  const data = STUDENT_DATA[s.code] || {};
+  const fullName = [data.firstName, data.middleName, data.lastName].filter(Boolean).join(' ') || s.name;
+  const dob = data.dob ? new Date(data.dob).toLocaleDateString('en-AU') : '';
+
+  function row(label, val) {
+    return '<div style="margin-bottom:10px;"><div style="font-size:9.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;">' + label + '</div>' +
+           '<div style="font-size:12px;color:#1e293b;">' + (val || '<span style=\'color:#94a3b8;font-style:italic;\'>Not provided</span>') + '</div></div>';
+  }
+
+  const html =
+    '<div style="padding:16px 0;">' +
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e2e8f0;">' +
+    '<div style="width:44px;height:44px;border-radius:50%;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;flex-shrink:0;">' +
+    ((data.firstName||s.name)[0]||'').toUpperCase() + ((data.lastName||'')[0]||'').toUpperCase() +
+    '</div><div><div style="font-size:14px;font-weight:700;color:#1e293b;">' + fullName + '</div>' +
+    '<div style="font-size:11px;font-family:monospace;color:#64748b;">' + s.code + '</div></div></div>' +
+    '<div style="font-size:9.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #e2e8f0;">Contact</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-bottom:16px;">' +
+    row('Email', data.email) + row('Mobile', data.mobile) + row('Gender', data.gender) + row('Date of Birth', dob) +
+    '</div>' +
+    '<div style="font-size:9.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #e2e8f0;">Academic</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-bottom:16px;">' +
+    row('Education Provider', data.ep) + row('Campus', data.campus) +
+    row('Discipline', data.discipline) + row('Year Level', data.yearLevel) +
+    '</div>' +
+    (data.emergencyContact ?
+    '<div style="font-size:9.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #e2e8f0;">Emergency Contact</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;">' +
+    row('Name', data.emergencyContact.name) + row('Phone', data.emergencyContact.phone) +
+    row('Relationship', data.emergencyContact.relationship) + row('Address', data.emergencyContact.address) +
+    '</div>' : '') +
+    '</div>';
+
+  // Set header
+  var titleEl = document.getElementById('sp-title');
+  if (titleEl) titleEl.textContent = 'Student Details';
+  var badgeEl = document.getElementById('sp-agency-badge');
+  if (badgeEl) badgeEl.style.display = 'none';
+  var nameEl = document.getElementById('sp-agency-name');
+  if (nameEl) nameEl.textContent = '';
+  var subtitleEl = document.getElementById('sp-subtitle');
+  if (subtitleEl) subtitleEl.textContent = '';
+  var navEl = document.getElementById('sp-nav');
+  if (navEl) navEl.style.display = 'none';
+  var fullBtn = document.getElementById('sp-open-full');
+  if (fullBtn) fullBtn.style.display = 'none';
+
+  // Set body
+  var bodyEl = document.getElementById('sp-body');
+  if (bodyEl) bodyEl.innerHTML = html;
+
+  // Set footer
+  var footerEl = document.getElementById('sp-footer');
+  if (footerEl) footerEl.innerHTML = '<div class="sp-footer-actions"><button class="btn-gen-cancel" onclick="closePanel()">Close</button></div>';
+
+  // Open panel
+  var overlay = document.getElementById('overlay');
+  var panel = document.getElementById('side-panel');
+  if (overlay) overlay.classList.add('open');
+  if (panel) panel.classList.add('open');
+}
+
 </script>
 <!-- REQUEST HOVER CARD -->
 <div id="req-hover-card" class="req-hover-card"></div>
+<div id="plc-hover-card" class="plc-hover-card"></div>
 <!-- STUDENT DETAIL PANEL -->
 <div class="student-panel" id="student-panel">
   <div class="sp-student-header">
